@@ -83,6 +83,8 @@ let ``average expenses grouped by title`` =
     |> Seq.sortBy snd
     |> Seq.toList
 
+
+// Display total monthly expenses
 df
 |> Frame.filterRows(fun _ c -> c?Amount < 0.)
 |> Frame.groupRowsUsing(fun _ c -> (c.Get("Date") :?> DateTime).Month)

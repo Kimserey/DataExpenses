@@ -2,3 +2,6 @@ London/data
 packages/
 .paket/paket.exe
 .vs/
+.DS_Store
+London.userprefs
+London/,DS_Store
