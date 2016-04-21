@@ -96,3 +96,25 @@ df
 |> Series.map(fun k t -> (CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(k), t))
 |> Series.observations
 |> Seq.iter (fun (_, (month, amount)) -> printfn "%10s : %.2f" month amount)
+
+
+(**
+    Top three expenses for each month
+    ---------------------------------
+    - Group by the month number
+    - Execute operation on Nested frame
+    - Transform from observations to Seq to manipulate the data
+    - Transform back to observations and unest the frame to get back original format
+**)
+df
+|> Frame.filterRows(fun _ c -> c?Amount < 0.)
+|> Frame.groupRowsUsing(fun _ c -> (c.Get("Date") :?> DateTime).Month)
+|> Frame.nest
+|> Series.observations
+|> Seq.map (fun (k, df) -> 
+    (k, 
+     df 
+     |> Frame.sortRows "Amount"
+     |> Frame.take 3))
+|> Series.ofObservations
+|> Frame.unnest
