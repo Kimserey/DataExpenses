@@ -84,7 +84,15 @@ let ``average expenses grouped by title`` =
     |> Seq.toList
 
 
-// Display total monthly expenses
+(**
+    Total monthly expenses
+    ----------------------
+    - Group by month number
+    - Get numeric column (amount)
+    - Execute Sum on the first level (monthly group level)
+    - Take the single value of the observations and take the data from it
+    - Map month number to month name
+**)
 df
 |> Frame.filterRows(fun _ c -> c?Amount < 0.)
 |> Frame.groupRowsUsing(fun _ c -> (c.Get("Date") :?> DateTime).Month)
@@ -99,8 +107,8 @@ df
 
 
 (**
-    Top three expenses for each month
-    ---------------------------------
+    Top three monthly expenses
+    --------------------------
     - Group by the month number
     - Execute operation on Nested frame
     - Transform from observations to Seq to manipulate the data
