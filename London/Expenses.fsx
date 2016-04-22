@@ -56,7 +56,7 @@ let df =
 **)
 df
 |> Frame.filterRows(fun _ c -> c?Amount < 0.)
-|> Frame.groupRowsUsing(fun _ c -> (c.Get("Date") :?> DateTime).Month)
+|> Frame.groupRowsUsing(fun _ c -> c.GetAs<DateTime>("Date").Month)
 |> Frame.nest
 |> Series.observations
 |> Seq.iter (fun (m, df) ->
@@ -66,8 +66,8 @@ df
     |> Series.observations
     |> Seq.iter (fun (_, s) -> 
         printfn "  %s %50s %10.2f" 
-            ((s.Get("Date") :?> DateTime).ToShortDateString()) 
-            (string <| s.Get("Title"))
+            (s.GetAs<DateTime>("Date").ToShortDateString()) 
+            (s.GetAs<string>("Title"))
             s?Amount))
 
 (**
@@ -85,7 +85,7 @@ df
 **)
 df
 |> Frame.filterRows(fun _ c -> c?Amount < 0.)
-|> Frame.groupRowsUsing(fun _ c -> (c.Get("Date") :?> DateTime).Month)
+|> Frame.groupRowsUsing(fun _ c -> c.GetAs<DateTime>("Date").Month)
 |> Frame.getNumericCols
 |> Series.mapValues (Stats.levelSum fst)
 |> Series.observations
@@ -106,7 +106,7 @@ df
 **)
 df
 |> Frame.filterRows(fun _ c -> c?Amount < 0.)
-|> Frame.groupRowsUsing(fun _ c -> (c.Get("Date") :?> DateTime).Month)
+|> Frame.groupRowsUsing(fun _ c -> c.GetAs<DateTime>("Date").Month)
 |> Frame.nest
 |> Series.observations
 |> Seq.map (fun (k, df) -> 
@@ -129,7 +129,7 @@ df
 **)
 df
 |> Frame.filterRows(fun _ c -> c?Amount < 0.)
-|> Frame.groupRowsUsing(fun _ c -> (c.Get("Date") :?> DateTime).Month)
+|> Frame.groupRowsUsing(fun _ c -> c.GetAs<DateTime>("Date").Month)
 |> Frame.nest
 |> Series.observations
 |> Seq.map (fun (k, df) -> 
@@ -144,8 +144,8 @@ df
     |> Series.observations
     |> Seq.iter (fun (_, s) -> 
         printfn "  %s %50s %10.2f" 
-            ((s.Get("Date") :?> DateTime).ToShortDateString()) 
-            (string <| s.Get("Title"))
+            (s.GetAs<DateTime>("Date").ToShortDateString()) 
+            (s.GetAs<string>("Title"))
             s?Amount))
 
 (**
@@ -161,8 +161,8 @@ df
 |> Series.observations
 |> Seq.iter (fun (_, s) -> 
     printfn "%s %50s %10.2f" 
-        ((s.Get("Date") :?> DateTime).ToShortDateString()) 
-        (string <| s.Get("Title"))
+            (s.GetAs<DateTime>("Date").ToShortDateString()) 
+            (s.GetAs<string>("Title"))
         s?Amount)
 
 (**
