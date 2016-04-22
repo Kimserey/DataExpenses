@@ -83,6 +83,8 @@ let ``average expenses grouped by title`` =
     |> Seq.sortBy snd
     |> Seq.toList
 
+let monthToString mth =
+    CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(mth)
 
 (**
     Total monthly expenses
@@ -101,7 +103,7 @@ df
 |> Series.observations
 |> Seq.head
 |> snd
-|> Series.map(fun k t -> (CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(k), t))
+|> Series.map(fun k t -> monthToString k, t)
 |> Series.observations
 |> Seq.iter (fun (_, (month, amount)) -> printfn "%10s : %.2f" month amount)
 
@@ -126,3 +128,34 @@ df
      |> Frame.take 3))
 |> Series.ofObservations
 |> Frame.unnest
+
+(** 
+    Top three montly expenses - pretty display
+    ------------------------------------------
+    October
+      28/10/2015              SOMETHING     -35.40
+      26/10/2015         SOMETHING ELSE     -24.03
+    November
+      30/11/2015    SOMETHING SOMETHING    -73.43
+      02/11/2015        SOMETHING AGAIN    -192.50
+**)
+df
+|> Frame.filterRows(fun _ c -> c?Amount < 0.)
+|> Frame.groupRowsUsing(fun _ c -> (c.Get("Date") :?> DateTime).Month)
+|> Frame.nest
+|> Series.observations
+|> Seq.map (fun (k, df) -> 
+    (monthToString k, 
+     df 
+     |> Frame.sortRows "Amount"
+     |> Frame.take 3))
+|> Seq.iter (fun (m, df) ->
+    printfn "%s" m
+    df
+    |> Frame.rows
+    |> Series.observations
+    |> Seq.iter (fun (_, s) -> 
+        printfn "  %s %50s %10.2f" 
+            ((s.Get("Date") :?> DateTime).ToShortDateString()) 
+            (string <| s.Get("Title"))
+            s?Amount))
