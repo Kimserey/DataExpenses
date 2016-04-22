@@ -4,7 +4,9 @@
 open System
 open System.IO
 open System.Globalization
+open System.Text.RegularExpressions
 open Deedle
+
 
 [<AutoOpen>]
 module Common =
@@ -55,7 +57,7 @@ let df =
       02/11/2015        SOMETHING AGAIN    -192.50
 **)
 df
-|> Frame.filterRows(fun _ c -> c?Amount < 0.)
+|> Frame.filterRowValues(fun c -> c?Amount < 0.)
 |> Frame.groupRowsUsing(fun _ c -> c.GetAs<DateTime>("Date").Month)
 |> Frame.nest
 |> Series.observations
@@ -84,7 +86,7 @@ df
       November : -198.72
 **)
 df
-|> Frame.filterRows(fun _ c -> c?Amount < 0.)
+|> Frame.filterRowValues(fun c -> c?Amount < 0.)
 |> Frame.groupRowsUsing(fun _ c -> c.GetAs<DateTime>("Date").Month)
 |> Frame.getNumericCols
 |> Series.mapValues (Stats.levelSum fst)
@@ -105,7 +107,7 @@ df
     - Transform back to observations and unest the frame to get back original format
 **)
 df
-|> Frame.filterRows(fun _ c -> c?Amount < 0.)
+|> Frame.filterRowValues(fun c -> c?Amount < 0.)
 |> Frame.groupRowsUsing(fun _ c -> c.GetAs<DateTime>("Date").Month)
 |> Frame.nest
 |> Series.observations
@@ -128,7 +130,6 @@ df
       02/11/2015        SOMETHING AGAIN    -192.50
 **)
 df
-|> Frame.filterRows(fun _ c -> c?Amount < 0.)
 |> Frame.groupRowsUsing(fun _ c -> c.GetAs<DateTime>("Date").Month)
 |> Frame.nest
 |> Series.observations
@@ -179,6 +180,7 @@ df
           AGAIN SOMETHING    -29.00
 **)
 df.Columns.[ [ "Title"; "Amount" ] ]
+|> Frame.filterRowValues(fun c -> c?Amount < 0.)
 |> Frame.groupRowsByString("Title")
 |> Frame.getNumericCols
 |> Series.mapValues (Stats.levelSum fst)
@@ -186,3 +188,80 @@ df.Columns.[ [ "Title"; "Amount" ] ]
 |> Seq.collect (fun (_, s) -> s |> Series.observations)
 |> Seq.sortBy snd
 |> Seq.iter (fun (title, amount) -> printfn "%50s %10.2f" title amount)
+
+(**
+    Grouped by title sorted expenses by name - pretty display
+    ---------------------------------------------------------
+    - Dropped all columns except Title and Amount (Prepare for group by)
+    - Group by Title
+    - Get numeric columns (useful for the compiler to know that all columns are float type)
+    - Run a sum on the first level (at this stage, the frame is indexed on two levels - Title - Id)
+
+    Output:
+                SOMETHING    -35.57
+      SOMETHING SOMETHING    -29.99
+          AGAIN SOMETHING    -29.00
+**)
+df.Columns.[ [ "Title"; "Amount" ] ]
+|> Frame.filterRowValues(fun c -> c?Amount < 0.)
+|> Frame.groupRowsByString("Title")
+|> Frame.getNumericCols
+|> Series.mapValues (Stats.levelSum fst)
+|> Series.observations
+|> Seq.collect (fun (_, s) -> s |> Series.observations)
+|> Seq.sortBy fst
+|> Seq.iter (fun (title, amount) -> printfn "%50s %10.2f" title amount)
+
+(**
+    Label stores
+    ------------
+    Label expenses with a Store name when Title match regex containing store name
+    Will be useful to aggregate cost per store
+**)
+let labelStore =
+    let label regex word str =
+        if Regex.IsMatch(str, regex, RegexOptions.IgnoreCase) 
+        then word
+        else str
+
+    label    ".*BHS.*"             "BHS"
+    >> label ".*LOLAS.*"           "LOLAS"
+    >> label ".*ALDI.*"            "ALDI"
+    >> label ".*ASDA.*"            "ASDA"
+    >> label ".*TESCO.*"           "TESCO"
+    >> label ".*AMAZON.*"          "AMAZON"
+    >> label ".*CASH.*"            "CASH WITHDRAW"
+    >> label ".*POST OFFICE.*"     "POST OFFICE"
+    >> label ".*WILKO.*"           "WILKO"
+    >> label ".*HOUSE OF FRASER.*" "HOUSE OF FRASER"
+    >> label ".*PAYPAL.*"          "PAYPAL"
+    >> label ".*(M&S|MARKS & SPENCER|MARKS & SPEN).*"  "M&S"
+
+(**
+    Grouped by title labeled sorted expenses - pretty display
+    ---------------------------------------------------------
+    - Map Title column to change Title to store name
+    - Group by Title
+    - Apply sum on first level
+
+    Output:
+                SOMETHING    -35.57
+      SOMETHING SOMETHING    -29.99
+          AGAIN SOMETHING    -29.00
+**)
+df.Columns.[ [ "Title"; "Amount" ] ]
+|> Frame.mapCols(fun k s -> 
+    if k = "Title" 
+    then s |> Series.mapValues (string >> labelStore >> box) 
+    else s.Observations |> Series)
+|> Frame.filterRowValues(fun c -> c?Amount < 0.)
+|> Frame.groupRowsByString("Title")
+|> Frame.getNumericCols
+|> Series.mapValues (Stats.levelSum fst)
+|> Series.observations
+|> Seq.head
+|> snd
+|> Series.observations
+|> Seq.sortBy snd
+|> Seq.iter (fun (title, amount) -> 
+    printfn "%50s %10.2f" title amount)
