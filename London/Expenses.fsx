@@ -81,7 +81,7 @@ df
 
     Output:
       October : -69.43
-     November : -198.72
+      November : -198.72
 **)
 df
 |> Frame.filterRows(fun _ c -> c?Amount < 0.)
@@ -148,24 +148,41 @@ df
             (string <| s.Get("Title"))
             s?Amount))
 
+(**
+    All sorted expenses - pretty display
+    ------------------------------------
+    01/12/2015              SOMETHING    -51.00
+    09/02/2016    SOMETHING SOMETHING    -30.00
+    13/01/2016        AGAIN SOMETHING     -4.00
+**)
+df
+|> Frame.rows
+|> Series.sortBy(fun s -> s?Amount)
+|> Series.observations
+|> Seq.iter (fun (_, s) -> 
+    printfn "%s %50s %10.2f" 
+        ((s.Get("Date") :?> DateTime).ToShortDateString()) 
+        (string <| s.Get("Title"))
+        s?Amount)
 
+(**
+    Grouped by title sorted expenses - pretty display
+    -------------------------------------------------
+    - Dropped all columns except Title and Amount (Prepare for group by)
+    - Group by Title
+    - Get numeric columns (useful for the compiler to know that all columns are float type)
+    - Run a sum on the first level (at this stage, the frame is indexed on two levels - Title - Id)
 
-let ``sorted expenses`` =
-    df.Columns.[ ["Date"; "Title"; "Amount"] ]
-    |> Frame.getRows
-    |> Series.sortBy(fun s -> s?Amount)
-    |> Frame.ofRows
-
-let ``cumulated expenses grouped by title`` =
-    let x =
-        df.Columns.[ [ "Title"; "Amount" ] ]
-        |> Frame.groupRowsByString("Title")
-        |> Frame.getNumericCols
-        |> Series.mapValues (Stats.levelSum fst)
-    x?Amount
-    |> Series.observations
-    |> Seq.sortBy snd
-    |> Seq.toList
-
-``cumulated expenses grouped by title`` 
-|> List.iter (fun (title, amount) -> printfn "%50s %.2f" title amount)
+    Output:
+                SOMETHING    -35.57
+      SOMETHING SOMETHING    -29.99
+          AGAIN SOMETHING    -29.00
+**)
+df.Columns.[ [ "Title"; "Amount" ] ]
+|> Frame.groupRowsByString("Title")
+|> Frame.getNumericCols
+|> Series.mapValues (Stats.levelSum fst)
+|> Series.observations
+|> Seq.collect (fun (_, s) -> s |> Series.observations)
+|> Seq.sortBy snd
+|> Seq.iter (fun (title, amount) -> printfn "%50s %10.2f" title amount)
