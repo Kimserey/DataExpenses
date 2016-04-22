@@ -6,29 +6,32 @@ open System.IO
 open System.Globalization
 open Deedle
 
-let printTitle title =
-    printfn "\n%s:\n" title
+[<AutoOpen>]
+module Common =
+
+    type Expense = {
+        Date: DateTime
+        Title: string
+        Amount: decimal
+    }
+
+    let printTitle title =
+        printfn "\n%s:\n" title
+
+    let monthToString mth =
+        CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(mth)
+
+(** 
+    Script boot up
+    --------------
+    - Set environment as current file script location
+    - Load all data from .csv files into Expenses (assuming no duplicate in .csv)
+    - Load all data to a dataframe
+**)
 
 Environment.CurrentDirectory <- __SOURCE_DIRECTORY__
 
-type Expense = {
-    Date: DateTime
-    Title: string
-    Amount: decimal
-} with
-    override x.ToString() =
-        sprintf "Title:%s\nDate:%A\nAmount:%.2f\n" x.Title x.Date x.Amount
-
-// Print the path location
-printTitle "Environment path"
-printfn "- %s" (Environment.CurrentDirectory + "/data")
-
-// Print the files
-printTitle "Files in data path"
-Array.iter (printfn " - %s") <| Directory.GetFiles(Environment.CurrentDirectory + "/data","*.csv")
-
-// Get all records
-let records =
+let df = 
     Directory.GetFiles(Environment.CurrentDirectory + "/data","*.csv")
     |> Array.map (fun path -> Frame.ReadCsv(path, hasHeaders = false))
     |> Array.map (fun df -> df |> Frame.indexColsWith [ "Date"; "Title"; "Amount" ])
@@ -39,61 +42,46 @@ let records =
         { Date = string date |> DateTime.Parse
           Title = string title
           Amount = string amount |> decimal })
-
-// Show duplicate records
-printTitle "Duplicate records found:"
-records
-|> Seq.groupBy id
-|> Seq.filter (fun (k, v) -> v |> Seq.toList |> List.length > 1)
-|> Seq.iter (fun (k, _) -> printfn "%s" (string k))
-
-// Concat all records to a dataframe
-let df = 
-    records
     |> Frame.ofRecords
 
-let ``sorted expenses`` =
-    df.Columns.[ ["Date"; "Title"; "Amount"] ]
-    |> Frame.getRows
-    |> Series.sortBy(fun s -> s?Amount)
-    |> Frame.ofRows
-
-let ``cumulated expenses grouped by title`` =
-    let x =
-        df.Columns.[ [ "Title"; "Amount" ] ]
-        |> Frame.groupRowsByString("Title")
-        |> Frame.getNumericCols
-        |> Series.mapValues (Stats.levelSum fst)
-    x?Amount
+(** 
+    All expenses - pretty display
+    ------------------------------------------
+    October
+      28/10/2015              SOMETHING     -35.40
+      26/10/2015         SOMETHING ELSE     -24.03
+    November
+      30/11/2015    SOMETHING SOMETHING    -73.43
+      02/11/2015        SOMETHING AGAIN    -192.50
+**)
+df
+|> Frame.filterRows(fun _ c -> c?Amount < 0.)
+|> Frame.groupRowsUsing(fun _ c -> (c.Get("Date") :?> DateTime).Month)
+|> Frame.nest
+|> Series.observations
+|> Seq.iter (fun (m, df) ->
+    printfn "%s" (monthToString m)
+    df
+    |> Frame.rows
     |> Series.observations
-    |> Seq.sortBy snd
-    |> Seq.toList
-
-``cumulated expenses grouped by title`` 
-|> List.iter (fun (title, amount) -> printfn "%50s %.2f" title amount)
-
-let ``average expenses grouped by title`` =
-    let x =
-        df.Columns.[ [ "Title"; "Amount" ] ]
-        |> Frame.groupRowsByString("Title")
-        |> Frame.getNumericCols
-        |> Series.mapValues (Stats.levelMean fst)
-    x?Amount
-    |> Series.observations
-    |> Seq.sortBy snd
-    |> Seq.toList
-
-let monthToString mth =
-    CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(mth)
+    |> Seq.iter (fun (_, s) -> 
+        printfn "  %s %50s %10.2f" 
+            ((s.Get("Date") :?> DateTime).ToShortDateString()) 
+            (string <| s.Get("Title"))
+            s?Amount))
 
 (**
-    Total monthly expenses
-    ----------------------
+    Total monthly expenses - pretty display
+    ---------------------------------------
     - Group by month number
     - Get numeric column (amount)
     - Execute Sum on the first level (monthly group level)
     - Take the single value of the observations and take the data from it
     - Map month number to month name
+
+    Output:
+      October : -69.43
+     November : -198.72
 **)
 df
 |> Frame.filterRows(fun _ c -> c?Amount < 0.)
@@ -109,8 +97,8 @@ df
 
 
 (**
-    Top three monthly expenses
-    --------------------------
+    Top three monthly expenses - frame
+    ----------------------------------
     - Group by the month number
     - Execute operation on Nested frame
     - Transform from observations to Seq to manipulate the data
@@ -159,3 +147,25 @@ df
             ((s.Get("Date") :?> DateTime).ToShortDateString()) 
             (string <| s.Get("Title"))
             s?Amount))
+
+
+
+let ``sorted expenses`` =
+    df.Columns.[ ["Date"; "Title"; "Amount"] ]
+    |> Frame.getRows
+    |> Series.sortBy(fun s -> s?Amount)
+    |> Frame.ofRows
+
+let ``cumulated expenses grouped by title`` =
+    let x =
+        df.Columns.[ [ "Title"; "Amount" ] ]
+        |> Frame.groupRowsByString("Title")
+        |> Frame.getNumericCols
+        |> Series.mapValues (Stats.levelSum fst)
+    x?Amount
+    |> Series.observations
+    |> Seq.sortBy snd
+    |> Seq.toList
+
+``cumulated expenses grouped by title`` 
+|> List.iter (fun (title, amount) -> printfn "%50s %.2f" title amount)
