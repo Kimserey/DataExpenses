@@ -60,6 +60,7 @@ let labelStore =
     >> label ".*TIGER.*"                                            "TIGER"                              DepartmentStore
     >> label ".*(JOHN LEWIS|JOHNLEWIS).*"                           "JOHN LEWIS"                         DepartmentStore
     >> label ".*TK MAXX.*"                                          "TK MAXX"                            DepartmentStore
+    >> label ".*TFS STORES.*"                                       "PERFUM TFS STORES"                  DepartmentStore
 
     >> label ".*ALDI.*"                                             "ALDI"                               Supermarket
     >> label ".*WAITROSE.*"                                         "WAITROSE"                           Supermarket
@@ -71,6 +72,7 @@ let labelStore =
     >> label ".*WILKO.*"                                            "WILKO"                              Supermarket
 
     >> label ".*CURRYS*"                                            "CURRYS"                             Electronics
+    >> label ".*CARPHONE*"                                            "CARPHONE"                         Electronics
 
     >> label ".*BURGER KING.*"                                      "BURGER KING"                        FastFood
     >> label ".*PIZZA HUT.*"                                        "PIZZA HUT"                          FastFood
@@ -101,6 +103,7 @@ let labelStore =
     >> label ".*AVID.*"                                             "AVID CHOCOLATE"                     SweetAndSavoury
     >> label ".*EAT.*"                                              "EAT"                                SweetAndSavoury
     >> label ".*LOLAS.*"                                            "LOLAS"                              SweetAndSavoury
+    >> label ".*STICKY RICE.*"                                      "STICKY RICE"                        SweetAndSavoury
 
     >> label ".*ITUNES.COM/BILL.*"                                  "APPLE APP STORE"                    Online
     >> label ".*AMAZON.*"                                           "AMAZON"                             Online
@@ -108,6 +111,14 @@ let labelStore =
     >> label ".*PAYPAL.*"                                           "PAYPAL"                             Online
 
     >> label ".*WASABI.*"                                           "WASABI JAP"                         Restaurant
+    >> label ".*MONGOLIAN GRILL.*"                                  "MONGOLIAN GRILL"                    Restaurant
+    >> label ".*RESTAURANTS.*"                                      "RESTAURANTS"                        Restaurant
+    >> label ".*SHAKE SHACK.*"                                      "SHAKE SHACK"                        Restaurant
+    >> label ".*NANDOS.*"                                           "NANDOS"                             Restaurant
+    >> label ".*ANGUS STEAKHOUSE.*"                                 "ANGUS STEAKHOUSE"                   Restaurant
+    >> label ".*GIRAFFE.*"                                          "GIRAFFE"                            Restaurant
+    >> label ".*CAFE ROUGE.*"                                       "CAFE ROUGE"                         Restaurant
+    >> label ".*TORTILLA.*"                                         "TORTILLA"                           Restaurant
 
     >> label ".*PET SUPPLIES.*"                                     "PET SUPPLIES GIFT"                  Other
     >> label ".*AUDIBLE.*"                                          "AUDIBLE"                            Other
@@ -120,7 +131,8 @@ let labelStore =
     >> label ".*EURO LIVERPOOL.*"                                   "EEA"                                Other
     >> label ".*FOXTONS.*"                                          "FOXTONS"                            Other
     >> label ".*GIFFGAFF.*"                                         "GIFFGAFF"                           Other
-
+    >> label ".*CINEMA.*"                                           "CINEMA"                             Other
+       
 (** 
     Script boot up, massage and label data
     --------------------------------------
@@ -375,8 +387,9 @@ df.Columns.[ [ "Date"; "Label"; "Amount" ]]
 |> Frame.filterRowValues(fun c -> c?Amount < 0.)
 |> Frame.groupRowsByString "Label"
 |> Frame.groupRowsUsing(fun _ c -> c.GetAs<DateTime>("Date").Month)
+|> Frame.mapRowKeys Pair.flatten3
 |> Frame.getNumericCols
-|> Series.mapValues (Stats.levelSum (Pair.flatten3 >> Pair.get1And2Of3))
+|> Series.mapValues (Stats.levelSum Pair.get1And2Of3)
 |> Series.observations
 |> Seq.collect (snd >> Series.observations)
 |> Seq.map (fun ((month, title), amount) -> month, title, amount)
@@ -391,8 +404,8 @@ df.Columns.[ [ "Date"; "Label"; "Amount" ]]
     printfn "-----------------------------------------------------------------")
 
 (**
-    Grouped by category per month - pretty display
-    ---------------------------------------------------
+    Grouped by category per month showing total - pretty display
+    ------------------------------------------------------------
     - Group by category
     - Group by Month
     - Get Amount column
@@ -416,8 +429,9 @@ df.Columns.[ [ "Date"; "Category"; "Amount" ]]
 |> Frame.filterRowValues(fun c -> c?Amount < 0.)
 |> Frame.groupRowsByString "Category"
 |> Frame.groupRowsUsing(fun _ c -> c.GetAs<DateTime>("Date").Month)
+|> Frame.mapRowKeys Pair.flatten3
 |> Frame.getNumericCols
-|> Series.mapValues (Stats.levelSum (Pair.flatten3 >> Pair.get1And2Of3))
+|> Series.mapValues (Stats.levelSum Pair.get1And2Of3)
 |> Series.observations
 |> Seq.collect (snd >> Series.observations)
 |> Seq.map (fun ((month, title), amount) -> month, title, amount)
@@ -429,4 +443,50 @@ df.Columns.[ [ "Date"; "Category"; "Amount" ]]
     |> Seq.iter (fun (_, title, amount) ->
         printfn "%50s %10.2f" title amount)
     printfn "Total: %.2f GBP" (values |> Seq.sumBy (fun (_, _, amount) -> amount))
+    printfn "-----------------------------------------------------------------")
+
+(**
+    Grouped by category per month showing expenses under category - pretty display
+    ------------------------------------------------------------------------------
+    April
+        Supermarket
+        ----------------
+              04/04/2016              M&S   -19.57 GBP
+              04/04/2016            TESCO   -67.05 GBP
+              11/04/2016              M&S   -10.00 GBP
+              11/04/2016       SAINSBURYS    -4.45 GBP
+                                    TOTAL   -58.15 GBP
+        Cash
+        ----------------
+              13/04/2016    CASH WITHDRAW   -50.00 GBP
+                                    TOTAL   -58.15 GBP
+**)
+df.Columns.[ [ "Date"; "Category"; "Label"; "Amount" ]]
+|> Frame.filterRowValues(fun c -> c?Amount < 0.)
+|> Frame.groupRowsByString "Category"
+|> Frame.groupRowsUsing(fun _ c -> c.GetAs<DateTime>("Date").Month)
+|> Frame.nest
+|> Series.observations
+|> Seq.iter (fun (m, frame) -> 
+    printfn "%s" (monthToString m)
+    frame
+    |> Frame.nest
+    |> Series.observations
+    |> Seq.iter (fun (category, frame) ->
+        printfn "    %s" category 
+        printfn "    ----------------"
+
+        frame
+        |> Frame.rows
+        |> Series.observations
+        |> Seq.map    (fun (_, s) -> s.GetAs<DateTime>("Date").ToShortDateString(), s.GetAs<string>("Label"), s?Amount)
+        |> Seq.sortBy (fun (date, _, _) -> date)
+        |> Seq.iter   (fun (date, label, amount)  -> printfn "%20s %40s %8.2f GBP" date label amount)
+
+        printfn "%61s %8.2f GBP" 
+            "TOTAL"
+            (frame
+             |> Frame.getCol "Amount" 
+             |> Series.observations 
+             |> Seq.sumBy snd))
     printfn "-----------------------------------------------------------------")

@@ -4,3 +4,5 @@ packages/
 .vs/
 .DS_Store
 London.userprefs
+London/bin
+London/obj
