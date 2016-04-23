@@ -23,32 +23,62 @@ module Common =
     let monthToString mth =
         CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(mth)
 
+(**
+    Label stores
+    ------------
+    Label expenses with a Store name when Title match regex containing store name
+    Will be useful to aggregate cost per store
+**)
+let labelStore =
+    let label regex word str =
+        if Regex.IsMatch(str, regex, RegexOptions.IgnoreCase) 
+        then word
+        else str
+
+    label    ".*BHS.*"             "BHS"
+    >> label ".*LOLAS.*"           "LOLAS"
+    >> label ".*ALDI.*"            "ALDI"
+    >> label ".*ASDA.*"            "ASDA"
+    >> label ".*TESCO.*"           "TESCO"
+    >> label ".*AMAZON.*"          "AMAZON"
+    >> label ".*CASH.*"            "CASH WITHDRAW"
+    >> label ".*POST OFFICE.*"     "POST OFFICE"
+    >> label ".*WILKO.*"           "WILKO"
+    >> label ".*HOUSE OF FRASER.*" "HOUSE OF FRASER"
+    >> label ".*PAYPAL.*"          "PAYPAL"
+    >> label ".*(M&S|MARKS & SPENCER|MARKS & SPEN).*"  "M&S"
+
 (** 
-    Script boot up
-    --------------
+    Script boot up, massage and label data
+    --------------------------------------
     - Set environment as current file script location
     - Load all data from .csv files into Expenses (assuming no duplicate in .csv)
     - Load all data to a dataframe
+    - Label the stores
 **)
 
 Environment.CurrentDirectory <- __SOURCE_DIRECTORY__
 
 let df = 
-    Directory.GetFiles(Environment.CurrentDirectory + "/data","*.csv")
-    |> Array.map (fun path -> Frame.ReadCsv(path, hasHeaders = false))
-    |> Array.map (fun df -> df |> Frame.indexColsWith [ "Date"; "Title"; "Amount" ])
-    |> Array.map (fun df -> df.GetRows())
-    |> Seq.collect (fun s -> s.Values)
-    |> Seq.map (fun s -> s?Date, s?Title, s?Amount)
-    |> Seq.map (fun (date, title, amount) -> 
-        { Date = string date |> DateTime.Parse
-          Title = string title
-          Amount = string amount |> decimal })
-    |> Frame.ofRecords
+    let x =
+        Directory.GetFiles(Environment.CurrentDirectory + "/data","*.csv")
+        |> Array.map (fun path -> Frame.ReadCsv(path, hasHeaders = false))
+        |> Array.map (fun df -> df |> Frame.indexColsWith [ "Date"; "Title"; "Amount" ])
+        |> Array.map (fun df -> df.GetRows())
+        |> Seq.collect (fun s -> s.Values)
+        |> Seq.map (fun s -> s?Date, s?Title, s?Amount)
+        |> Seq.map (fun (date, title, amount) -> 
+            { Date = string date |> DateTime.Parse
+              Title = string title
+              Amount = string amount |> decimal })
+        |> Frame.ofRecords
+
+    x.AddColumn("Label", x |> Frame.getCol "Title" |> Series.mapValues labelStore)
+    x
 
 (** 
     All expenses - pretty display
-    ------------------------------------------
+    -----------------------------
     October
       28/10/2015              SOMETHING     -35.40
       26/10/2015         SOMETHING ELSE     -24.03
@@ -212,33 +242,9 @@ df.Columns.[ [ "Title"; "Amount" ] ]
 |> Seq.sortBy fst
 |> Seq.iter (fun (title, amount) -> printfn "%50s %10.2f" title amount)
 
-(**
-    Label stores
-    ------------
-    Label expenses with a Store name when Title match regex containing store name
-    Will be useful to aggregate cost per store
-**)
-let labelStore =
-    let label regex word str =
-        if Regex.IsMatch(str, regex, RegexOptions.IgnoreCase) 
-        then word
-        else str
-
-    label    ".*BHS.*"             "BHS"
-    >> label ".*LOLAS.*"           "LOLAS"
-    >> label ".*ALDI.*"            "ALDI"
-    >> label ".*ASDA.*"            "ASDA"
-    >> label ".*TESCO.*"           "TESCO"
-    >> label ".*AMAZON.*"          "AMAZON"
-    >> label ".*CASH.*"            "CASH WITHDRAW"
-    >> label ".*POST OFFICE.*"     "POST OFFICE"
-    >> label ".*WILKO.*"           "WILKO"
-    >> label ".*HOUSE OF FRASER.*" "HOUSE OF FRASER"
-    >> label ".*PAYPAL.*"          "PAYPAL"
-    >> label ".*(M&S|MARKS & SPENCER|MARKS & SPEN).*"  "M&S"
 
 (**
-    Grouped by title labeled sorted expenses - pretty display
+    Grouped by labeled title sorted expenses - pretty display
     ---------------------------------------------------------
     - Map Title column to change Title to store name
     - Group by Title
@@ -249,19 +255,40 @@ let labelStore =
       SOMETHING SOMETHING    -29.99
           AGAIN SOMETHING    -29.00
 **)
-df.Columns.[ [ "Title"; "Amount" ] ]
-|> Frame.mapCols(fun k s -> 
-    if k = "Title" 
-    then s |> Series.mapValues (string >> labelStore >> box) 
-    else s.Observations |> Series)
+df
 |> Frame.filterRowValues(fun c -> c?Amount < 0.)
-|> Frame.groupRowsByString("Title")
+|> Frame.groupRowsByString "Label"
 |> Frame.getNumericCols
 |> Series.mapValues (Stats.levelSum fst)
 |> Series.observations
-|> Seq.head
-|> snd
-|> Series.observations
+|> Seq.collect (snd >> Series.observations)
 |> Seq.sortBy snd
 |> Seq.iter (fun (title, amount) -> 
     printfn "%50s %10.2f" title amount)
+
+(**
+    Grouped by labeled title per month - pretty display
+    ---------------------------------------------------
+    - Group by Label
+    - Group by Month
+    - Get Amount column
+    - Level sum by flattening the keys and summing using Month and Label
+**)
+df.Columns.[ [ "Date"; "Label"; "Amount" ]]
+|> Frame.filterRowValues(fun c -> c?Amount < 0.)
+|> Frame.groupRowsByString "Label"
+|> Frame.groupRowsUsing(fun _ c -> c.GetAs<DateTime>("Date").Month)
+|> Frame.getNumericCols
+|> Series.mapValues (Stats.levelSum (Pair.flatten3 >> Pair.get1And2Of3))
+|> Series.observations
+|> Seq.collect (snd >> Series.observations)
+|> Seq.map (fun ((month, title), amount) -> month, title, amount)
+|> Seq.groupBy (fun (month, _, _) -> month)
+|> Seq.iter (fun (month, values) ->
+    printfn "%s" (monthToString month)
+    values
+    |> Seq.sortBy (fun (_, _, amount) -> amount)
+    |> Seq.iter (fun (_, title, amount) ->
+        printfn "%50s %10.2f" title amount)
+    printfn "Total: %.2f GBP" (values |> Seq.sumBy (fun (_, _, amount) -> amount))
+    printfn "-----------------------------------------------------------------")
