@@ -35,17 +35,44 @@ let labelStore =
         then word
         else str
 
-    label    ".*BHS.*"             "BHS"
-    >> label ".*LOLAS.*"           "LOLAS"
-    >> label ".*ALDI.*"            "ALDI"
-    >> label ".*ASDA.*"            "ASDA"
-    >> label ".*TESCO.*"           "TESCO"
-    >> label ".*AMAZON.*"          "AMAZON"
-    >> label ".*CASH.*"            "CASH WITHDRAW"
-    >> label ".*POST OFFICE.*"     "POST OFFICE"
-    >> label ".*WILKO.*"           "WILKO"
-    >> label ".*HOUSE OF FRASER.*" "HOUSE OF FRASER"
-    >> label ".*PAYPAL.*"          "PAYPAL"
+    label    ".*BHS.*"                "BHS"
+    >> label ".*JOHN LEWIS.*"         "JOHN LEWIS"
+    >> label ".*HOUSE OF FRASER.*"    "HOUSE OF FRASER"
+    >> label ".*TIGER.*"              "TIGER"
+    >> label ".*BOOTS.*"              "BOOTS"
+    >> label ".*LOLAS.*"              "LOLAS"
+    >> label ".*ALDI.*"               "ALDI"
+    >> label ".*WAITROSE.*"           "WAITROSE"
+    >> label ".*NISA.*"               "NISA"
+    >> label ".*ASDA.*"               "ASDA"
+    >> label ".*TESCO.*"              "TESCO"
+    >> label ".*CASH.*"               "CASH WITHDRAW"
+    >> label ".*POST OFFICE.*"        "POST OFFICE"
+    >> label ".*WILKO.*"              "WILKO"
+    >> label ".*AMAZON.*"             "AMAZON"
+    >> label ".*CURRYS*"              "CURRYS"
+    >> label ".*PAYPAL.*"             "PAYPAL"
+    >> label ".*TK MAXX.*"            "TK MAXX"
+    >> label ".*BURGER KING.*"        "BURGER KING"
+    >> label ".*GIFFGAFF.*"           "GIFFGAFF"
+    >> label ".*SUPERDRUG.*"          "SUPERDRUG"
+    >> label ".*EAT.*"                "EAT"
+    >> label ".*PIZZA HUT.*"          "PIZZA HUT"
+    >> label ".*AVID.*"               "AVID CHOCOLATE"
+    >> label ".*CRABTREE AND EVELY.*" "CRABTREE AND EVELYN"
+    >> label ".*COFFEE REPUBLIC.*"    "COFFEE REPUBLIC"
+    >> label ".*FOXTONS.*"            "FOXTONS"
+    >> label ".*SPORTSDIRECT.*"       "SPORTSDIRECT"
+    >> label ".*UNIQLO.*"             "UNIQLO"
+    >> label ".*PRIMARK.*"            "PRIMARK"
+    >> label ".*DEBENHAMS.*"          "DEBENHAMS"
+    >> label ".*EURO LIVERPOOL.*"     "EEA"
+    >> label ".*SPECSAVERS.*"         "SPECSAVERS"
+    >> label ".*THE BODY SHOP.*"      "THE BODY SHOP"
+    >> label ".*MCDONALDS.*"          "MCDONALDS"
+    >> label ".*(NRGGYM|HARLANDS).*"                   "NRGGYM"
+    >> label ".*(LUL TICKET MACHINE|DLR).*"            "UNDERGROUND / DLR"
+    >> label "^[A-Z0-9]{8}\sGB[A-Z0-9]{14}\s"          "FUND TRANSFER (OR RELATED)"
     >> label ".*(M&S|MARKS & SPENCER|MARKS & SPEN).*"  "M&S"
 
 (** 
@@ -101,6 +128,7 @@ df
             (s.GetAs<DateTime>("Date").ToShortDateString()) 
             (s.GetAs<string>("Title"))
             s?Amount))
+
 
 (**
     Total monthly expenses - pretty display
@@ -192,8 +220,8 @@ df
 |> Series.observations
 |> Seq.iter (fun (_, s) -> 
     printfn "%s %50s %10.2f" 
-            (s.GetAs<DateTime>("Date").ToShortDateString()) 
-            (s.GetAs<string>("Title"))
+        (s.GetAs<DateTime>("Date").ToShortDateString()) 
+        (s.GetAs<string>("Title"))
         s?Amount)
 
 (**
