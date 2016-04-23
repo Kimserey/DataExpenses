@@ -17,12 +17,28 @@ module Common =
         Amount: decimal
     }
 
+    type Category =
+        | DepartmentStore
+        | Supermarket
+        | AsianSupermarket
+        | Clothing
+        | Restaurant
+        | Electronics
+        | FastFood
+        | SweetAndSavoury
+        | HealthAndBeauty
+        | Online
+        | Cash
+        | Other
+        with
+            override x.ToString() = sprintf "%A" x
+
     let printTitle title =
         printfn "\n%s:\n" title
 
     let monthToString mth =
         CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(mth)
-
+       
 (**
     Label stores
     ------------
@@ -30,60 +46,80 @@ module Common =
     Will be useful to aggregate cost per store
 **)
 let labelStore =
-    let label regex word str =
+    let label regex label category (str, initialCategory) =
         if Regex.IsMatch(str, regex, RegexOptions.IgnoreCase) 
-        then word
-        else str
+        then (label, category)
+        else (str, initialCategory)
 
-    label    ".*BHS.*"                "BHS"
-    >> label ".*HOUSE OF FRASER.*"    "HOUSE OF FRASER"
-    >> label ".*TIGER.*"              "TIGER"
-    >> label ".*BOOTS.*"              "BOOTS"
-    >> label ".*LOLAS.*"              "LOLAS"
-    >> label ".*ALDI.*"               "ALDI"
-    >> label ".*WAITROSE.*"           "WAITROSE"
-    >> label ".*NISA.*"               "NISA"
-    >> label ".*ASDA.*"               "ASDA"
-    >> label ".*SAINSBURYS.*"         "SAINSBURYS"
-    >> label ".*TESCO.*"              "TESCO"
-    >> label ".*CASH.*"               "CASH WITHDRAW"
-    >> label ".*POST OFFICE.*"        "POST OFFICE"
-    >> label ".*WILKO.*"              "WILKO"
-    >> label ".*AMAZON.*"             "AMAZON"
-    >> label ".*CURRYS*"              "CURRYS"
-    >> label ".*PAYPAL.*"             "PAYPAL"
-    >> label ".*TK MAXX.*"            "TK MAXX"
-    >> label ".*BURGER KING.*"        "BURGER KING"
-    >> label ".*GIFFGAFF.*"           "GIFFGAFF"
-    >> label ".*SUPERDRUG.*"          "SUPERDRUG"
-    >> label ".*EAT.*"                "EAT"
-    >> label ".*PIZZA HUT.*"          "PIZZA HUT"
-    >> label ".*AVID.*"               "AVID CHOCOLATE"
-    >> label ".*CRABTREE AND EVELY.*" "CRABTREE AND EVELYN"
-    >> label ".*COFFEE REPUBLIC.*"    "COFFEE REPUBLIC"
-    >> label ".*FOXTONS.*"            "FOXTONS"
-    >> label ".*SPORTSDIRECT.*"       "SPORTSDIRECT"
-    >> label ".*UNIQLO.*"             "UNIQLO"
-    >> label ".*PRIMARK.*"            "PRIMARK"
-    >> label ".*DEBENHAMS.*"          "DEBENHAMS"
-    >> label ".*EURO LIVERPOOL.*"     "EEA"
-    >> label ".*SPECSAVERS.*"         "SPECSAVERS"
-    >> label ".*THE BODY SHOP.*"      "THE BODY SHOP"
-    >> label ".*MCDONALDS.*"          "MCDONALDS"
-    >> label ".*AUDIBLE.*"            "AUDIBLE"
-    >> label ".*LOON FUNG.*"          "LOON FUNG"
-    >> label ".*PET SUPPLIES.*"       "PET SUPPLIES GIFT"
-    >> label ".*GMC PHARMACY.*"       "PHARMACY"
-    >> label ".*MR SIMMS OLDE SWEE.*" "MR SIMMS OLDE SWEET CHOCOLATE"
-    >> label ".*DISNEY STORE.*"       "DISNEY STORE"
-    >> label ".*WASABI.*"             "WASABI JAP"
-    >> label ".*ITUNES.COM/BILL.*"                       "APPLE APP STORE"
-    >> label ".*(JOHN LEWIS|JOHNLEWIS).*"                "JOHN LEWIS"
-    >> label ".*(NRGGYM|HARLANDS).*"                     "NRGGYM"
-    >> label ".*(LUL TICKET MACHINE|DLR).*"              "UNDERGROUND / DLR"
-    >> label ".*(GOOGLE|Non-Sterling Transaction Fee).*" "GOOGLE ACCOUNT (OR RELATED)"
-    >> label "^[A-Z0-9]{8}\sGB[A-Z0-9]{14}\s"            "FUND TRANSFER (OR RELATED)"
-    >> label ".*(M&S|MARKS & SPENCER|MARKS & SPEN|MARKS&SPENCER).*"  "M&S"
+    (**      Regex pattern                                          Label                                Category
+             ^^^^^^^^^^^^^                                          ^^^^^                                ^^^^^^^^     **)
+    label    ".*CASH.*"                                             "CASH WITHDRAW"                      Cash
+
+    >> label ".*BHS.*"                                              "BHS"                                DepartmentStore
+    >> label ".*HOUSE OF FRASER.*"                                  "HOUSE OF FRASER"                    DepartmentStore
+    >> label ".*TIGER.*"                                            "TIGER"                              DepartmentStore
+    >> label ".*(JOHN LEWIS|JOHNLEWIS).*"                           "JOHN LEWIS"                         DepartmentStore
+    >> label ".*TK MAXX.*"                                          "TK MAXX"                            DepartmentStore
+
+    >> label ".*ALDI.*"                                             "ALDI"                               Supermarket
+    >> label ".*WAITROSE.*"                                         "WAITROSE"                           Supermarket
+    >> label ".*NISA.*"                                             "NISA"                               Supermarket
+    >> label ".*ASDA.*"                                             "ASDA"                               Supermarket
+    >> label ".*SAINSBURYS.*"                                       "SAINSBURYS"                         Supermarket
+    >> label ".*TESCO.*"                                            "TESCO"                              Supermarket
+    >> label ".*(M&S|MARKS & SPENCER|MARKS & SPEN|MARKS&SPENCER).*" "M&S"                                Supermarket
+    >> label ".*WILKO.*"                                            "WILKO"                              Supermarket
+
+    >> label ".*CURRYS*"                                            "CURRYS"                             Electronics
+
+    >> label ".*BURGER KING.*"                                      "BURGER KING"                        FastFood
+    >> label ".*PIZZA HUT.*"                                        "PIZZA HUT"                          FastFood
+    >> label ".*MCDONALDS.*"                                        "MCDONALDS"                          FastFood
+
+    >> label ".*SPORTSDIRECT.*"                                     "SPORTSDIRECT"                       Clothing
+    >> label ".*UNIQLO.*"                                           "UNIQLO"                             Clothing
+    >> label ".*PRIMARK.*"                                          "PRIMARK"                            Clothing
+    >> label ".*DEBENHAMS.*"                                        "DEBENHAMS"                          Clothing
+
+    >> label ".*SPECSAVERS.*"                                       "SPECSAVERS"                         HealthAndBeauty
+    >> label ".*THE BODY SHOP.*"                                    "THE BODY SHOP"                      HealthAndBeauty
+    >> label ".*CRABTREE AND EVELY.*"                               "CRABTREE AND EVELYN"                HealthAndBeauty
+    >> label ".*GMC PHARMACY.*"                                     "PHARMACY"                           HealthAndBeauty
+    >> label ".*REGIS INTERNATIONA.*"                               "SUPERCUTS"                          HealthAndBeauty
+    >> label ".*SUPERDRUG.*"                                        "SUPERDRUG"                          HealthAndBeauty
+    >> label ".*BOOTS.*"                                            "BOOTS"                              HealthAndBeauty
+
+    >> label ".*LOON FUNG.*"                                        "LOON FUNG"                          AsianSupermarket
+    >> label ".*ASIAN MARKET.*"                                     "ASIAN MARKET"                       AsianSupermarket
+
+    >> label ".*NAM PO.*"                                           "NAM PO DIM SUM"                     SweetAndSavoury
+    >> label ".*PRET A MANGER.*"                                    "PRET A MANGER"                      SweetAndSavoury
+    >> label ".*POTBELLY.*"                                         "POTBELLY SANDWICH"                  SweetAndSavoury
+    >> label ".*MR SIMMS OLDE SWEE.*"                               "MR SIMMS OLDE SWEET CHOCOLATE"      SweetAndSavoury
+    >> label ".*COFFEE REPUBLIC.*"                                  "COFFEE REPUBLIC"                    SweetAndSavoury
+    >> label ".*PASTY SHOP.*"                                       "PASTY SHOP PUFF"                    SweetAndSavoury
+    >> label ".*AVID.*"                                             "AVID CHOCOLATE"                     SweetAndSavoury
+    >> label ".*EAT.*"                                              "EAT"                                SweetAndSavoury
+    >> label ".*LOLAS.*"                                            "LOLAS"                              SweetAndSavoury
+
+    >> label ".*ITUNES.COM/BILL.*"                                  "APPLE APP STORE"                    Online
+    >> label ".*AMAZON.*"                                           "AMAZON"                             Online
+    >> label ".*(GOOGLE|Non-Sterling Transaction Fee).*"            "GOOGLE ACCOUNT (OR RELATED)"        Online
+    >> label ".*PAYPAL.*"                                           "PAYPAL"                             Online
+
+    >> label ".*WASABI.*"                                           "WASABI JAP"                         Restaurant
+
+    >> label ".*PET SUPPLIES.*"                                     "PET SUPPLIES GIFT"                  Other
+    >> label ".*AUDIBLE.*"                                          "AUDIBLE"                            Other
+    >> label ".*POST OFFICE.*"                                      "POST OFFICE"                        Other
+    >> label ".*DISNEY STORE.*"                                     "DISNEY STORE"                       Other
+    >> label ".*(NRGGYM|HARLANDS).*"                                "NRGGYM"                             Other
+    >> label ".*(LUL TICKET MACHINE|DLR).*"                         "UNDERGROUND / DLR"                  Other
+    >> label "^[A-Z0-9]{8}\sGB[A-Z0-9]{14}\s"                       "FUND TRANSFER (OR RELATED)"         Other
+    >> label ".*(LONDON & SOUTH EAS|GWR BURNHAM TO BURHAM).*"       "RAILWAY"                            Other
+    >> label ".*EURO LIVERPOOL.*"                                   "EEA"                                Other
+    >> label ".*FOXTONS.*"                                          "FOXTONS"                            Other
+    >> label ".*GIFFGAFF.*"                                         "GIFFGAFF"                           Other
 
 (** 
     Script boot up, massage and label data
@@ -97,7 +133,7 @@ let labelStore =
 Environment.CurrentDirectory <- __SOURCE_DIRECTORY__
 
 let df = 
-    let x =
+    let frame =
         Directory.GetFiles(Environment.CurrentDirectory + "/data","*.csv")
         |> Array.map (fun path -> Frame.ReadCsv(path, hasHeaders = false))
         |> Array.map (fun df -> df |> Frame.indexColsWith [ "Date"; "Title"; "Amount" ])
@@ -110,8 +146,17 @@ let df =
               Amount = string amount |> decimal })
         |> Frame.ofRecords
 
-    x.AddColumn("Label", x |> Frame.getCol "Title" |> Series.mapValues labelStore)
-    x
+    frame.AddColumn(
+        "Label", 
+        frame
+        |> Frame.getCol "Title" 
+        |> Series.mapValues ((fun title -> (title, Other)) >> labelStore >> fst))
+    frame.AddColumn(
+        "Category", 
+        frame 
+        |> Frame.getCol "Title" 
+        |> Series.mapValues ((fun title -> (title, Other)) >> labelStore >> snd >> string))
+    frame
 
 (** 
     All expenses - pretty display
@@ -329,6 +374,47 @@ df
 df.Columns.[ [ "Date"; "Label"; "Amount" ]]
 |> Frame.filterRowValues(fun c -> c?Amount < 0.)
 |> Frame.groupRowsByString "Label"
+|> Frame.groupRowsUsing(fun _ c -> c.GetAs<DateTime>("Date").Month)
+|> Frame.getNumericCols
+|> Series.mapValues (Stats.levelSum (Pair.flatten3 >> Pair.get1And2Of3))
+|> Series.observations
+|> Seq.collect (snd >> Series.observations)
+|> Seq.map (fun ((month, title), amount) -> month, title, amount)
+|> Seq.groupBy (fun (month, _, _) -> month)
+|> Seq.iter (fun (month, values) ->
+    printfn "%s" (monthToString month)
+    values
+    |> Seq.sortBy (fun (_, _, amount) -> amount)
+    |> Seq.iter (fun (_, title, amount) ->
+        printfn "%50s %10.2f" title amount)
+    printfn "Total: %.2f GBP" (values |> Seq.sumBy (fun (_, _, amount) -> amount))
+    printfn "-----------------------------------------------------------------")
+
+(**
+    Grouped by category per month - pretty display
+    ---------------------------------------------------
+    - Group by category
+    - Group by Month
+    - Get Amount column
+    - Level sum by flattening the keys and summing using Month and Label
+
+    Output:
+    February
+                SOMETHING    -35.57
+      SOMETHING SOMETHING    -29.99
+          AGAIN SOMETHING    -29.00
+    Total: -661.08 GBP
+    -----------------------------------------------------------------
+    March
+                SOMETHING    -35.57
+      SOMETHING SOMETHING    -29.99
+          AGAIN SOMETHING    -29.00
+    Total: -661.08 GBP
+    -----------------------------------------------------------------
+**)
+df.Columns.[ [ "Date"; "Category"; "Amount" ]]
+|> Frame.filterRowValues(fun c -> c?Amount < 0.)
+|> Frame.groupRowsByString "Category"
 |> Frame.groupRowsUsing(fun _ c -> c.GetAs<DateTime>("Date").Month)
 |> Frame.getNumericCols
 |> Series.mapValues (Stats.levelSum (Pair.flatten3 >> Pair.get1And2Of3))
