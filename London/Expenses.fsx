@@ -273,6 +273,20 @@ df
     - Group by Month
     - Get Amount column
     - Level sum by flattening the keys and summing using Month and Label
+
+    Output:
+    February
+                SOMETHING    -35.57
+      SOMETHING SOMETHING    -29.99
+          AGAIN SOMETHING    -29.00
+    Total: -661.08 GBP
+    -----------------------------------------------------------------
+    March
+                SOMETHING    -35.57
+      SOMETHING SOMETHING    -29.99
+          AGAIN SOMETHING    -29.00
+    Total: -661.08 GBP
+    -----------------------------------------------------------------
 **)
 df.Columns.[ [ "Date"; "Label"; "Amount" ]]
 |> Frame.filterRowValues(fun c -> c?Amount < 0.)
