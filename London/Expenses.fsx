@@ -36,7 +36,6 @@ let labelStore =
         else str
 
     label    ".*BHS.*"                "BHS"
-    >> label ".*JOHN LEWIS.*"         "JOHN LEWIS"
     >> label ".*HOUSE OF FRASER.*"    "HOUSE OF FRASER"
     >> label ".*TIGER.*"              "TIGER"
     >> label ".*BOOTS.*"              "BOOTS"
@@ -45,6 +44,7 @@ let labelStore =
     >> label ".*WAITROSE.*"           "WAITROSE"
     >> label ".*NISA.*"               "NISA"
     >> label ".*ASDA.*"               "ASDA"
+    >> label ".*SAINSBURYS.*"         "SAINSBURYS"
     >> label ".*TESCO.*"              "TESCO"
     >> label ".*CASH.*"               "CASH WITHDRAW"
     >> label ".*POST OFFICE.*"        "POST OFFICE"
@@ -70,10 +70,15 @@ let labelStore =
     >> label ".*SPECSAVERS.*"         "SPECSAVERS"
     >> label ".*THE BODY SHOP.*"      "THE BODY SHOP"
     >> label ".*MCDONALDS.*"          "MCDONALDS"
-    >> label ".*(NRGGYM|HARLANDS).*"                   "NRGGYM"
-    >> label ".*(LUL TICKET MACHINE|DLR).*"            "UNDERGROUND / DLR"
-    >> label "^[A-Z0-9]{8}\sGB[A-Z0-9]{14}\s"          "FUND TRANSFER (OR RELATED)"
-    >> label ".*(M&S|MARKS & SPENCER|MARKS & SPEN).*"  "M&S"
+    >> label ".*AUDIBLE.*"            "AUDIBLE"
+    >> label ".*LOON FUNG.*"          "LOON FUNG"
+    >> label ".*ITUNES.COM/BILL.*"                       "APPLE APP STORE"
+    >> label ".*(JOHN LEWIS|JOHNLEWIS).*"                "JOHN LEWIS"
+    >> label ".*(NRGGYM|HARLANDS).*"                     "NRGGYM"
+    >> label ".*(LUL TICKET MACHINE|DLR).*"              "UNDERGROUND / DLR"
+    >> label ".*(GOOGLE|Non-Sterling Transaction Fee).*" "GOOGLE ACCOUNT (OR RELATED)"
+    >> label "^[A-Z0-9]{8}\sGB[A-Z0-9]{14}\s"            "FUND TRANSFER (OR RELATED)"
+    >> label ".*(M&S|MARKS & SPENCER|MARKS & SPEN|MARKS&SPENCER).*"  "M&S"
 
 (** 
     Script boot up, massage and label data
