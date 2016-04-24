@@ -382,25 +382,33 @@ df
     Total: -661.08 GBP
     -----------------------------------------------------------------
 **)
-df.Columns.[ [ "Date"; "Label"; "Amount" ]]
-|> Frame.filterRowValues(fun c -> c?Amount < 0.)
-|> Frame.groupRowsByString "Label"
-|> Frame.groupRowsUsing(fun _ c -> c.GetAs<DateTime>("Date").Month)
-|> Frame.mapRowKeys Pair.flatten3
-|> Frame.getNumericCols
-|> Series.mapValues (Stats.levelSum Pair.get1And2Of3)
-|> Series.observations
-|> Seq.collect (snd >> Series.observations)
-|> Seq.map (fun ((month, title), amount) -> month, title, amount)
-|> Seq.groupBy (fun (month, _, _) -> month)
-|> Seq.iter (fun (month, values) ->
-    printfn "%s" (monthToString month)
-    values
-    |> Seq.sortBy (fun (_, _, amount) -> amount)
-    |> Seq.iter (fun (_, title, amount) ->
-        printfn "%50s %10.2f" title amount)
-    printfn "Total: %.2f GBP" (values |> Seq.sumBy (fun (_, _, amount) -> amount))
-    printfn "-----------------------------------------------------------------")
+let showExpensesPerLabel (categories: Category list) =
+    categories
+    |> List.map string
+    |> List.iter (fun category ->
+        printfn "%s" category
+        df.Columns.[ [ "Date"; "Label"; "Category"; "Amount" ]]
+        |> Frame.filterRowValues (fun c -> c?Amount < 0. && c.GetAs<string>("Category") = category)
+        |> Frame.groupRowsByString "Label"
+        |> Frame.groupRowsUsing (fun _ c -> c.GetAs<DateTime>("Date").Month)
+        |> Frame.mapRowKeys Pair.flatten3
+        |> Frame.getNumericCols
+        |> Series.mapValues (Stats.levelSum Pair.get1And2Of3)
+        |> Series.observations
+        |> Seq.collect (snd >> Series.observations)
+        |> Seq.map (fun ((month, title), amount) -> month, title, amount)
+        |> Seq.groupBy (fun (month, _, _) -> month)
+        |> Seq.iter (fun (month, values) ->
+            printfn "%20s" (monthToString month)
+            values
+            |> Seq.sortBy (fun (_, _, amount) -> amount)
+            |> Seq.iter (fun (_, title, amount) ->
+                printfn "%50s %10.2f GBP" title amount)
+            printfn "%50s %10.2f GBP" "TOTAL" (values |> Seq.sumBy (fun (_, _, amount) -> amount))))
+
+showExpensesPerLabel 
+    [ Category.Supermarket
+      Category.Restaurant ]
 
 (**
     Grouped by category per month showing total - pretty display
@@ -440,9 +448,8 @@ df.Columns.[ [ "Date"; "Category"; "Amount" ]]
     values
     |> Seq.sortBy (fun (_, _, amount) -> amount)
     |> Seq.iter (fun (_, title, amount) ->
-        printfn "%50s %10.2f" title amount)
-    printfn "Total: %.2f GBP" (values |> Seq.sumBy (fun (_, _, amount) -> amount))
-    printfn "-----------------------------------------------------------------")
+        printfn "%50s %10.2f GBP" title amount)
+    printfn "%50s %10.2f GBP" "TOTAL" (values |> Seq.sumBy (fun (_, _, amount) -> amount)))
 
 (**
     Grouped by category per month showing expenses under category - pretty display
