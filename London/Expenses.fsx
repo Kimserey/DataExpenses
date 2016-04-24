@@ -523,4 +523,8 @@ let showExpensesPerMonth (categories: Category list) =
         |> Seq.iter (fun (month, value) -> 
             printfn "%15s %8.2f GBP" (monthToString month) value))
 
-showExpensesPerMonth [ Supermarket; AsianSupermarket; SweetAndSavoury ]
+showExpensesPerMonth 
+    [ Category.Supermarket
+      Category.AsianSupermarket
+      Category.SweetAndSavoury
+      Category.Restaurant ]
