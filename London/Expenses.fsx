@@ -7,7 +7,6 @@ open System.Globalization
 open System.Text.RegularExpressions
 open Deedle
 
-
 [<AutoOpen>]
 module Common =
 
