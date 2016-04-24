@@ -449,14 +449,12 @@ df.Columns.[ [ "Date"; "Category"; "Amount" ]]
     ------------------------------------------------------------------------------
     April
         Supermarket
-        ----------------
               04/04/2016              M&S   -19.57 GBP
               04/04/2016            TESCO   -67.05 GBP
               11/04/2016              M&S   -10.00 GBP
               11/04/2016       SAINSBURYS    -4.45 GBP
                                     TOTAL   -58.15 GBP
         Cash
-        ----------------
               13/04/2016    CASH WITHDRAW   -50.00 GBP
                                     TOTAL   -58.15 GBP
 **)
@@ -472,23 +470,19 @@ df.Columns.[ [ "Date"; "Category"; "Label"; "Amount" ]]
     |> Frame.nest
     |> Series.observations
     |> Seq.iter (fun (category, frame) ->
-        printfn "    %s" category 
-        printfn "    ----------------"
-
+        printfn "%25s" category 
         frame
         |> Frame.rows
         |> Series.observations
         |> Seq.map    (fun (_, s) -> s.GetAs<DateTime>("Date").ToShortDateString(), s.GetAs<string>("Label"), s?Amount)
         |> Seq.sortBy (fun (date, _, _) -> date)
-        |> Seq.iter   (fun (date, label, amount)  -> printfn "%20s %40s %8.2f GBP" date label amount)
-
-        printfn "%61s %8.2f GBP" 
+        |> Seq.iter   (fun (date, label, amount)  -> printfn "%35s %40s %8.2f GBP" date label amount)
+        printfn "%76s %8.2f GBP" 
             "TOTAL"
             (frame
              |> Frame.getCol "Amount" 
              |> Series.observations 
-             |> Seq.sumBy snd))
-    printfn "-----------------------------------------------------------------")
+             |> Seq.sumBy snd)))
 
 (**
     Expenses per month for a category - pretty display
@@ -503,7 +497,6 @@ df.Columns.[ [ "Date"; "Category"; "Label"; "Amount" ]]
             October   -35.40 GBP
            November   -31.69 GBP
 **)
-
 let showExpensesPerMonth (categories: Category list) =
     categories
     |> List.map string
@@ -527,3 +520,33 @@ showExpensesPerMonth
       Category.AsianSupermarket
       Category.SweetAndSavoury
       Category.Restaurant ]
+
+(**
+    Expenses per month for each day of the week - pretty display
+    ------------------------------------------------------------
+    October
+                  Monday   -24.03 GBP
+               Wednesday   -35.40 GBP
+                Saturday   -10.00 GBP
+    November
+                  Sunday   -30.00 GBP
+               Wednesday   -17.06 GBP
+                Thursday   -16.52 GBP
+**)
+df.Columns.[ [ "Date"; "Amount" ]]
+|> Frame.filterRowValues(fun c -> c?Amount < 0.)
+|> Frame.groupRowsUsing(fun _ c -> c.GetAs<DateTime>("Date").Month)
+|> Frame.groupRowsUsing(fun _ c -> c.GetAs<DateTime>("Date").DayOfWeek)
+|> Frame.mapRowKeys Pair.flatten3
+|> Frame.getNumericCols
+|> Series.mapValues (Stats.levelSum Pair.get1And2Of3)
+|> Series.observations
+|> Seq.collect (snd >> Series.observations)
+|> Seq.map (fun ((day, month), amount) -> day, month, amount)
+|> Seq.groupBy (fun (_, m, _) -> m)
+|> Seq.iter (fun (month, group) ->
+    printfn "%s" (monthToString month)
+    group
+    |> Seq.sort
+    |> Seq.iter (fun (d, _, a) ->
+        printfn "%20s %8.2f GBP" (d.ToString()) a))
