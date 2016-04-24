@@ -490,3 +490,37 @@ df.Columns.[ [ "Date"; "Category"; "Label"; "Amount" ]]
              |> Series.observations 
              |> Seq.sumBy snd))
     printfn "-----------------------------------------------------------------")
+
+(**
+    Expenses per month for a category - pretty display
+    --------------------------------------------------
+    Supermarket
+            October   -24.03 GBP
+           December   -83.32 GBP
+    AsianSupermarket
+            January   -14.55 GBP
+           February   -15.14 GBP
+    SweetAndSavoury
+            October   -35.40 GBP
+           November   -31.69 GBP
+**)
+
+let showExpensesPerMonth (categories: Category list) =
+    categories
+    |> List.map string
+    |> List.iter (fun category ->
+        printfn "%s" category
+        df.Columns.[ [ "Date"; "Category"; "Amount" ] ]
+        |> Frame.filterRowValues(fun c -> 
+            c?Amount < 0. 
+            && c.GetAs<string>("Category") = category)
+        |> Frame.groupRowsUsing(fun _ c -> 
+            c.GetAs<DateTime>("Date").Month)
+        |> Frame.getNumericCols
+        |> Series.mapValues (Stats.levelSum fst)
+        |> Series.observations
+        |> Seq.collect (snd >> Series.observations)
+        |> Seq.iter (fun (month, value) -> 
+            printfn "%15s %8.2f GBP" (monthToString month) value))
+
+showExpensesPerMonth [ Supermarket; AsianSupermarket; SweetAndSavoury ]
