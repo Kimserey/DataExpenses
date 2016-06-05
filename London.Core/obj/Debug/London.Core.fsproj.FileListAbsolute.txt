@@ -1,7 +1,0 @@
-C:\Projects\DataExpenses\London.Core\bin\Debug\London.Core.XML
-C:\Projects\DataExpenses\London.Core\bin\Debug\London.Core.dll
-C:\Projects\DataExpenses\London.Core\bin\Debug\London.Core.pdb
-C:\Projects\DataExpenses\London.Core\bin\Debug\FSharp.Core.dll
-C:\Projects\DataExpenses\London.Core\bin\Debug\FSharp.Core.xml
-C:\Projects\DataExpenses\London.Core\obj\Debug\London.Core.dll
-C:\Projects\DataExpenses\London.Core\obj\Debug\London.Core.pdb

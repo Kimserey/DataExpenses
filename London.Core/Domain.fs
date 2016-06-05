@@ -62,7 +62,8 @@ module Domain =
         >> label ".*WAITROSE.*"                                         "WAITROSE"                           Supermarket
         >> label ".*NISA.*"                                             "NISA"                               Supermarket
         >> label ".*ASDA.*"                                             "ASDA"                               Supermarket
-        >> label ".*SAINSBURYS.*"                                       "SAINSBURYS"                         Supermarket
+        >> label ".*OCADO.*"                                            "OCADO"                              Supermarket
+        >> label ".*SAINSBURY.*"                                        "SAINSBURY"                          Supermarket
         >> label ".*TESCO.*"                                            "TESCO"                              Supermarket
         >> label ".*(M&S|MARKS & SPENCER|MARKS & SPEN|MARKS&SPENCER).*" "M&S"                                Supermarket
         >> label ".*WILKO.*"                                            "WILKO"                              Supermarket
@@ -73,11 +74,13 @@ module Domain =
         >> label ".*BURGER KING.*"                                      "BURGER KING"                        FastFood
         >> label ".*PIZZA HUT.*"                                        "PIZZA HUT"                          FastFood
         >> label ".*MCDONALDS.*"                                        "MCDONALDS"                          FastFood
+        >> label ".*KFC.*"                                              "KFC"                                FastFood
 
         >> label ".*SPORTSDIRECT.*"                                     "SPORTSDIRECT"                       Clothing
         >> label ".*UNIQLO.*"                                           "UNIQLO"                             Clothing
         >> label ".*PRIMARK.*"                                          "PRIMARK"                            Clothing
         >> label ".*DEBENHAMS.*"                                        "DEBENHAMS"                          Clothing
+        >> label ".*MONSOON.*"                                          "MONSOON"                            Clothing
 
         >> label ".*SPECSAVERS.*"                                       "SPECSAVERS"                         HealthAndBeauty
         >> label ".*THE BODY SHOP.*"                                    "THE BODY SHOP"                      HealthAndBeauty
@@ -100,6 +103,7 @@ module Domain =
         >> label ".*EAT.*"                                              "EAT"                                SweetAndSavoury
         >> label ".*LOLAS.*"                                            "LOLAS"                              SweetAndSavoury
         >> label ".*STICKY RICE.*"                                      "STICKY RICE"                        SweetAndSavoury
+        >> label ".*CAFFE NERO.*"                                       "CAFFE NERO"                         SweetAndSavoury
 
         >> label ".*ITUNES.COM/BILL.*"                                  "APPLE APP STORE"                    Online
         >> label ".*AMAZON.*"                                           "AMAZON"                             Online
@@ -115,7 +119,12 @@ module Domain =
         >> label ".*GIRAFFE.*"                                          "GIRAFFE"                            Restaurant
         >> label ".*CAFE ROUGE.*"                                       "CAFE ROUGE"                         Restaurant
         >> label ".*TORTILLA.*"                                         "TORTILLA"                           Restaurant
-
+        >> label ".*KOFFEES & KREAM.*"                                  "KOFFEES & KREAM"                    Restaurant
+        >> label ".*BUMPKIN.*"                                          "BUMPKIN"                            Restaurant
+        >> label ".*WAGAMAMA.*"                                         "WAGAMAMA"                           Restaurant
+        >> label ".*GOLD MINE.*"                                        "GOLD MINE"                          Restaurant
+        >> label ".*THE BREAKFAST CLUB.*"                               "THE BREAKFAST CLUB"                 Restaurant
+        
         >> label ".*PET SUPPLIES.*"                                     "PET SUPPLIES GIFT"                  Other
         >> label ".*AUDIBLE.*"                                          "AUDIBLE"                            Other
         >> label ".*POST OFFICE.*"                                      "POST OFFICE"                        Other
@@ -127,4 +136,5 @@ module Domain =
         >> label ".*EURO LIVERPOOL.*"                                   "EEA"                                Other
         >> label ".*FOXTONS.*"                                          "FOXTONS"                            Other
         >> label ".*GIFFGAFF.*"                                         "GIFFGAFF"                           Other
-        >> label ".*CINEMA.*"                                           "CINEMA"                             Other
+        >> label ".*(CINEMA|EVERYMAN|VUE).*"                            "CINEMA"                             Other
+        >> label ".*THE GENTRY BARBER.*"                                "THE GENTRY BARBER"                  Other

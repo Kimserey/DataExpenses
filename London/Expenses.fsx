@@ -50,11 +50,11 @@ let df =
     All expenses - pretty display
     -----------------------------
     October
-      28/10/2015              SOMETHING     -35.40
-      26/10/2015         SOMETHING ELSE     -24.03
+      28/10/2015              SOMETHING     -35.40  CATEGORY
+      26/10/2015         SOMETHING ELSE     -24.03  CATEGORY
     November
-      30/11/2015    SOMETHING SOMETHING    -73.43
-      02/11/2015        SOMETHING AGAIN    -192.50
+      30/11/2015    SOMETHING SOMETHING    -73.43   CATEGORY
+      02/11/2015        SOMETHING AGAIN    -192.50  CATEGORY
 **)
 df
 |> Frame.filterRowValues(fun c -> c?Amount < 0.)
