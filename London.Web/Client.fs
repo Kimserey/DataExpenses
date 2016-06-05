@@ -10,8 +10,4 @@ open WebSharper.UI.Next.Client
 module Client =
     
     let page() = 
-        Doc.Button "Say hello " [] (fun () -> 
-            async {
-                let! hello = Rpcs.Hello.sayHello()
-                JS.Alert hello
-            } |> Async.Start)
+        ExpensesPerMonth.page()

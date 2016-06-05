@@ -263,10 +263,7 @@ let showExpensesPerLabel (categories: Category list) =
             printfn "%50s %10.2f GBP" "TOTAL" (values |> Seq.sumBy (fun (_, _, amount) -> amount))))
 
 showExpensesPerLabel 
-    [ Category.Supermarket
-      Category.Restaurant
-      Category.SweetAndSavoury 
-      Category.Other ]
+    [ Category.FastFood ]
 
 (**
     Grouped by category per month showing total - pretty display
@@ -384,7 +381,13 @@ showExpensesPerMonth
     [ Category.Supermarket
       Category.AsianSupermarket
       Category.SweetAndSavoury
-      Category.Restaurant ]
+      Category.Restaurant
+      Category.Clothing
+      Category.Cash
+      Category.DepartmentStore
+      Category.Electronics
+      Category.FastFood
+      Category.Other ]
 
 (**
     Expenses per month for each day of the week - pretty display
