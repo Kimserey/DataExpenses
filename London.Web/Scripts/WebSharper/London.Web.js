@@ -1,11 +1,11 @@
 (function()
 {
- var Global=this,Runtime=this.IntelliFactory.Runtime,Concurrency,Remoting,AjaxRemotingProvider,alert,UI,Next,Doc,List,T,London,Web,Client;
+ var Global=this,Runtime=this.IntelliFactory.Runtime,Concurrency,Remoting,AjaxRemotingProvider,alert,UI,Next,Doc,List,T;
  Runtime.Define(Global,{
   London:{
    Web:{
     Client:{
-     page:Runtime.Field(function()
+     page:function()
      {
       var arg20;
       arg20=function()
@@ -21,10 +21,10 @@
         $:0
        });
       };
-      return Doc.Button("Say hello",Runtime.New(T,{
+      return Doc.Button("Say hello ",Runtime.New(T,{
        $:0
       }),arg20);
-     })
+     }
     }
    }
   }
@@ -39,14 +39,10 @@
   Next=Runtime.Safe(UI.Next);
   Doc=Runtime.Safe(Next.Doc);
   List=Runtime.Safe(Global.WebSharper.List);
-  T=Runtime.Safe(List.T);
-  London=Runtime.Safe(Global.London);
-  Web=Runtime.Safe(London.Web);
-  return Client=Runtime.Safe(Web.Client);
+  return T=Runtime.Safe(List.T);
  });
  Runtime.OnLoad(function()
  {
-  Client.page();
   return;
  });
 }());

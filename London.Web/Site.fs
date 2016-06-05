@@ -9,6 +9,6 @@ module Site =
     
     type MainTemplate = Templating.Template<"Main.html">
 
-    let page = Content.Page(MainTemplate.Doc(title = "Data expenses", body = [ client <@ Client.page @> ]))
+    let page = Content.Page(MainTemplate.Doc(title = "Data expenses", body = [ client <@ Client.page() @> ]))
 
     let app = Application.SinglePage(fun _ -> page)

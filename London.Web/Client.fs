@@ -9,8 +9,8 @@ open WebSharper.UI.Next.Client
 [<JavaScript>]
 module Client =
     
-    let page = 
-        Doc.Button "Say hello" [] (fun () -> 
+    let page() = 
+        Doc.Button "Say hello " [] (fun () -> 
             async {
                 let! hello = Rpcs.Hello.sayHello()
                 JS.Alert hello
