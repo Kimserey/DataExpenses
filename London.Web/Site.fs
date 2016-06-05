@@ -18,6 +18,6 @@ module Site =
             .With("body", fun x -> x.Body)
 
     let page =
-        Content.WithTemplate template { Title = " Data expenses"; Body = [ text "Hello" ] }
+        Content.WithTemplate template { Title = " Data expenses"; Body = [ text "Hello!" ] }
 
     let app = Application.SinglePage(fun _ -> page)
