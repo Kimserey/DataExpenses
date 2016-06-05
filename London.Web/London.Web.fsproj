@@ -36,6 +36,8 @@
     <WarningLevel>3</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\css\style.css" />
+    <Compile Include="Resources.fs" />
     <Compile Include="Site.fs" />
     <Compile Include="EntryPoint.fs" />
     <Content Include="Main.html" />
