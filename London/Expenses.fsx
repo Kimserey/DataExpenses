@@ -20,31 +20,9 @@ open London.Core
 
 Environment.CurrentDirectory <- __SOURCE_DIRECTORY__
 
-let df = 
-    let frame =
-        Directory.GetFiles(Environment.CurrentDirectory + "/data","*.csv")
-        |> Array.map (fun path -> Frame.ReadCsv(path, hasHeaders = false))
-        |> Array.map (fun df -> df |> Frame.indexColsWith [ "Date"; "Title"; "Amount" ])
-        |> Array.map (fun df -> df.GetRows())
-        |> Seq.collect (fun s -> s.Values)
-        |> Seq.map (fun s -> s?Date, s?Title, s?Amount)
-        |> Seq.map (fun (date, title, amount) -> 
-            { Date = string date |> DateTime.Parse
-              Title = string title
-              Amount = string amount |> decimal })
-        |> Frame.ofRecords
-
-    frame.AddColumn(
-        "Label", 
-        frame
-        |> Frame.getCol "Title" 
-        |> Series.mapValues ((fun title -> (title, Other)) >> labelStore >> fst))
-    frame.AddColumn(
-        "Category", 
-        frame 
-        |> Frame.getCol "Title" 
-        |> Series.mapValues ((fun title -> (title, Other)) >> labelStore >> snd >> string))
-    frame
+let df =
+    ExpenseDataFrame.FromFile <| Directory.GetFiles(Environment.CurrentDirectory + "/data","*.csv")
+    |> ExpenseDataFrame.GetFrame
 
 (** 
     All expenses - pretty display
