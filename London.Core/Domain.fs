@@ -104,6 +104,7 @@ module Domain =
         >> label ".*LOLAS.*"                                            "LOLAS"                              SweetAndSavoury
         >> label ".*STICKY RICE.*"                                      "STICKY RICE"                        SweetAndSavoury
         >> label ".*CAFFE NERO.*"                                       "CAFFE NERO"                         SweetAndSavoury
+        >> label ".*ISLINGTON SUGAR.*"                                  "SUGAR FREE BAKERY"                  SweetAndSavoury
 
         >> label ".*ITUNES.COM/BILL.*"                                  "APPLE APP STORE"                    Online
         >> label ".*AMAZON.*"                                           "AMAZON"                             Online

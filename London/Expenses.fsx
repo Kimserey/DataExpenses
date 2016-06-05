@@ -286,7 +286,9 @@ let showExpensesPerLabel (categories: Category list) =
 
 showExpensesPerLabel 
     [ Category.Supermarket
-      Category.Restaurant ]
+      Category.Restaurant
+      Category.SweetAndSavoury 
+      Category.Other ]
 
 (**
     Grouped by category per month showing total - pretty display
