@@ -6,3 +6,6 @@ packages/
 London.userprefs
 London/bin
 London/obj
+London.Web/bin
+London.Web/obj
+London.Web/Content
