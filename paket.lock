@@ -2,3 +2,6 @@ NUGET
   remote: https://www.nuget.org/api/v2
   specs:
     Deedle (1.2.4)
+    WebSharper (3.6.14.237)
+    WebSharper.UI.Next (3.6.15.211)
+      WebSharper (>= 3.6.12.235)
