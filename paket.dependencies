@@ -1,4 +1,15 @@
 source https://www.nuget.org/api/v2
 nuget Deedle
-nuget WebSharper
+nuget IntelliFactory.Xml 0.6.63.95 framework: >= net45
+nuget Microsoft.Owin 3.0.1 framework: >= net45
+nuget Microsoft.Owin.Diagnostics 3.0.1 framework: >= net45
+nuget Microsoft.Owin.FileSystems 3.0.1 framework: >= net45
+nuget Microsoft.Owin.Host.HttpListener 3.0.1 framework: >= net45
+nuget Microsoft.Owin.Hosting 3.0.1 framework: >= net45
+nuget Microsoft.Owin.StaticFiles 3.0.1 framework: >= net45
+nuget Mono.Cecil 0.9.6.1 framework: >= net45
+nuget Owin 1.0 framework: >= net45
+nuget WebSharper 3.6.14.237 framework: >= net45
+nuget WebSharper.Html 3.6.10.22 framework: >= net45
+nuget WebSharper.Owin 3.6.11.126 framework: >= net45
 nuget WebSharper.UI.Next
