@@ -17,7 +17,7 @@ module EntryPoint =
             match args with
             | [| rootDirectory; url |] -> rootDirectory, url
             | [| url |] -> "..", url
-            | [| |] -> "..", "http://localhost:9000/"
+            | [| |] -> "..", "http://localhost:9100/"
             | _ -> eprintfn "Usage: London.Web ROOT_DIRECTORY URL"; exit 1
         use server = WebApp.Start(url, fun appB ->
             appB.UseStaticFiles(
