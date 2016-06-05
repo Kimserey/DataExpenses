@@ -4,6 +4,7 @@ open System
 open System.Globalization
 open System.Text.RegularExpressions
 
+[<AutoOpen>]
 module Domain =
     
     type Expense = {
@@ -67,7 +68,7 @@ module Domain =
         >> label ".*WILKO.*"                                            "WILKO"                              Supermarket
 
         >> label ".*CURRYS*"                                            "CURRYS"                             Electronics
-        >> label ".*CARPHONE*"                                            "CARPHONE"                         Electronics
+        >> label ".*CARPHONE*"                                          "CARPHONE"                           Electronics
 
         >> label ".*BURGER KING.*"                                      "BURGER KING"                        FastFood
         >> label ".*PIZZA HUT.*"                                        "PIZZA HUT"                          FastFood
