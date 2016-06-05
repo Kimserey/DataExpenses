@@ -7,8 +7,8 @@ packages/
 London.userprefs
 London/bin/*
 London/obj/*
-London.Core/bin/*
-London.Core/obj/*
+London.Core/bin/Debug/*
+London.Core/obj/Debug/*
 London.Web/bin/*
 London.Web/obj/*
 London.Web/Content
