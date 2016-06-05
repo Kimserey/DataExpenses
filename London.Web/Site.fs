@@ -9,7 +9,7 @@ module Site =
 
     type MainHtml = {
         Title : string
-        Body : Doc list
+        Body : Doc
     }
  
     let template =
@@ -18,6 +18,6 @@ module Site =
             .With("body", fun x -> x.Body)
 
     let page =
-        Content.WithTemplate template { Title = " Data expenses"; Body = [ text "Hello!" ] }
+        Content.WithTemplate template { Title = " Data expenses"; Body = client <@ Client.page @> }
 
     let app = Application.SinglePage(fun _ -> page)
