@@ -1,0 +1,800 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+<assembly><name>WebSharper.Web</name></assembly>
+<members>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="F:WebSharper.Json.OptionalFieldKind.MarkedOption">
+<summary>
+ The field has type option&lt;&apos;T&gt; and is marked [&lt;OptionalField&gt;]
+</summary>
+</member>
+<member name="F:WebSharper.Json.OptionalFieldKind.NormalOption">
+<summary>
+ The field has type option&lt;&apos;T&gt;
+</summary>
+</member>
+<member name="F:WebSharper.Json.OptionalFieldKind.NotOption">
+<summary>
+ The field doesn&apos;t have type option&lt;&apos;T&gt;
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="M:WebSharper.Json.|Object|Array|Number|String|Boolean|Undefined|(WebSharper.Core.Json.Encoded)">
+<summary>
+ Test the shape of a JSON encoded value.
+ Client-side only.
+</summary>
+</member>
+<member name="M:WebSharper.Json.DeserializeWith``1(WebSharper.Json.Provider,System.String)">
+<summary>
+ Deserializes a JSON string using the same readable format as Sitelets.
+ For plain JSON parsing, see Json.Parse.
+ Client-side only.
+</summary>
+</member>
+<member name="M:WebSharper.Json.Deserialize``1(System.String)">
+<summary>
+ Deserializes a JSON string using the same readable format as Sitelets.
+ For plain JSON parsing, see Json.Parse.
+</summary>
+</member>
+<member name="M:WebSharper.Json.DecodeWith``1(WebSharper.Json.Provider,System.Object)">
+<summary>
+ Decodes an object parsed from the same readable JSON format as Sitelets.
+ Client-side only.
+</summary>
+</member>
+<member name="M:WebSharper.Json.Decode``1(System.Object)">
+<summary>
+ Decodes an object parsed from the same readable JSON format as Sitelets.
+ Client-side only.
+</summary>
+</member>
+<member name="M:WebSharper.Json.SerializeWith``1(WebSharper.Json.Provider,``0)">
+<summary>
+ Serializes an object to JSON using the same readable format as Sitelets.
+ For plain JSON stringification, see Json.Stringify.
+ Client-side only.
+</summary>
+</member>
+<member name="M:WebSharper.Json.Serialize``1(``0)">
+<summary>
+ Serializes an object to JSON using the same readable format as Sitelets.
+ For plain JSON stringification, see Json.Stringify.
+</summary>
+</member>
+<member name="M:WebSharper.Json.EncodeWith``1(WebSharper.Json.Provider,``0)">
+<summary>
+ Encodes an object in such a way that JSON stringification
+ results in the same readable format as Sitelets.
+ Client-side only.
+</summary>
+</member>
+<member name="M:WebSharper.Json.Encode``1(``0)">
+<summary>
+ Encodes an object in such a way that JSON stringification
+ results in the same readable format as Sitelets.
+ Client-side only.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Json.Macro.Internals.Funs">
+
+</member>
+<member name="T:WebSharper.Json.Macro.Internals">
+
+</member>
+<member name="T:WebSharper.Json.Macro">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Json.Internals">
+
+</member>
+<member name="T:WebSharper.Json">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Web.Control">
+<summary>
+ A base class for defining custom ASP.NET controls. Inherit from this class,
+ override the Body property and use the new class as a Server ASP.NET
+ control in your application.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="P:WebSharper.Web.IContext.UserSession">
+<summary>
+ Manage user login sessions.
+</summary>
+</member>
+<member name="P:WebSharper.Web.IContext.RootFolder">
+<summary>
+ The full path to the application&apos;s root folder.
+</summary>
+</member>
+<member name="P:WebSharper.Web.IContext.RequestUri">
+<summary>
+ The URI of the web request.
+</summary>
+</member>
+<member name="P:WebSharper.Web.IContext.Environment">
+<summary>
+ Environment-specific information (e.g. the ASP.NET or OWIN context)
+</summary>
+</member>
+<member name="T:WebSharper.Web.IContext">
+<summary>
+ Provides context about the web request being replied to.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="P:WebSharper.Web.IUserSession.IsAvailable">
+<summary>
+ Check whether user sessions are currently available.
+</summary>
+</member>
+<member name="M:WebSharper.Web.IUserSession.Logout">
+<summary>
+ Log out the current user.
+</summary>
+</member>
+<member name="M:WebSharper.Web.IUserSession.LoginUser(System.String,Microsoft.FSharp.Core.FSharpOption{System.Boolean})">
+<summary>
+ Log in the given user.
+ Set `persistent` to true to persist the login across browser sessions.
+</summary>
+</member>
+<member name="M:WebSharper.Web.IUserSession.GetLoggedInUser">
+<summary>
+ Retrieve the currently logged in user.
+</summary>
+</member>
+<member name="T:WebSharper.Web.IUserSession">
+<summary>
+ Manages user sessions in a web application.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Web.InlineControl`1">
+<summary>
+ Implements a web control based on a quotation-wrapped top-level body.
+ Use the function ClientSide to create an InlineControl.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Web.Require">
+<summary>
+ A server-side control that adds a runtime dependency on a given resource.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Web.Require`1">
+<summary>
+ A server-side control that adds a runtime dependency on a given resource.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Web.RpcModule">
+<summary>
+ The WebSharper RPC HttpModule. Handles RPC requests.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="M:WebSharper.Web.ScriptManager.TryFind(System.Web.UI.Page)">
+<summary>
+ Searches the page for a ScriptManager.
+</summary>
+</member>
+<member name="M:WebSharper.Web.ScriptManager.Render(System.Web.UI.HtmlTextWriter)">
+<summary>
+ Renders the resources.
+</summary>
+</member>
+<member name="M:WebSharper.Web.ScriptManager.Register(Microsoft.FSharp.Core.FSharpOption{System.String},WebSharper.IRequiresResources)">
+<summary>
+ Registers a pagelet with the manager.
+</summary>
+</member>
+<member name="M:WebSharper.Web.ScriptManager.Find(System.Web.UI.Page)">
+<summary>
+ Finds an instance of ScriptManager on the page, throwing an
+ exception if it is not present.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Web.ScriptManager">
+<summary>
+ The script manager control takes care of providing resources
+ for the WebSharper pagelets used on the page. Every
+ ASP.NET page should have one instance of this
+ control in the head section.
+</summary>
+</member>
+<member name="M:WebSharper.Web.HtmlTextWriterExtensions.HtmlTextWriter.IsSelfClosingTag.Static(System.String)">
+<summary>
+ Checks whether an element should be rendered as self-closing,
+ ie. &lt;x /&gt; instead of &lt;x&gt;&lt;/x&gt;
+</summary>
+</member>
+<member name="T:WebSharper.Web.HtmlTextWriterExtensions">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Web.IUserSessionExtensions">
+
+</member>
+<member name="M:WebSharper.Web.Remoting.GetContext">
+<summary>
+ Retrieve the current web context in an Rpc function. This function must be called
+ from the thread from which the Rpc function is originally called. The returned
+ object can be used throughout the Rpc function.
+</summary>
+</member>
+<member name="M:WebSharper.Web.Remoting.DisableCsrfProtection">
+<summary>
+ Disable Cross-Site Request Forgery protection on RPC calls.
+ It is enabled by default.
+</summary>
+</member>
+<member name="M:WebSharper.Web.Remoting.EnableCsrfProtection">
+<summary>
+ Enable Cross-Site Request Forgery protection on RPC calls.
+ It is enabled by default.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="M:WebSharper.Web.Remoting.RemoveAllowedOrigin(System.String)">
+<summary>
+ Remove an HTTP origin that is allowed to perform RPC calls to this application.
+ Does nothing if this origin wasn&apos;t allowed.
+ The format is: &quot;http://mydomain.com&quot;
+</summary>
+</member>
+<member name="M:WebSharper.Web.Remoting.AddAllowedOrigin(System.String)">
+<summary>
+ Add an HTTP origin that is allowed to perform RPC calls to this application.
+ Does nothing if this origin was already allowed.
+ The format is: &quot;http://mydomain.com&quot;
+</summary>
+</member>
+<member name="M:WebSharper.Web.Remoting.SetAllowedOrigins(System.Collections.Generic.IEnumerable{System.String})">
+<summary>
+ Set the HTTP origins that are allowed to perform RPC calls to this application.
+ The format is: &quot;http://mydomain.com&quot;
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Web.Remoting">
+
+</member>
+<member name="M:WebSharper.Web.RemotingExtensions.Server.HandleRequest(WebSharper.Core.Remoting.Server,WebSharper.Core.Remoting.Request,WebSharper.Web.IContext)">
+<summary>
+ Handle a request with the given web context.
+</summary>
+</member>
+<member name="T:WebSharper.Web.RemotingExtensions">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Web.RpcUtil">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Web.Shared">
+
+</member>
+<member name="M:WebSharper.WebExtensions.ClientSide``1(Microsoft.FSharp.Quotations.FSharpExpr{``0})">
+<summary>
+ Embed the given client-side control body in a server-side control.
+ The client-side control body must be either a module-bound or static value,
+ or a call to a module-bound function or static method, and all arguments
+ must be either literals or references to local variables.
+</summary>
+</member>
+<member name="T:WebSharper.WebExtensions">
+
+</member>
+</members>
+</doc>

@@ -1,0 +1,1415 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+<assembly><name>WebSharper.Sitelets</name></assembly>
+<members>
+<member name="M:WebSharper.Application.Text(Microsoft.FSharp.Core.FSharpFunc{WebSharper.Sitelets.Context{WebSharper.Application.SPA.EndPoint},System.String})">
+<summary>
+ Create a single-page application that returns text.
+</summary>
+</member>
+<member name="M:WebSharper.Application.SinglePage(Microsoft.FSharp.Core.FSharpFunc{WebSharper.Sitelets.Context{WebSharper.Application.SPA.EndPoint},Microsoft.FSharp.Control.FSharpAsync{WebSharper.Sitelets.Content{WebSharper.Application.SPA.EndPoint}}})">
+<summary>
+ Create a single-page HTML application.
+</summary>
+</member>
+<member name="M:WebSharper.Application.MultiPage``1(Microsoft.FSharp.Core.FSharpFunc{WebSharper.Sitelets.Context{``0},Microsoft.FSharp.Core.FSharpFunc{``0,Microsoft.FSharp.Control.FSharpAsync{WebSharper.Sitelets.Content{``0}}}})">
+<summary>
+ Create a multi-page application.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Application.SPA">
+
+</member>
+<member name="T:WebSharper.Application">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="M:WebSharper.Sitelets.Content`1.Text(System.String,Microsoft.FSharp.Core.FSharpOption{System.Text.Encoding})">
+<summary>
+ Creates a plain text content.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content`1.Page(WebSharper.Sitelets.Page)">
+<summary>
+ Creates an HTML content.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content`1.Page``4(Microsoft.FSharp.Core.FSharpOption{``0},Microsoft.FSharp.Core.FSharpOption{``2},Microsoft.FSharp.Core.FSharpOption{System.String},Microsoft.FSharp.Core.FSharpOption{System.String})">
+<summary>
+ Creates an HTML content.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content`1.Json``1(``0)">
+<summary>
+ Creates a JSON content from the given object.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content`1.File(System.String,Microsoft.FSharp.Core.FSharpOption{System.Boolean},Microsoft.FSharp.Core.FSharpOption{System.String})">
+<summary>
+ Creates a content that serves a file from disk.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content`1.Custom(Microsoft.FSharp.Core.FSharpOption{WebSharper.Sitelets.Http.Status},Microsoft.FSharp.Core.FSharpOption{System.Collections.Generic.IEnumerable{WebSharper.Sitelets.Http.Header}},Microsoft.FSharp.Core.FSharpOption{Microsoft.FSharp.Core.FSharpFunc{System.IO.Stream,Microsoft.FSharp.Core.Unit}})">
+<summary>
+ Creates a custom content.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content`1.Custom(WebSharper.Sitelets.Http.Response)">
+<summary>
+ Creates a custom content.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.Content`1">
+<summary>
+ Represents server responses to actions. The Page response is special-cased
+ for combinators to have access to it.
+</summary>
+</member>
+<member name="P:WebSharper.Sitelets.Context`1.Environment">
+<summary>
+ Environment-specific information (e.g. the ASP.NET or OWIN context).
+</summary>
+</member>
+<member name="P:WebSharper.Sitelets.Context`1.UserSession">
+<summary>
+ Manage user login sessions.
+</summary>
+</member>
+<member name="P:WebSharper.Sitelets.Context`1.RootFolder">
+<summary>
+ The full path to the root application folder.
+</summary>
+</member>
+<member name="P:WebSharper.Sitelets.Context`1.Request">
+<summary>
+ HTTP Request object
+</summary>
+</member>
+<member name="P:WebSharper.Sitelets.Context`1.ResourceContext">
+<summary>
+ WebSharper resource rendering context required for resources.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="P:WebSharper.Sitelets.Context`1.Metadata">
+<summary>
+ WebSharper metadata required for serializing controls.
+</summary>
+</member>
+<member name="P:WebSharper.Sitelets.Context`1.Json">
+<summary>
+ The typed JSON provider for interacting with the client.
+</summary>
+</member>
+<member name="P:WebSharper.Sitelets.Context`1.Link">
+<summary>
+ Generates a (possibly relative) URL to a given action.
+</summary>
+</member>
+<member name="P:WebSharper.Sitelets.Context`1.ApplicationPath">
+<summary>
+ Virtual application root path on the server.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.Context`1">
+<summary>
+ Provides services available to handlers at run-time.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Sitelets.Controller`1">
+<summary>
+ Represents a controller that matches actions to responses.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.EndPointAttribute">
+<summary>
+ Indicates the URL fragment parsed by this union case.
+ Example: type Action = | [&lt;EndPoint &quot;/article&quot;&gt;] GetArticle
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.FormDataAttribute.#ctor(System.String[])">
+<summary>
+ Indicates that the union case arguments with the given names must be parsed
+ from the request&apos;s query parameters.
+ Example: type Action = | [&lt;FormData &quot;someField&quot;&gt;] MyAction of someField: string
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.FormDataAttribute.#ctor">
+<summary>
+ Indicates that a field must be parsed from the request&apos;s query parameters.
+ Example: type Action = { [&lt;FormData&gt;] someField: string }
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.FormDataAttribute">
+<summary>
+ Indicates that a field or union case argument must be parsed
+ from the request&apos;s body in form post syntax, ie. with the Content-Type
+ being either application/x-www-form-urlencoded or multipart/form-data.
+ The value must be a primitive value, a DateTime, or an option thereof.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Sitelets.HttpHandler">
+<summary>
+ The ISS handler for WebSharper applications.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Sitelets.HttpModule">
+<summary>
+ IIS module, processing the URLs and serving the pages.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Sitelets.IWebsite`1">
+<summary>
+ Define a Sitelets website. This interface must be
+ implemented by the type passed to WebsiteAttribute.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.JsonAttribute.#ctor(System.String)">
+<summary>
+ Indicates that the union case argument with the given name must be parsed
+ from the request&apos;s body as JSON.
+ Example: type Action = | [&lt;Json &quot;data&quot;&gt;] MyAction of data: MyData
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.JsonAttribute.#ctor">
+<summary>
+ Indicates that a field must be parsed from the request&apos;s body as JSON.
+ Example: type Action = { [&lt;Json&gt;] data : MyData }
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.JsonAttribute">
+<summary>
+ Indicates that a field or a union case argument must be parsed
+ from the request body as JSON, rather than from the URL path.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.Location">
+<summary>
+ Represents addressable locations.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Sitelets.MethodAttribute">
+<summary>
+ Indicates that a union case in an action type must only be mapped
+ for requests that use the given HTTP method(s).
+ Example: type Action = | [&lt;Method &quot;POST&quot;&gt;] MyPostAction
+</summary>
+</member>
+<member name="P:WebSharper.Sitelets.Page.Body">
+<summary>
+ Body of the page, ie. contents of the &lt;body&gt; tag.
+</summary>
+</member>
+<member name="P:WebSharper.Sitelets.Page.Head">
+<summary>
+ Head of the page, ie. contents of the &lt;head&gt; tag.
+ WebSharper-generated tags, such as script dependencies,
+ are appended to this head.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="P:WebSharper.Sitelets.Page.Title">
+<summary>
+ Title of the page, ie. contents of the &lt;title&gt; tag.
+</summary>
+</member>
+<member name="P:WebSharper.Sitelets.Page.Doctype">
+<summary>
+ Doctype tag.
+ Default is the standard HTML5 doctype: &quot;&lt;!DOCTYPE html&gt;&quot;
+</summary>
+</member>
+<member name="P:WebSharper.Sitelets.Page.Default">
+<summary>
+ A default, empty page.
+ Use the `{ Page.Default with ... }` syntax to create your own pages.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.Page">
+<summary>
+ Represents HTML pages with embedded WebSharper controls.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.QueryAttribute.#ctor(System.String[])">
+<summary>
+ Indicates that the union case arguments with the given names must be parsed
+ from the request&apos;s query parameters.
+ Example: type Action = | [&lt;Query &quot;someField&quot;&gt;] MyAction of someField: string
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.QueryAttribute.#ctor">
+<summary>
+ Indicates that a field must be parsed from the request&apos;s query parameters.
+ Example: type Action = { [&lt;Query&gt;] someField : string }
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.QueryAttribute">
+<summary>
+ Indicates that a field or union case argument must be parsed
+ from the request&apos;s query parameters, rather than from the URL path.
+ The value must be a primitive value, a DateTime, or an option thereof.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Router`1.op_LessBarGreater(WebSharper.Sitelets.Router{`0},WebSharper.Sitelets.Router{`0})">
+<summary>
+ Combines two routers. The combined router
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Router`1.Route(WebSharper.Sitelets.Http.Request)">
+<summary>
+ Tries to route a request to an action. Fails if the request
+ is not understood by the router.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Router`1.Link(`0)">
+<summary>
+ Tries to constructs a link to a given action. Fails with None
+ if the action is not understood by the router.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.Router`1">
+<summary>
+ Provides a bijection between URL locations and abstract actions.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Sitelets.SinglePageAction">
+<summary>
+ The action type for SinglePageWebsite.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="M:WebSharper.Sitelets.Sitelet`1.op_LessBarGreater``1(WebSharper.Sitelets.Sitelet{``0},WebSharper.Sitelets.Sitelet{``0})">
+<summary>
+ Combines two sitelets, with the leftmost taking precedence.
+</summary>
+</member>
+<member name="P:WebSharper.Sitelets.Sitelet`1.Upcast">
+<summary>
+ Called through reflection by SiteLoading.TryLoadSite.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.Sitelet`1">
+<summary>
+ Represents a self-contained website parameterized by the type of actions.
+ A sitelet combines a router, which is used to match incoming requests to
+ actions and actions to URLs, and a controller, which is used to handle
+ the actions.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="M:WebSharper.Sitelets.WebsiteAttribute.#ctor">
+<summary>
+ Mark a static property or module-bound value representing a Sitelets website.
+ The value must have type Sitelet&lt;&apos;T&gt;.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.WebsiteAttribute.#ctor(System.Type)">
+<summary>
+ Mark an assembly that contains a Sitelets website.
+ The type passed must implement IWebsite.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Sitelets.WebsiteAttribute">
+<summary>
+ Mark an assembly that contains a Sitelets website, or a Sitelet static property.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Sitelets.WildcardAttribute">
+<summary>
+ Indicates that the last field or union case argument parses all the remaining
+ path segments into a list or an array.
+ Example: type Action = | [&lt;Wildcard&gt;] MyAction of string * list&lt;string&gt;
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="M:WebSharper.Sitelets.ActionEncoding.Factory.GetFormatFor(System.Type)">
+<summary>
+ Derives an encoding for the given type.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.ActionEncoding.Factory.GetFormat``1">
+<summary>
+ Derives an encoding for the given type passed as a type parameter.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.ActionEncoding.Factory.Create">
+<summary>
+ Creates a new factory.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.ActionEncoding.Factory">
+<summary>
+ Represents cached formatter collection.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.ActionEncoding.Format`1.Show(`0)">
+<summary>
+ Formats a value into a URL. Fails if it cannot be represented.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.ActionEncoding.Format`1.Read(System.String,WebSharper.Sitelets.Http.Request)">
+<summary>
+ Parses a URL path from the given request. Fails if the request cannot be parsed.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.ActionEncoding.Format`1">
+<summary>
+ Represents an URL encoding for a given type.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.ActionEncoding.DecodeResult`1.MissingFormData">
+<summary>
+ A post body parameter of type application/x-www-urlencoded or multipart/form-data
+ was missing to decode an action.
+ The corresponding part of the action is a default value.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.ActionEncoding.DecodeResult`1.MissingQueryParameter">
+<summary>
+ A GET query parameter was missing to decode an action.
+ The corresponding part of the action is a default value.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.ActionEncoding.DecodeResult`1.InvalidJson">
+<summary>
+ An action failed to be decoded as JSON from the request body.
+ The JSON part of the action is a default value.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.ActionEncoding.DecodeResult`1.InvalidMethod">
+<summary>
+ An action was decoded, but the request used the given invalid HTTP method.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.ActionEncoding.DecodeResult`1.Success">
+<summary>
+ The request was correct and an action was decoded.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.ActionEncoding.DecodeResult`1">
+<summary>
+ The result of trying to decode a request.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="M:WebSharper.Sitelets.ActionEncoding.GetFormatFor(System.Type)">
+<summary>
+ Derives a format for a given type using a new temporary factory.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.ActionEncoding.GetFormat``1">
+<summary>
+ Derives a format using a new temporary factory.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Sitelets.ActionEncoding.NoFormatError">
+<summary>
+ Thrown when a formatter cannot be derived for a certain type.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.ActionEncoding">
+<summary>
+ Implements generic URL encoding and decoding for algebraic
+ datatypes. To be on the safe side, the encoded values use only
+ unreserved URL characters (including alphanumeric, tilde, dash,
+ underscore and dot characters). Tilde serves as a special character
+ starting escape sequences. The encoding also uses the forward slash
+ to separate logical components.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="M:WebSharper.Sitelets.Content.MethodNotAllowed``1">
+<summary>
+ Constructs a 405 Method Not Allowed response.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content.ServerError``1">
+<summary>
+ Constructs a 500 Server Error response.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content.NotFound``1">
+<summary>
+ Constructs a 404 Not Found response.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content.Forbidden``1">
+<summary>
+ Constructs a 403 Forbidden response.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content.Unauthorized``1">
+<summary>
+ Constructs a 401 Unauthorized response.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content.RedirectTemporaryToUrl``1(System.String)">
+<summary>
+ Redirects temporarily (307 Redirect Temporary) to a given URL.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content.RedirectTemporary``1(``0)">
+<summary>
+ Redirects temporarily (307 Redirect Temporary) to a given action.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content.RedirectPermanentToUrl``1(System.String)">
+<summary>
+ Redirects permanently (301 Moved Permanently) to a given URL.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content.RedirectPermanent``1(``0)">
+<summary>
+ Redirects permanently (301 Moved Permanently) to a given action.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content.SetBody``1(Microsoft.FSharp.Core.FSharpFunc{System.IO.Stream,Microsoft.FSharp.Core.Unit},Microsoft.FSharp.Control.FSharpAsync{WebSharper.Sitelets.Content{``0}})">
+<summary>
+ Set the body writing function of the generated response.
+ Transforms any content to &apos;CustomContent&apos;.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content.SetStatus``1(WebSharper.Sitelets.Http.Status,Microsoft.FSharp.Control.FSharpAsync{WebSharper.Sitelets.Content{``0}})">
+<summary>
+ Set the status of the generated response.
+ Transforms any content to &apos;CustomContent&apos;.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content.SetHeaders``1(System.Collections.Generic.IEnumerable{WebSharper.Sitelets.Http.Header},Microsoft.FSharp.Control.FSharpAsync{WebSharper.Sitelets.Content{``0}})">
+<summary>
+ Replace the headers of the generated response. Transforms any
+ content to &apos;CustomContent&apos;.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content.WithContentType``1(System.String,Microsoft.FSharp.Control.FSharpAsync{WebSharper.Sitelets.Content{``0}})">
+<summary>
+ Set the Content-Type header.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content.WithHeader``1(System.String,System.String,Microsoft.FSharp.Control.FSharpAsync{WebSharper.Sitelets.Content{``0}})">
+<summary>
+ Add a header to the generated response. Transforms any
+ content to &apos;CustomContent&apos;.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content.WithHeaders``1(System.Collections.Generic.IEnumerable{WebSharper.Sitelets.Http.Header},Microsoft.FSharp.Control.FSharpAsync{WebSharper.Sitelets.Content{``0}})">
+<summary>
+ Add headers to the generated response. Transforms any
+ content to &apos;CustomContent&apos;.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content.MapResponseAsync``1(Microsoft.FSharp.Core.FSharpFunc{WebSharper.Sitelets.Http.Response,Microsoft.FSharp.Control.FSharpAsync{WebSharper.Sitelets.Http.Response}},Microsoft.FSharp.Control.FSharpAsync{WebSharper.Sitelets.Content{``0}})">
+<summary>
+ Modify the response of a content. Transforms any
+ content to &apos;CustomContent&apos;.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content.MapResponse``1(Microsoft.FSharp.Core.FSharpFunc{WebSharper.Sitelets.Http.Response,WebSharper.Sitelets.Http.Response},Microsoft.FSharp.Control.FSharpAsync{WebSharper.Sitelets.Content{``0}})">
+<summary>
+ Modify the response of a content. Transforms any
+ content to &apos;CustomContent&apos;.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content.JsonContentAsync``2(Microsoft.FSharp.Core.FSharpFunc{WebSharper.Sitelets.Context{``0},Microsoft.FSharp.Control.FSharpAsync{``1}})">
+<summary>
+ Generates JSON content from the given object.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content.JsonContent``2(Microsoft.FSharp.Core.FSharpFunc{WebSharper.Sitelets.Context{``0},``1})">
+<summary>
+ Generates JSON content from the given object.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content.FromAsync``1(Microsoft.FSharp.Control.FSharpAsync{WebSharper.Sitelets.Content{``0}})">
+<summary>
+ Wraps an asynchronous content.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content.ToResponseAsync``1(WebSharper.Sitelets.Content{``0},WebSharper.Sitelets.Context{``0})">
+<summary>
+ Generates an HTTP response.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content.ToResponse``1(WebSharper.Sitelets.Content{``0},WebSharper.Sitelets.Context{``0})">
+<summary>
+ Generates an HTTP response.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Content.FromContext``1(Microsoft.FSharp.Core.FSharpFunc{WebSharper.Sitelets.Context{``0},Microsoft.FSharp.Control.FSharpAsync{WebSharper.Sitelets.Content{``0}}})">
+<summary>
+ Creates Content that depends on the Sitelet context.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.Content">
+<summary>
+ Provides combinators for modifying content.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Context.Map``2(Microsoft.FSharp.Core.FSharpFunc{``0,``1},WebSharper.Sitelets.Context{``1})">
+<summary>
+ Map a context to a wrapping type.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.Context">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Sitelets.Extensions">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="P:WebSharper.Sitelets.Http.Status.Unauthorized">
+<summary>
+ 401 Unauthorized.
+</summary>
+</member>
+<member name="P:WebSharper.Sitelets.Http.Status.Ok">
+<summary>
+ 200 Ok.
+</summary>
+</member>
+<member name="P:WebSharper.Sitelets.Http.Status.NotFound">
+<summary>
+ 404 Not Found.
+</summary>
+</member>
+<member name="P:WebSharper.Sitelets.Http.Status.MethodNotAllowed">
+<summary>
+ 405 Method Not Allowed.
+</summary>
+</member>
+<member name="P:WebSharper.Sitelets.Http.Status.InternalServerError">
+<summary>
+ 500 Internal Error.
+</summary>
+</member>
+<member name="P:WebSharper.Sitelets.Http.Status.Forbidden">
+<summary>
+ 403 Forbidden.
+</summary>
+</member>
+<member name="P:WebSharper.Sitelets.Http.Status.Code">
+<summary>
+ The integer status code, such as 200.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="M:WebSharper.Sitelets.Http.Status.Custom(System.Int32,Microsoft.FSharp.Core.FSharpOption{System.String})">
+<summary>
+ Custom status with an integer code and optional message.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.Http.Status">
+<summary>
+ Represents the status of HTTP responses.
+ TODO
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Sitelets.Http.Request">
+<summary>
+ Represents HTTP requests.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="M:WebSharper.Sitelets.Http.ParameterCollection.ToList">
+<summary>
+ Transforms the parameter list into a list of
+ name and value pairs.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Http.ParameterCollection.Item(System.String)">
+<summary>
+ Get the entry with the specified key.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Http.ParameterCollection.#ctor(System.Collections.Generic.IEnumerable{System.Tuple{System.String,System.String}})">
+<summary>
+ Creates a new parameter collection from s sequence of name and value pairs.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Sitelets.Http.ParameterCollection">
+<summary>
+ Represents parameter collections.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Sitelets.Http.Header">
+<summary>
+ Represents HTTP headers.
+ May later add active patterns and constructors
+ for common headers.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="P:WebSharper.Sitelets.Http.Version.Default">
+<summary>
+ The default version (1.1).
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Http.Version.Custom(System.Double)">
+<summary>
+ Constructs a new custom version.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.Http.Version">
+<summary>
+ Represents the HTTP version for responses and requests.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Sitelets.Http.Method">
+<summary>
+ Represents HTTP methods.
+ See: http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Sitelets.Http.StatusUtils">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Sitelets.Http.VersionUtils">
+
+</member>
+<member name="T:WebSharper.Sitelets.Http">
+<summary>
+ Defines HTTP-related functionality.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Offline.HtmlCommand.Execute(System.String,System.String,Microsoft.FSharp.Collections.FSharpList{System.String},System.String,System.Boolean,System.Boolean,System.Boolean)">
+ <summary>
+ Generate an offline HTML application.
+ </summary>
+ <param name="options">The configuration for the application.</param>
+ <returns>List errors on failure, or None on success.</returns>
+</member>
+<member name="T:WebSharper.Sitelets.Offline.HtmlCommand">
+<summary>
+ Implements the WebSharper executable plugin for generating
+ offline pages with sitelets. To use, run `WebSharper.exe sitelets`.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Offline.Extra.CopyFiles(System.String,System.String)">
+<summary>
+ Copies files specified in extra.files to the html directory of a mobile application
+ takes in the directory in which extra.files is contained and the destination.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.Offline.Extra">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Sitelets.Offline.Output.Config">
+<summary>
+ Configuration options.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Offline.Output.WriteSite(IntelliFactory.Core.AssemblyResolution.AssemblyResolver,WebSharper.Sitelets.Offline.Output.Config)">
+<summary>
+ Writes a site given the configuration options.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.Offline.Output">
+<summary>
+ Implements offline sitelet HTML generation.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Sitelets.Offline.PathUtility">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Sitelets.ResourceContext">
+
+</member>
+<member name="M:WebSharper.Sitelets.Router.TryMap``2(Microsoft.FSharp.Core.FSharpFunc{``0,Microsoft.FSharp.Core.FSharpOption{``1}},Microsoft.FSharp.Core.FSharpFunc{``1,Microsoft.FSharp.Core.FSharpOption{``0}},WebSharper.Sitelets.Router{``0})">
+<summary>
+ Maps over the action type of the router.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Router.Empty``1">
+<summary>
+ The empty router, the unit of &lt;|&gt;.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Router.At``1(System.String,WebSharper.Sitelets.Router{``0})">
+<summary>
+ Modifies the router to use a constant URL.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Router.FromJsonParameter``1(System.String)">
+<summary>
+ Creates a router with Link always failing,
+ and Route picking a POST-ed parameter with a
+ given key, assumes that the corresponding value is
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Router.FromPostParameter(System.String)">
+<summary>
+ Creates a router with Link always failing,
+ and Route picking a POST-ed parameter with a
+ given key, for example PostParameter &quot;id&quot; routes
+ request POST id=123 to action &quot;123&quot;.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Router.Shift``1(System.String,WebSharper.Sitelets.Router{``0})">
+<summary>
+ Shifts the router&apos;s locations by adding a prefix.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Router.Map``2(Microsoft.FSharp.Core.FSharpFunc{``0,``1},Microsoft.FSharp.Core.FSharpFunc{``1,``0},WebSharper.Sitelets.Router{``0})">
+<summary>
+ Maps over a router, changing its action type.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Router.Sum``1(System.Collections.Generic.IEnumerable{WebSharper.Sitelets.Router{``0}})">
+<summary>
+ Composes several routers. For both linking and routing,
+ the leftmost matching router is selected. Two routers can be
+ composed with the `&lt;|&gt;` combinator.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Router.InferWithErrors``1">
+<summary>
+ Infers the router by analyzing an algebraic action data type.
+ The returned router&apos;s action includes possible errors that occurred
+ when parsing the request.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Router.Infer``1">
+<summary>
+ Infers the router by analyzing an algebraic action data type.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Router.Table``1(System.Collections.Generic.IEnumerable{System.Tuple{``0,System.String}})">
+<summary>
+ Constructs a router from a finite table defining a
+ bijection between locations and actions. Throws InvalidArgument
+ exceptions if the table does not define a bijection.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Router.New``1(Microsoft.FSharp.Core.FSharpFunc{WebSharper.Sitelets.Http.Request,Microsoft.FSharp.Core.FSharpOption{``0}},Microsoft.FSharp.Core.FSharpFunc{``0,Microsoft.FSharp.Core.FSharpOption{System.Uri}})">
+<summary>
+ Constructs a custom new router with a given route and link functions.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.Router">
+<summary>
+ Provides combinators over the Router type.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="M:WebSharper.Sitelets.SiteLoading.TryLoadSiteB``1(System.Reflection.Assembly)">
+<summary>
+ Searches for static property with Website attribute and loads it if found
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.SiteLoading.TryLoadSiteA(System.Reflection.Assembly)">
+<summary>
+ Looks up assembly-wide Website attribute and runs it if present
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.SiteLoading">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Sitelets.Sitelet.Filter`1">
+<summary>
+ Represents filters for protecting sitelets.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Sitelet.InferPartialInUnion``2(Microsoft.FSharp.Quotations.FSharpExpr{Microsoft.FSharp.Core.FSharpFunc{``0,``1}},Microsoft.FSharp.Core.FSharpFunc{WebSharper.Sitelets.Context{``1},Microsoft.FSharp.Core.FSharpFunc{``0,Microsoft.FSharp.Control.FSharpAsync{WebSharper.Sitelets.Content{``1}}}})">
+<summary>
+ Constructs a partial sitelet with an inferred router and a given controller function.
+ The actions covered by this sitelet correspond to the given union case.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Sitelet.InferPartial``2(Microsoft.FSharp.Core.FSharpFunc{``0,``1},Microsoft.FSharp.Core.FSharpFunc{``1,Microsoft.FSharp.Core.FSharpOption{``0}},Microsoft.FSharp.Core.FSharpFunc{WebSharper.Sitelets.Context{``1},Microsoft.FSharp.Core.FSharpFunc{``0,Microsoft.FSharp.Control.FSharpAsync{WebSharper.Sitelets.Content{``1}}}})">
+<summary>
+ Constructs a partial sitelet with an inferred router and a given controller function.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Sitelet.InferWithCustomErrors``1(Microsoft.FSharp.Core.FSharpFunc{WebSharper.Sitelets.Context{``0},Microsoft.FSharp.Core.FSharpFunc{WebSharper.Sitelets.ActionEncoding.DecodeResult{``0},Microsoft.FSharp.Control.FSharpAsync{WebSharper.Sitelets.Content{``0}}}})">
+<summary>
+ Constructs a sitelet with an inferred router and a given controller function.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Sitelet.Infer``1(Microsoft.FSharp.Core.FSharpFunc{WebSharper.Sitelets.Context{``0},Microsoft.FSharp.Core.FSharpFunc{``0,Microsoft.FSharp.Control.FSharpAsync{WebSharper.Sitelets.Content{``0}}}})">
+<summary>
+ Constructs a sitelet with an inferred router and a given controller function.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Sitelet.UnsafeDowncast``1(WebSharper.Sitelets.Sitelet{System.Object})">
+<summary>
+ Reverses the Upcast operation on the sitelet.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Sitelet.Upcast``1(WebSharper.Sitelets.Sitelet{``0})">
+<summary>
+ Boxes the sitelet action type to Object type.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Sitelet.Folder``1(System.String,System.Collections.Generic.IEnumerable{WebSharper.Sitelets.Sitelet{``0}})">
+<summary>
+ Serves the sum of the given sitelets under a given prefix.
+ This function is convenient for folder-like structures.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Sitelet.Sum``1(System.Collections.Generic.IEnumerable{WebSharper.Sitelets.Sitelet{``0}})">
+<summary>
+ Combines several sitelets, leftmost taking precedence.
+ Is equivalent to folding with the choice operator.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Sitelet.Shift``1(System.String,WebSharper.Sitelets.Sitelet{``0})">
+<summary>
+ Shifts all sitelet locations by a given prefix.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Sitelet.EmbedInUnion``2(Microsoft.FSharp.Quotations.FSharpExpr{Microsoft.FSharp.Core.FSharpFunc{``0,``1}},WebSharper.Sitelets.Sitelet{``0})">
+<summary>
+ Maps over the sitelet action type, where the destination action type
+ is a discriminated union with a case containing the source type.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Sitelet.Embed``2(Microsoft.FSharp.Core.FSharpFunc{``0,``1},Microsoft.FSharp.Core.FSharpFunc{``1,Microsoft.FSharp.Core.FSharpOption{``0}},WebSharper.Sitelets.Sitelet{``0})">
+<summary>
+ Maps over the sitelet action type with only an injection.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Sitelet.Map``2(Microsoft.FSharp.Core.FSharpFunc{``0,``1},Microsoft.FSharp.Core.FSharpFunc{``1,``0},WebSharper.Sitelets.Sitelet{``0})">
+<summary>
+ Maps over the sitelet action type. Requires a bijection.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Sitelet.Content``1(System.String,``0,Microsoft.FSharp.Core.FSharpFunc{WebSharper.Sitelets.Context{``0},Microsoft.FSharp.Control.FSharpAsync{WebSharper.Sitelets.Content{``0}}})">
+<summary>
+ Constructs a singleton sitelet that contains exactly one action
+ and serves a single content value at a given location.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Sitelet.Protect``1(WebSharper.Sitelets.Sitelet.Filter{``0},WebSharper.Sitelets.Sitelet{``0})">
+<summary>
+ Constructs a protected sitelet given the filter specification.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Sitelet.Empty``1">
+<summary>
+ Creates an empty sitelet.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.Sitelet">
+<summary>
+ Provides combinators over sitelets.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Specialization.IGeneric`2.Run``1(`0)">
+<summary>
+ Runs the computation. Note the generic &apos;T3 argument.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.Specialization.IGeneric`2">
+<summary>
+ Represents a generic algorithm.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.Specialization.Specialize``2(WebSharper.Sitelets.Specialization.IGeneric{``0,``1})">
+<summary>
+ Specializes the generic algorithm.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.Specialization">
+
+</member>
+<member name="M:WebSharper.Sitelets.UrlHelpers.|DELETE|GET|OPTIONS|POST|PUT|TRACE|SPECIAL|(WebSharper.Sitelets.Http.Request)">
+<summary>
+ Extract the URL and parameters from an HTTP request
+ that uses the given method.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.UrlHelpers.|SPLIT_BY|_|(System.Char,System.Uri)">
+<summary>
+ Split the Path component of a URL by a given character.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.UrlHelpers.|REGEX|_|(System.String,System.String)">
+<summary>
+ Skip the substring matching a regexp at the beginning of a string.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.UrlHelpers.|ALPHA_NUM|_|(System.String)">
+<summary>
+ Parse an alphanumeric string in a string.
+ Returns the parsed string and the remainder of the string.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.UrlHelpers.|ALPHA|_|(System.String)">
+<summary>
+ Parse an alphabetic string in a string.
+ Returns the parsed string and the remainder of the string.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.UrlHelpers.|FLOAT|_|(System.String)">
+<summary>
+ Parse a floating-point number in a string.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.UrlHelpers.|INT|_|(System.String)">
+<summary>
+ Parse an integer in a string.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.UrlHelpers.|SLASH|_|(System.String)">
+<summary>
+ Parse a slash in a string.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.UrlHelpers.|EOL|_|(System.String)">
+<summary>
+ Match the end of a string.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.UrlHelpers">
+<summary>
+ Helpers to parse requests in a custom Sitelet router.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.UserSession.Logout">
+<summary>
+ Logout current user.
+ Warning: Must be called from the same thread as the request.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.UserSession.LoginUserPersistent(System.String)">
+<summary>
+ Login user and persist the login across browser sessions.
+ Warning: Must be called from the same thread as the request.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.UserSession.LoginUser(System.String)">
+<summary>
+ Login user.
+ Warning: Must be called from the same thread as the request.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.UserSession.GetLoggedInUser">
+<summary>
+ Gets the currently logged in user.
+ Warning: Must be called from the same thread as the request.
+</summary>
+</member>
+<member name="T:WebSharper.Sitelets.UserSession">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Sitelets.Utils">
+
+</member>
+<member name="M:WebSharper.Sitelets.WebUtils.respond(WebSharper.Sitelets.Sitelet{System.Object},System.Web.HttpContextBase,WebSharper.Sitelets.Http.Request,System.Object)">
+<summary>
+ Writes a response.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.WebUtils.getContext(WebSharper.Sitelets.Sitelet{System.Object},System.Web.HttpContextBase,WebSharper.Sitelets.Http.Request)">
+<summary>
+ Constructs the sitelet context object.
+</summary>
+</member>
+<member name="M:WebSharper.Sitelets.WebUtils.convertRequest(System.Web.HttpContextBase)">
+<summary>
+ Converts ASP.NET requests to Sitelet requests.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:WebSharper.Sitelets.WebUtils">
+
+</member>
+</members>
+</doc>
