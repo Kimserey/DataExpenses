@@ -1,4 +1,4 @@
-﻿namespace London.AssemblyInfo
+﻿namespace London.Core.AssemblyInfo
 
 open System.Reflection
 open System.Runtime.CompilerServices
@@ -7,11 +7,11 @@ open System.Runtime.InteropServices
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[<assembly: AssemblyTitle("London")>]
+[<assembly: AssemblyTitle("London.Core")>]
 [<assembly: AssemblyDescription("")>]
 [<assembly: AssemblyConfiguration("")>]
 [<assembly: AssemblyCompany("Kimserey Lam")>]
-[<assembly: AssemblyProduct("London")>]
+[<assembly: AssemblyProduct("London.Core")>]
 [<assembly: AssemblyCopyright("Copyright ©  2016")>]
 [<assembly: AssemblyTrademark("")>]
 [<assembly: AssemblyCulture("")>]
@@ -22,7 +22,7 @@ open System.Runtime.InteropServices
 [<assembly: ComVisible(false)>]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[<assembly: Guid("e23f113f-f3e7-4f17-ab7c-8002ca4eae48")>]
+[<assembly: Guid("4c61acb9-941f-4faa-8fb6-b9640538bead")>]
 
 // Version information for an assembly consists of the following four values:
 // 
