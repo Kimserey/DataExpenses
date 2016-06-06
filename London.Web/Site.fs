@@ -7,8 +7,8 @@ open WebSharper.UI.Next.Server
 
 module Site =
     
-    type MainTemplate = Templating.Template<"Main.html">
+    type MainTemplate = Templating.Template<"index.html">
 
-    let page = Content.Page(MainTemplate.Doc(title = "Data expenses", body = [ client <@ Client.page() @> ]))
+    let page = Content.Page(MainTemplate.Doc(title = "Expenses", body = [ client <@ Client.page() @> ]))
 
     let app = Application.SinglePage(fun _ -> page)

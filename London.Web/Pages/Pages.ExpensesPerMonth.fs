@@ -19,6 +19,7 @@ module ExpensesPerMonth =
         |> Doc.BindView (fun expenses ->
             expenses
             |> Map.toList
+            |> List.sortByDescending(fun ((Month (name, m), Year y), _) -> m + y * 100)
             |> List.map (fun ((Month (name, m), Year y), v) -> 
                 Table.Doc(name + " " + string y, v |> List.map (fun expense -> Table.row.Doc(expense.Date.ToShortDateString(), expense.Label, string expense.Amount, expense.Category))))
             |> Doc.Concat)
