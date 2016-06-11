@@ -3,7 +3,6 @@
 open WebSharper
 open WebSharper.Resources
 
-[<AutoOpen>]
 module Resources =
     
     module FontAwesome = 
