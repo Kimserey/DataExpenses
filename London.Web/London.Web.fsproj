@@ -67,7 +67,7 @@
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
-  <Import Project="..\packages\WebSharper\build\WebSharper.targets" Condition="Exists('..\packages\WebSharper\build\WebSharper.targets')" />
+  <Import Project="..\packages\WebSharper\build\WebSharper.targets" Condition="Exists('..\packages\WebSharper\build\WebSharper.targets')" Label="Paket" />
   <Import Project="..\.paket\paket.targets" />
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2')">
@@ -301,21 +301,29 @@
       </ItemGroup>
     </When>
   </Choose>
-  <Import Project="..\packages\WebSharper\build\WebSharper.targets" Condition="Exists('..\packages\WebSharper\build\WebSharper.targets')" Label="Paket" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <EmbeddedResource Include="Resources\css\style.css" />
+    <EmbeddedResource Include="Resources\fonts\FontAwesome.otf" />
+    <EmbeddedResource Include="Resources\fonts\fontawesome-webfont.eot" />
+    <EmbeddedResource Include="Resources\fonts\fontawesome-webfont.svg" />
+    <EmbeddedResource Include="Resources\fonts\fontawesome-webfont.ttf" />
+    <EmbeddedResource Include="Resources\fonts\fontawesome-webfont.woff" />
+    <EmbeddedResource Include="Resources\fonts\fontawesome-webfont.woff2" />
+    <EmbeddedResource Include="Resources\css\simple_ui.css" />
+    <EmbeddedResource Include="Resources\js\simple_ui.js" />
     <Compile Include="Resources\Resources.fs" />
-    <None Include="Templates\tpl.expenses-per-month.html" />
+    <None Include="Templates\template-card.html" />
+    <None Include="Templates\template-nav.html" />
+    <None Include="Templates\template-expenses-table.html" />
+    <Compile Include="Templates\Templates.fs" />
     <Compile Include="Rpcs\Rpcs.Common.fs" />
     <Compile Include="Rpcs\Rpcs.ExpensesPerMonth.fs" />
-    <Compile Include="Pages\Pages.ExpensesPerMonth.fs" />
-    <Compile Include="Client.fs" />
-    <Compile Include="Site.fs" />
+    <Compile Include="App.fs" />
     <Compile Include="EntryPoint.fs" />
     <Content Include="index.html" />
     <Content Include="App.config" />
     <Content Include="paket.references" />
+    <None Include="BuildAndRun.cmd" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
