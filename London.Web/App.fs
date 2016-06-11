@@ -7,25 +7,16 @@ open WebSharper.UI.Next
 open WebSharper.UI.Next.Client
 open WebSharper.UI.Next.Html
 
-module Server =
-    
-    [<Rpc>]
-    let sayHello() =
-        async.Return "hello world"    
-
 [<JavaScript>]
 module App =
-
     let nav = 
         Nav.Doc(
             "Expenses", 
             "List design", 
             [ Nav.Category.Doc("Expenses", [ a [ text "1" ]; a [ text "2" ] ])
               Nav.Category.Doc("Dates", [ a [ text "1" ]; a [ text "2" ] ]) ])
-        |> Doc.RunById "nav"
 
-
-    let content =
+    let main =
         [ Card.Doc(
             Title = "April 2016",
             Items = 
@@ -90,4 +81,3 @@ module App =
                               Table.Row.Doc("02/01/2015", "Waitrose", "-21.01", "Supermarket")
                               Table.Row.Doc("02/01/2015", "Waitrose", "-21.01", "Supermarket")] ]) ]) ]
         |> Doc.Concat
-        |> Doc.RunById "content"

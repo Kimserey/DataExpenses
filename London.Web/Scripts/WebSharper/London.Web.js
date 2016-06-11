@@ -5,7 +5,7 @@
   London:{
    Web:{
     App:{
-     content:Runtime.Field(function()
+     main:Runtime.Field(function()
      {
       var Items,Content,Body,attrs,attrs1,attrs2,attrs3,attrs4,attrs5,attrs6,attrs7,attrs8,Content1,Body1,attrs9,attrsa,attrsb,attrsc,attrsd,attrse,attrsf,attrs10,attrs11,Content2,Body2,attrs12,attrs13,attrs14,attrs15,attrs16,attrs17,attrs18,attrs19,attrs1a,Items1,Content3,Body3,attrs1b,attrs1c,attrs1d,attrs1e,attrs1f,attrs20,attrs21,attrs22,attrs23,Items2,Content4,Body4,attrs24,attrs25,attrs26,attrs27,attrs28,attrs29,attrs2a,attrs2b,attrs2c;
       attrs=[];
@@ -66,11 +66,11 @@
       Content4=List.ofArray([Doc.Concat([Doc.Element("div",attrs28,[Doc.TextNode("\n    "),Doc.Element("table",attrs29,[Doc.TextNode("\n        "),Doc.Element("thead",attrs2a,[Doc.TextNode("\n            "),Doc.Element("tr",attrs2b,[Doc.TextNode("\n                "),Doc.Element("th",[],[Doc.TextNode("Date")]),Doc.TextNode("\n                "),Doc.Element("th",[],[Doc.TextNode("Label")]),Doc.TextNode("\n                "),Doc.Element("th",[AttrProxy.Create("class","right")],[Doc.TextNode("Amount")]),Doc.TextNode("\n                "),Doc.Element("th",[],[Doc.TextNode("Category")]),Doc.TextNode("\n            ")]),Doc.TextNode("\n        ")]),Doc.TextNode("\n        "),Doc.Element("tbody",[],Arrays.ofSeq(Body4)),Doc.TextNode("\n    ")]),Doc.TextNode("\n")])])]);
       attrs2c=[AttrProxy.Create("class","card-list-item"),AttrProxy.Create("data-content","content-1")];
       Items2=List.ofArray([Doc.Concat([Doc.TextNode("\n        "),Doc.Element("div",attrs2c,[Doc.TextNode("\n            "),Doc.Element("div",[AttrProxy.Create("class","card-list-item-header")],[Doc.TextNode("\n                "),Doc.Element("div",[AttrProxy.Create("class","card-list-item-header-title")],[Doc.TextNode("Supermarket")]),Doc.TextNode("\n                "),Doc.Element("div",[AttrProxy.Create("class","card-list-item-header-subtitle")],[Doc.Element("div",[AttrProxy.Create("class","amount")],[Doc.TextNode("20.00")])]),Doc.TextNode("\n            ")]),Doc.TextNode("\n            "),Doc.Element("div",[AttrProxy.Create("class","card-list-item-content"),AttrProxy.Create("id","content-1")],Arrays.ofSeq(Content4)),Doc.TextNode("\n        ")]),Doc.TextNode("\n    ")])]);
-      return Doc.RunById("content",Doc.Concat(List.ofArray([Doc.Concat([Doc.Element("div",[AttrProxy.Create("class","card")],[Doc.TextNode("\n    "),Doc.Element("div",[AttrProxy.Create("class","card-title")],[Doc.TextNode("April 2016")]),Doc.TextNode("\n    "),Doc.Element("div",[AttrProxy.Create("class","card-content")],Arrays.ofSeq(Items)),Doc.TextNode("\n")])]),Doc.Concat([Doc.Element("div",[AttrProxy.Create("class","card")],[Doc.TextNode("\n    "),Doc.Element("div",[AttrProxy.Create("class","card-title")],[Doc.TextNode("March 2016")]),Doc.TextNode("\n    "),Doc.Element("div",[AttrProxy.Create("class","card-content")],Arrays.ofSeq(Items1)),Doc.TextNode("\n")])]),Doc.Concat([Doc.Element("div",[AttrProxy.Create("class","card")],[Doc.TextNode("\n    "),Doc.Element("div",[AttrProxy.Create("class","card-title")],[Doc.TextNode("February 2016")]),Doc.TextNode("\n    "),Doc.Element("div",[AttrProxy.Create("class","card-content")],Arrays.ofSeq(Items2)),Doc.TextNode("\n")])])])));
+      return Doc.Concat(List.ofArray([Doc.Concat([Doc.Element("div",[AttrProxy.Create("class","card")],[Doc.TextNode("\n    "),Doc.Element("div",[AttrProxy.Create("class","card-title")],[Doc.TextNode("April 2016")]),Doc.TextNode("\n    "),Doc.Element("div",[AttrProxy.Create("class","card-content")],Arrays.ofSeq(Items)),Doc.TextNode("\n")])]),Doc.Concat([Doc.Element("div",[AttrProxy.Create("class","card")],[Doc.TextNode("\n    "),Doc.Element("div",[AttrProxy.Create("class","card-title")],[Doc.TextNode("March 2016")]),Doc.TextNode("\n    "),Doc.Element("div",[AttrProxy.Create("class","card-content")],Arrays.ofSeq(Items1)),Doc.TextNode("\n")])]),Doc.Concat([Doc.Element("div",[AttrProxy.Create("class","card")],[Doc.TextNode("\n    "),Doc.Element("div",[AttrProxy.Create("class","card-title")],[Doc.TextNode("February 2016")]),Doc.TextNode("\n    "),Doc.Element("div",[AttrProxy.Create("class","card-content")],Arrays.ofSeq(Items2)),Doc.TextNode("\n")])])]));
      }),
      nav:Runtime.Field(function()
      {
-      var Categories,Links,arg20,arg201,Links1,arg202,arg203,_arg10_,attrs;
+      var Categories,Links,arg20,arg201,Links1,arg202,arg203,attrs;
       arg20=List.ofArray([Doc.TextNode("1")]);
       arg201=List.ofArray([Doc.TextNode("2")]);
       Links=List.ofArray([Doc.Element("a",[],arg20),Doc.Element("a",[],arg201)]);
@@ -79,8 +79,7 @@
       Links1=List.ofArray([Doc.Element("a",[],arg202),Doc.Element("a",[],arg203)]);
       Categories=List.ofArray([Doc.Concat([Doc.TextNode("\n            "),Doc.Element("dt",[],[Doc.TextNode(" "),Doc.TextNode("Expenses")]),Doc.TextNode("\n            "),Doc.Element("dd",[],Arrays.ofSeq(Links)),Doc.TextNode("\n        ")]),Doc.Concat([Doc.TextNode("\n            "),Doc.Element("dt",[],[Doc.TextNode(" "),Doc.TextNode("Dates")]),Doc.TextNode("\n            "),Doc.Element("dd",[],Arrays.ofSeq(Links1)),Doc.TextNode("\n        ")])]);
       attrs=[];
-      _arg10_=Doc.Concat([Doc.Element("header",[],[Doc.TextNode(" "),Doc.TextNode("Expenses")]),Doc.TextNode("\n"),Doc.Element("nav",attrs,[Doc.TextNode("\n    "),Doc.Element("button",[AttrProxy.Create("id","side-menu-button"),AttrProxy.Create("class","nav-menu")],[Doc.TextNode("\n        "),Doc.Element("i",[AttrProxy.Create("class","fa fa-bars")],[]),Doc.TextNode("\n    ")]),Doc.TextNode("\n\n    "),Doc.Element("div",[AttrProxy.Create("id","side-menu")],[Doc.TextNode("\n        "),Doc.Element("div",[AttrProxy.Create("class","brand")],[Doc.TextNode("List design")]),Doc.TextNode("\n        "),Doc.Element("dl",[],Arrays.ofSeq(Categories)),Doc.TextNode("\n    ")]),Doc.TextNode("\n")]),Doc.TextNode("\n\n"),Doc.Element("div",[AttrProxy.Create("id","mask")],[])]);
-      return Doc.RunById("nav",_arg10_);
+      return Doc.Concat([Doc.Element("header",[],[Doc.TextNode(" "),Doc.TextNode("Expenses")]),Doc.TextNode("\n"),Doc.Element("nav",attrs,[Doc.TextNode("\n    "),Doc.Element("button",[AttrProxy.Create("id","side-menu-button"),AttrProxy.Create("class","nav-menu")],[Doc.TextNode("\n        "),Doc.Element("i",[AttrProxy.Create("class","fa fa-bars")],[]),Doc.TextNode("\n    ")]),Doc.TextNode("\n\n    "),Doc.Element("div",[AttrProxy.Create("id","side-menu")],[Doc.TextNode("\n        "),Doc.Element("div",[AttrProxy.Create("class","brand")],[Doc.TextNode("List design")]),Doc.TextNode("\n        "),Doc.Element("dl",[],Arrays.ofSeq(Categories)),Doc.TextNode("\n    ")]),Doc.TextNode("\n")]),Doc.TextNode("\n\n"),Doc.Element("div",[AttrProxy.Create("id","mask")],[])]);
      })
     }
    }
@@ -101,7 +100,7 @@
  Runtime.OnLoad(function()
  {
   App.nav();
-  App.content();
+  App.main();
   return;
  });
 }());

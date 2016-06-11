@@ -4,6 +4,7 @@ open WebSharper
 open WebSharper.Sitelets
 open WebSharper.UI.Next
 open WebSharper.UI.Next.Html
+open WebSharper.UI.Next.Server
 open global.Owin
 open Microsoft.Owin.Hosting
 open Microsoft.Owin.StaticFiles
@@ -12,22 +13,15 @@ open WebSharper.Owin
 
 module EntryPoint =
     
-    type Index = {
-        Title: string
-        Body: Doc list
-    }
-
-    let template = 
-        Content.Template<Index>("~/index.html")
-            .With("Title", fun x -> x.Title)
-            .With("Body", fun x -> x.Body)
+    let page = 
+        Templates.Index.Doc(
+            Title = "London expenses",
+            Nav = [ client <@ App.nav @> ],
+            Main = [ client <@ App.main @> ])
+        |> Content.Page
 
     let app = 
-        Application.SinglePage(fun _ -> 
-            Content.WithTemplate template 
-                { Title = "London expenses"
-                  Body = [ divAttr [ attr.id "main" ] []
-                           divAttr [ attr.id "nav"  ] [] ] })
+        Application.SinglePage(fun _ -> page)
 
     [<EntryPoint>]
     let Main args =
@@ -44,3 +38,4 @@ module EntryPoint =
         stdout.WriteLine("Serving {0}", url)
         stdin.ReadLine() |> ignore
         0
+
