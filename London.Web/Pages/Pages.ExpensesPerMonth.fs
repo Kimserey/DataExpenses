@@ -71,6 +71,7 @@ module ExpensesPerMonth =
                                month + " " + string year,
                                expenses
                                |> List.groupBy (fun e -> e.Category)
+                               |> List.sortBy  fst
                                |> List.mapi (fun contentIndex (category, values) ->
                                     Card.Item.Doc(
                                         "card-" + string cardIndex + "-content-" + string contentIndex,

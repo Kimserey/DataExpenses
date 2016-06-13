@@ -34,7 +34,6 @@ module EntryPoint =
                     .UseSitelet(rootDirectory, app)
                     |> ignore)
         
-        
         stdout.WriteLine("Serving {0}", url)
         stdin.ReadLine() |> ignore
         0
