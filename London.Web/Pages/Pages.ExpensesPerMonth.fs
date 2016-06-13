@@ -47,14 +47,9 @@ module ExpensesPerMonth =
                 
     [<JavaScript>]
     module Client =
-        open WebSharper.JavaScript
         open WebSharper.UI.Next
         open WebSharper.UI.Next.Client
-        open London.Web.Templates        
-        
-        type Math with
-            [<Inline "Math.round($0 * 100) / 100">]
-            static member RoundTwoDecimals x = X<float>
+        open London.Web.Templates       
 
         type Expense with
             static member ToTableRow x =
@@ -78,7 +73,7 @@ module ExpensesPerMonth =
                                         category,
                                         values 
                                         |> List.sumBy (fun e -> e.Amount) 
-                                        |> Math.RoundTwoDecimals
+                                        |> parseFloat 2
                                         |> string,
                                         [ Table.Doc (List.map Expense.ToTableRow values) ]))))
                         |> Doc.Concat
