@@ -316,8 +316,8 @@
     <None Include="Templates\template-nav.html" />
     <None Include="Templates\template-expenses-table.html" />
     <Compile Include="Templates\Templates.fs" />
-    <Compile Include="Rpcs\Rpcs.Common.fs" />
-    <Compile Include="Rpcs\Rpcs.ExpensesPerMonth.fs" />
+    <Compile Include="Pages\Pages.Common.fs" />
+    <Compile Include="Pages\Pages.ExpensesPerMonth.fs" />
     <Compile Include="App.fs" />
     <Compile Include="EntryPoint.fs" />
     <Content Include="index.html" />
