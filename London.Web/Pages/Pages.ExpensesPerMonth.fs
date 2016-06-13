@@ -65,14 +65,15 @@ module ExpensesPerMonth =
                 let! expensesPerMonth = Rpcs.get()
                 return expensesPerMonth
                         |> Map.toList
-                        |> List.map (fun ((Month (month, _), Year year), expenses) ->
+                        |> List.sortByDescending (fun ((Month (_, month), Year year), _) -> month + year * 100)
+                        |> List.mapi (fun cardIndex ((Month (month, _), Year year), expenses) ->
                             Card.Doc(
                                month + " " + string year,
                                expenses
                                |> List.groupBy (fun e -> e.Category)
-                               |> List.mapi (fun i (category, values) ->
+                               |> List.mapi (fun contentIndex (category, values) ->
                                     Card.Item.Doc(
-                                        "content-" + string i,
+                                        "card-" + string cardIndex + "-content-" + string contentIndex,
                                         category,
                                         values 
                                         |> List.sumBy (fun e -> e.Amount) 

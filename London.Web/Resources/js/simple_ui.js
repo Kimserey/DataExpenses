@@ -1,33 +1,4 @@
 //****************************
-//      CARD
-//****************************
-
-(function ($) {
-    var _active_ = 'active';
-
-    function expendCard ($this) {
-        $this.addClass(_active_);
-        $('#' + $this.data().content).addClass(_active_);
-    }
-
-    function hideCard ($this) {
-        $this.removeClass(_active_);
-        $('#' + $this.data().content).removeClass(_active_);
-    }
-
-    $(document).ready(function () {
-        $('.card-list-item').click(function () {
-            if ($(this).hasClass(_active_)) {
-                hideCard($(this));
-            } else {
-                expendCard($(this));
-            }
-        });
-    });
-}(jQuery));
-
-
-//****************************
 //      SIDE MENU
 //****************************
 
@@ -48,3 +19,35 @@
         })
     });
 }(jQuery));
+
+//****************************
+//      CARD
+//****************************
+
+var toggleCard = function ($) {
+    var active = 'active';
+
+    function expendCard($this) {
+        $this.addClass(active);
+        $('#' + $this.data().content).addClass(active);
+    }
+
+    function hideCard($this) {
+        $this.removeClass(active);
+        $('#' + $this.data().content).removeClass(active);
+    }
+
+    function isActive($this) {
+        return $this.hasClass(active);
+    }
+
+    return function (el) {
+        var $this = $(el);
+
+        if (isActive($this)) {
+            hideCard($this);
+        } else {
+            expendCard($this);
+        }
+    };
+}(jQuery);

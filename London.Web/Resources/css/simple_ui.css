@@ -2252,7 +2252,7 @@
         .card .card-content .card-list-item .card-list-item-content.active {
           opacity: 1;
           visibility: visible;
-          max-height: 300px;
+          max-height: 100%;
           -webkit-transition: max-height 0.3s ease-in, opacity 0.2s ease-in 0.2;
           -moz-transition: max-height 0.3s ease-in, opacity 0.2s ease-in 0.2;
           -ms-transition: max-height 0.3s ease-in, opacity 0.2s ease-in 0.2;
