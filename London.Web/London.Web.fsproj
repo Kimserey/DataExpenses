@@ -315,13 +315,13 @@
     <None Include="Templates\template-card.html" />
     <None Include="Templates\template-nav.html" />
     <None Include="Templates\template-expenses-table.html" />
+    <None Include="Templates\index.html" />
     <Compile Include="Templates\Templates.fs" />
     <Compile Include="Pages\Pages.Common.Client.fs" />
     <Compile Include="Pages\Pages.ExpensesPerMonth.fs" />
     <Compile Include="Pages\Pages.ExpensesPerCategory.fs" />
     <Compile Include="App.fs" />
     <Compile Include="EntryPoint.fs" />
-    <Content Include="index.html" />
     <Content Include="App.config" />
     <Content Include="paket.references" />
     <None Include="BuildAndRun.cmd" />

@@ -86,6 +86,10 @@
     </None>
     <Compile Include="Domain.fs" />
     <Compile Include="ExpenseDataFrame.fs" />
+    <None Include="..\London\data\201606.csv">
+      <Link>data\201606.csv</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
