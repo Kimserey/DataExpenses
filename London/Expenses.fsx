@@ -37,9 +37,14 @@ let df =
 
 df
 |> ExpenseDataFrame.GetExpensesPerMonth
-|> Map.iter (fun (Month (month, _), Year y) v ->
-    printfn "%s" month
-    v |> List.iter (fun e -> printfn "  %s %50s %50s %10.2f %50s" (e.Date.ToShortDateString()) e.Title e.Label (e.Amount) e.Category))
+|> List.iter (fun (Month (month, _), Year y, Sum sum, expenses) ->
+    printfn "%s %f" (month + " " + string y) sum
+    expenses 
+    |> List.iter (fun (Title category, Sum sum, expenses) -> 
+        printfn "  %20s %2f" category sum
+        expenses
+        |> List.iter (fun e ->
+            printfn "    %40s %50s %50s %10.2f %50s" (e.Date.ToShortDateString()) e.Title e.Label (e.Amount) e.Category)))
 
 (**
     Total monthly expenses - pretty display

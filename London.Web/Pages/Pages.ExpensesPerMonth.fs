@@ -12,7 +12,7 @@ open London.Web.Pages.Common
 module ExpensesPerMonth =
     module Rpcs =
         [<Rpc>]
-        let get(): Async<Map<(Month * Year), Expense list>> =
+        let get(): Async<_> =
             expenses
             |> ExpenseDataFrame.GetExpensesPerMonth
             |> async.Return
@@ -28,23 +28,19 @@ module ExpensesPerMonth =
             async {
                 let! expensesPerMonth = Rpcs.get()
                 return expensesPerMonth
-                        |> Map.toList
-                        |> List.sortByDescending (fun ((Month (_, month), Year year), _) -> month + year * 100)
-                        |> List.mapi (fun cardIndex ((Month (month, _), Year year), expenses) ->
+                        |> List.sortByDescending (fun (Month (_, month), Year year, _, _) -> month + year * 100)
+                        |> List.mapi (fun cardIndex (Month (month, _), Year year, Sum sum, expenses) ->
                             Card.Doc(
                                month + " " + string year,
+                               sum |> parseFloat 2 |> string,
                                expenses
-                               |> List.groupBy (fun e -> e.Category)
-                               |> List.sortBy  fst
-                               |> List.mapi (fun contentIndex (category, values) ->
+                               |> List.sortBy (fun (Title c, _, _) -> c)
+                               |> List.mapi (fun contentIndex (Title category, Sum sum, expenses) ->
                                     Card.Item.Doc(
                                         "card-" + string cardIndex + "-content-" + string contentIndex,
                                         category,
-                                        values 
-                                        |> List.sumBy (fun e -> e.Amount) 
-                                        |> parseFloat 2
-                                        |> string,
-                                        [ Table.Doc (List.map Expense.ToTableRow values) ]))))
+                                        sum |> parseFloat 2 |> string,
+                                        [ Table.Doc (List.map Expense.ToTableRow expenses) ]))))
                         |> Doc.Concat
             }
             |> Doc.Async

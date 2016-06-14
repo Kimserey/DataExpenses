@@ -1,47 +1,22 @@
-//****************************
-//      SIDE MENU
-//****************************
+var simpleUI = function ($) {
 
-(function ($) {
-    $(document).ready(function () {
-        var _show_ = 'show';
-        var $sidemenu = $('#side-menu');
-        var $mask = $('#mask');
+    var toggleCard = function (el) {
+        var active = 'active';
 
-        $('#side-menu-button').click(function () {
-            $sidemenu.addClass(_show_);
-            $mask.addClass(_show_);
-        });
+        function expendCard($this) {
+            $this.addClass(active);
+            $('#' + $this.data().content).addClass(active);
+        }
 
-        $mask.click(function () {
-            $sidemenu.removeClass(_show_);
-            $mask.removeClass(_show_);
-        })
-    });
-}(jQuery));
+        function hideCard($this) {
+            $this.removeClass(active);
+            $('#' + $this.data().content).removeClass(active);
+        }
 
-//****************************
-//      CARD
-//****************************
+        function isActive($this) {
+            return $this.hasClass(active);
+        }
 
-var toggleCard = function ($) {
-    var active = 'active';
-
-    function expendCard($this) {
-        $this.addClass(active);
-        $('#' + $this.data().content).addClass(active);
-    }
-
-    function hideCard($this) {
-        $this.removeClass(active);
-        $('#' + $this.data().content).removeClass(active);
-    }
-
-    function isActive($this) {
-        return $this.hasClass(active);
-    }
-
-    return function (el) {
         var $this = $(el);
 
         if (isActive($this)) {
@@ -49,5 +24,37 @@ var toggleCard = function ($) {
         } else {
             expendCard($this);
         }
+    };
+
+    var toggleSideMenu = function () {
+        var show = 'show';
+        var $sidemenu = $('#side-menu');
+        var $mask = $('#mask');
+
+        function hideMenu() {
+            $sidemenu.removeClass(show);
+            $mask.removeClass(show);
+        }
+
+        function showMenu() {
+            $sidemenu.addClass(show);
+            $mask.addClass(show);
+        }
+
+        function isActive() {
+            return $sidemenu.hasClass(show);
+        }
+
+        if (isActive()) {
+            hideMenu();
+        } else {
+            showMenu();
+        }
+    };
+
+
+    return {
+        toggleCard: toggleCard,
+        toggleSideMenu: toggleSideMenu
     };
 }(jQuery);

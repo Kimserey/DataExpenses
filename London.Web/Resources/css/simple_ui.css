@@ -2198,6 +2198,10 @@
   margin: 30px 50px; }
   .card .card-title {
     padding: 10px; }
+    .card .card-title .amount {
+      float: right; }
+      .card .card-title .amount:after {
+        content: " GBP"; }
   .card .card-content {
     margin: 10px 0; }
     .card .card-content .card-list-item {

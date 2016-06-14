@@ -28,18 +28,16 @@ module ExpensesPerCategory =
             async {
                 let! expenses = Rpcs.get()
                 return expenses
-                        |> Map.toList
-                        |> List.mapi (fun cardIndex (Title category, subCategory) ->
+                        |> List.mapi (fun cardIndex (Title category, Sum sum, subCategory) ->
                             Card.Doc(
                                category,
+                               sum |> parseFloat 2 |> string,
                                subCategory
-                               |> List.mapi (fun contentIndex (Title month, Sum amount, values) ->
+                               |> List.mapi (fun contentIndex (Title month, Sum sum, values) ->
                                     Card.Item.Doc(
                                         "card-" + string cardIndex + "-content-" + string contentIndex,
                                         month,
-                                        amount 
-                                        |> parseFloat 2
-                                        |> string,
+                                        sum |> parseFloat 2 |> string,
                                         [ Table.Doc (List.map Expense.ToTableRow values) ]))))
                         |> Doc.Concat
             }

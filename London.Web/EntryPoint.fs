@@ -26,7 +26,7 @@ module EntryPoint =
     [<EntryPoint>]
     let Main args =
         let rootDirectory = ".."
-        let url = "http://localhost:9100/"
+        let url = "http://+:9100/"
 
         use server = 
             WebApp.Start(url, fun appB ->
