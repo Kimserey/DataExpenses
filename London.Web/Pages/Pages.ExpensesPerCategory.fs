@@ -5,14 +5,16 @@ open System.IO
 open WebSharper
 open WebSharper.Remoting
 open London.Core
+open London.Core.Dataframe
 open London.Web.Pages.Common
 open Deedle
 
 module ExpensesPerCategory =
     module Rpcs =
         [<Rpc>]
-        let get(): Async<Map<string, Expense list>> =
-            getExpensesPerCategory()
+        let get(): Async<_> =
+            expenses
+            |> ExpenseDataFrame.GetExpensesPerCategory
             |> async.Return
                 
     [<JavaScript>]
@@ -27,17 +29,15 @@ module ExpensesPerCategory =
                 let! expenses = Rpcs.get()
                 return expenses
                         |> Map.toList
-                        |> List.mapi (fun cardIndex (category, expenses) ->
+                        |> List.mapi (fun cardIndex (category, subCategory) ->
                             Card.Doc(
                                category,
-                               expenses
-                               |> List.groupBy (fun e -> string e.Date.Month + " " + string e.Date.Year)
-                               |> List.mapi (fun contentIndex (month, values) ->
+                               subCategory
+                               |> List.mapi (fun contentIndex (month, amount, values) ->
                                     Card.Item.Doc(
                                         "card-" + string cardIndex + "-content-" + string contentIndex,
                                         month,
-                                        values 
-                                        |> List.sumBy (fun e -> e.Amount) 
+                                        amount 
                                         |> parseFloat 2
                                         |> string,
                                         [ Table.Doc (List.map Expense.ToTableRow values) ]))))

@@ -34,23 +34,12 @@ let df =
       30/11/2015    SOMETHING SOMETHING    -73.43   CATEGORY
       02/11/2015        SOMETHING AGAIN    -192.50  CATEGORY
 **)
-df
-|> Frame.filterRowValues(fun c -> c?Amount < 0.)
-|> Frame.groupRowsUsing(fun _ c -> c.GetAs<DateTime>("Date").Month)
-|> Frame.nest
-|> Series.observations
-|> Seq.iter (fun (m, df) ->
-    printfn "%s" (monthToString m)
-    df
-    |> Frame.rows
-    |> Series.observations
-    |> Seq.iter (fun (_, s) -> 
-        printfn "  %s %50s %10.2f %50s" 
-            (s.GetAs<DateTime>("Date").ToShortDateString()) 
-            (s.GetAs<string>("Label"))
-            s?Amount
-            (s.GetAs<string>("Category"))))
 
+df
+|> ExpenseDataFrame.GetExpensesPerMonth
+|> Map.iter (fun (Month (month, _), Year y) v ->
+    printfn "%s" month
+    v |> List.iter (fun e -> printfn "  %s %50s %10.2f %50s" (e.Date.ToShortDateString()) e.Label (e.Amount) e.Category))
 
 (**
     Total monthly expenses - pretty display

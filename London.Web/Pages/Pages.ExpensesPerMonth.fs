@@ -5,6 +5,7 @@ open System.IO
 open WebSharper
 open WebSharper.Remoting
 open London.Core
+open London.Core.Dataframe
 open Deedle
 open London.Web.Pages.Common
 
@@ -12,7 +13,8 @@ module ExpensesPerMonth =
     module Rpcs =
         [<Rpc>]
         let get(): Async<Map<(Month * Year), Expense list>> =
-            getExpensesPerMonth()
+            expenses
+            |> ExpenseDataFrame.GetExpensesPerMonth
             |> async.Return
                 
     [<JavaScript>]
