@@ -32,10 +32,23 @@ type ExpenseDataFrame = {
             frame
             |> Frame.getCol "Title" 
             |> Series.mapValues ((fun title -> (title, Other)) >> labelStore >> fst))
+        
         frame.AddColumn(
             "Category", 
             frame 
             |> Frame.getCol "Title" 
             |> Series.mapValues ((fun title -> (title, Other)) >> labelStore >> snd >> string))
         
+        frame.AddColumn(
+            "MonthName", 
+            frame
+            |> Frame.getCol "Date" 
+            |> Series.mapValues (fun date -> monthToString (DateTime.Parse (string date)).Month))
+
         { Frame = frame }
+
+and private Expense = {
+    Date: DateTime
+    Title: string
+    Amount: decimal
+}

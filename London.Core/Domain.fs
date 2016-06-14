@@ -7,12 +7,6 @@ open System.Text.RegularExpressions
 [<AutoOpen>]
 module Domain =
     
-    type Expense = {
-        Date: DateTime
-        Title: string
-        Amount: decimal
-    }
-
     type Category =
         | DepartmentStore
         | Supermarket

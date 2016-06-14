@@ -5,39 +5,36 @@ open System.IO
 open WebSharper
 open WebSharper.Remoting
 open London.Core
-open Deedle
 open London.Web.Pages.Common
+open Deedle
 
-module ExpensesPerMonth =
+module ExpensesPerCategory =
     module Rpcs =
         [<Rpc>]
-        let get(): Async<Map<(Month * Year), Expense list>> =
-            getExpensesPerMonth()
+        let get(): Async<Map<string, Expense list>> =
+            getExpensesPerCategory()
             |> async.Return
                 
     [<JavaScript>]
     module Client =
         open WebSharper.UI.Next
         open WebSharper.UI.Next.Client
-        open WebSharper.JavaScript
         open London.Web.Templates       
-        
+
         let page =
             async {
-                let! expensesPerMonth = Rpcs.get()
-                return expensesPerMonth
+                let! expenses = Rpcs.get()
+                return expenses
                         |> Map.toList
-                        |> List.sortByDescending (fun ((Month (_, month), Year year), _) -> month + year * 100)
-                        |> List.mapi (fun cardIndex ((Month (month, _), Year year), expenses) ->
+                        |> List.mapi (fun cardIndex (category, expenses) ->
                             Card.Doc(
-                               month + " " + string year,
+                               category,
                                expenses
-                               |> List.groupBy (fun e -> e.Category)
-                               |> List.sortBy  fst
-                               |> List.mapi (fun contentIndex (category, values) ->
+                               |> List.groupBy (fun e -> string e.Date.Month + " " + string e.Date.Year)
+                               |> List.mapi (fun contentIndex (month, values) ->
                                     Card.Item.Doc(
                                         "card-" + string cardIndex + "-content-" + string contentIndex,
-                                        category,
+                                        month,
                                         values 
                                         |> List.sumBy (fun e -> e.Amount) 
                                         |> parseFloat 2
