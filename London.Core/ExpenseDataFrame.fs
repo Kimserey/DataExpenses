@@ -4,8 +4,9 @@ open System
 open Deedle
 
 type Month = Month of (string * int)
-
 type Year = Year of int
+type Title = Title of string
+type Sum = Sum of float
 
 type Expense = {
     Date: DateTime
@@ -82,7 +83,7 @@ type ExpenseDataFrame = {
             |> Seq.toList)
         |> Map.ofSeq
 
-    static member GetExpensesPerCategory exp: Map<string, List<string * float * List<Expense>>> =
+    static member GetExpensesPerCategory exp: Map<Title, List<Title * Sum * List<Expense>>> =
         exp
         |> Frame.filterRowValues(fun c -> c?Amount < 0.)
         |> Frame.groupRowsUsing(fun _ c ->  monthToString (c.GetAs<DateTime>("Date").Month) + " " + string (c.GetAs<DateTime>("Date").Year))
@@ -90,16 +91,17 @@ type ExpenseDataFrame = {
         |> Frame.nest
         |> Series.observations
         |> Seq.map (fun (category, frame) -> 
-            category,
+            Title category,
             frame
             |> Frame.nest
             |> Series.observations
             |> Seq.map (fun (month, frame) ->
-                month,
+                Title month,
                 frame
                 |> Frame.getCol "Amount"
                 |> Series.observations
-                |> Seq.sumBy snd,
+                |> Seq.sumBy snd
+                |> Sum,
                 frame
                 |> Frame.rows
                 |> Series.observations

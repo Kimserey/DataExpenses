@@ -29,11 +29,11 @@ module ExpensesPerCategory =
                 let! expenses = Rpcs.get()
                 return expenses
                         |> Map.toList
-                        |> List.mapi (fun cardIndex (category, subCategory) ->
+                        |> List.mapi (fun cardIndex (Title category, subCategory) ->
                             Card.Doc(
                                category,
                                subCategory
-                               |> List.mapi (fun contentIndex (month, amount, values) ->
+                               |> List.mapi (fun contentIndex (Title month, Sum amount, values) ->
                                     Card.Item.Doc(
                                         "card-" + string cardIndex + "-content-" + string contentIndex,
                                         month,
