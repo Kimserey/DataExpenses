@@ -27,12 +27,22 @@ module App =
 
     let nav = 
         Nav.Doc(
-            "Expenses", 
-            "List design", 
+            View.Map (function ExpensesPerMonth -> "Expenses per month" | _ -> "Expenses per category") route.View, 
+            "Data expenses", 
             [ Nav.Category.Doc("Expenses", 
-                [ aAttr [ on.click(fun _ _ -> route.Value <- ExpensesPerMonth) ] [ text "Per month" ]
-                  aAttr [ on.click(fun _ _ -> route.Value <- ExpensesPerCategory) ] [ text "Per cateogry" ] ])
-              Nav.Category.Doc("Dates", [ a [ text "1" ]; a [ text "2" ] ]) ])
+                [ aAttr 
+                    [ attr.href ""
+                      on.click(fun _ _ -> 
+                        route.Value <- ExpensesPerMonth
+                        toggleSideMenu()) ] 
+                    [ text "Per month" ]
+
+                  aAttr 
+                    [ attr.href ""
+                      on.click(fun _ _ -> 
+                        route.Value <- ExpensesPerCategory
+                        toggleSideMenu()) ]
+                    [ text "Per cateogry" ] ]) ])
 
     let main =
         Doc.BindView 

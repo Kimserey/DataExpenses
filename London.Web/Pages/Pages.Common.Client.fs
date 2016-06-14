@@ -16,3 +16,6 @@ module Common =
 
     [<Inline "parseFloat($1).toFixed($0)">]
     let parseFloat (d: int) (x: float) = X<float>
+
+    [<Direct "simpleUI.toggleSideMenu()">]
+    let toggleSideMenu() = X<unit>

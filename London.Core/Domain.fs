@@ -21,7 +21,20 @@ module Domain =
         | Cash
         | Other
         with
-            override x.ToString() = sprintf "%A" x
+            override x.ToString() =
+                match x with
+                | DepartmentStore -> "Department store"
+                | Supermarket -> "Supermarket"
+                | AsianSupermarket -> "Asian supermarket"
+                | Clothing -> "Clothing"
+                | Restaurant -> "Restaurant"
+                | Electronics -> "Electronics"
+                | FastFood -> "Fast food"
+                | SweetAndSavoury -> "Sweet and savoury"
+                | HealthAndBeauty -> "Health and beauty"
+                | Online -> "Online"
+                | Cash -> "Cash"
+                | Other -> "Other"
 
     let printTitle title =
         printfn "\n%s:\n" title
