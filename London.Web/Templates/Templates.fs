@@ -10,6 +10,7 @@ open WebSharper.UI.Next.Html
 [<JavaScript; AutoOpen>]
 module Templates =    
     type Card  = Templating.Template<"Templates/template-card.html">
+    type CardTable = Templating.Template<"Templates/template-card-table.html">
+    type CardList = Templating.Template<"Templates/template-card-list.html">
     type Nav   = Templating.Template<"Templates/template-nav.html">
-    type Table = Templating.Template<"Templates/template-expenses-table.html">
     type Index = Templating.Template<"Templates/index.html">

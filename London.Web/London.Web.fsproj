@@ -317,6 +317,7 @@
     <None Include="Templates\template-expenses-table.html" />
     <None Include="Templates\index.html" />
     <Compile Include="Templates\Templates.fs" />
+    <None Include="Templates\template-card-list.html" />
     <Compile Include="Pages\Pages.Common.Client.fs" />
     <Compile Include="Pages\Pages.ExpensesPerMonth.fs" />
     <Compile Include="Pages\Pages.ExpensesPerCategory.fs" />

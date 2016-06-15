@@ -29,16 +29,17 @@ module ExpensesPerCategory =
                 let! expenses = Rpcs.get()
                 return expenses
                         |> List.mapi (fun cardIndex (Title category, Sum sum, subCategory) ->
-                            Card.Doc(
-                               category,
-                               sum |> parseFloat 2 |> string,
-                               subCategory
-                               |> List.mapi (fun contentIndex (Title month, Sum sum, values) ->
-                                    Card.Item.Doc(
-                                        "card-" + string cardIndex + "-content-" + string contentIndex,
-                                        month,
-                                        sum |> parseFloat 2 |> string,
-                                        [ Table.Doc (List.map Expense.ToTableRow values) ]))))
+                            Card.Doc 
+                                [ CardList.Doc(
+                                       category,
+                                       sum |> parseFloat 2 |> string,
+                                       subCategory
+                                       |> List.mapi (fun contentIndex (Title month, Sum sum, values) ->
+                                            CardList.Item.Doc(
+                                                "card-" + string cardIndex + "-content-" + string contentIndex,
+                                                month,
+                                                sum |> parseFloat 2 |> string,
+                                                [ CardTable.Doc (List.map Expense.ToTableRow values) ]))) ])
                         |> Doc.Concat
             }
             |> Doc.Async

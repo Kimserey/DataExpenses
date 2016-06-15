@@ -30,17 +30,18 @@ module ExpensesPerMonth =
                 return expensesPerMonth
                         |> List.sortByDescending (fun (Month (_, month), Year year, _, _) -> month + year * 100)
                         |> List.mapi (fun cardIndex (Month (month, _), Year year, Sum sum, expenses) ->
-                            Card.Doc(
-                               month + " " + string year,
-                               sum |> parseFloat 2 |> string,
-                               expenses
-                               |> List.sortBy (fun (Title c, _, _) -> c)
-                               |> List.mapi (fun contentIndex (Title category, Sum sum, expenses) ->
-                                    Card.Item.Doc(
-                                        "card-" + string cardIndex + "-content-" + string contentIndex,
-                                        category,
-                                        sum |> parseFloat 2 |> string,
-                                        [ Table.Doc (List.map Expense.ToTableRow expenses) ]))))
+                            Card.Doc [
+                               CardList.Doc(
+                                   month + " " + string year,
+                                   sum |> parseFloat 2 |> string,
+                                   expenses
+                                   |> List.sortBy (fun (Title c, _, _) -> c)
+                                   |> List.mapi (fun contentIndex (Title category, Sum sum, expenses) ->
+                                        CardList.Item.Doc(
+                                            "card-" + string cardIndex + "-content-" + string contentIndex,
+                                            category,
+                                            sum |> parseFloat 2 |> string,
+                                            [ CardTable.Doc (List.map Expense.ToTableRow expenses) ]))) ])
                         |> Doc.Concat
             }
             |> Doc.Async
