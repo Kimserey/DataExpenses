@@ -313,14 +313,15 @@
     <EmbeddedResource Include="Resources\js\simple_ui.js" />
     <Compile Include="Resources\Resources.fs" />
     <None Include="Templates\template-card.html" />
+    <None Include="Templates\template-card-list.html" />
+    <None Include="Templates\template-card-table.html" />
     <None Include="Templates\template-nav.html" />
-    <None Include="Templates\template-expenses-table.html" />
     <None Include="Templates\index.html" />
     <Compile Include="Templates\Templates.fs" />
-    <None Include="Templates\template-card-list.html" />
     <Compile Include="Pages\Pages.Common.Client.fs" />
     <Compile Include="Pages\Pages.ExpensesPerMonth.fs" />
     <Compile Include="Pages\Pages.ExpensesPerCategory.fs" />
+    <Compile Include="Pages\Pages.Expenses.fs" />
     <Compile Include="App.fs" />
     <Compile Include="EntryPoint.fs" />
     <Content Include="App.config" />

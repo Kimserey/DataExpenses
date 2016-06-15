@@ -9,28 +9,56 @@ open WebSharper.UI.Next.Html
 open London.Web.Pages
 
 [<JavaScript>]
+type Endpoint =
+| Expenses
+| ExpensesPerMonth
+| ExpensesPerCategory
+    with
+        override x.ToString() =
+            match x with 
+            | Expenses -> "Expenses"
+            | ExpensesPerMonth -> "Expenses per month"
+            | ExpensesPerCategory -> "Expenses per category"
+            
+        static member Page x =
+            match x with
+            | Expenses -> Expenses.Client.page
+            | ExpensesPerMonth -> ExpensesPerMonth.Client.page
+            | ExpensesPerCategory -> ExpensesPerCategory.Client.page
+
+        static member Route x =
+            match x with
+            | Expenses            -> [ "expenses" ]
+            | ExpensesPerMonth    -> [ "per-month" ]
+            | ExpensesPerCategory -> [ "per-category" ]
+
+        static member ReverseRoute x =
+            match x with
+            | [ "expenses" ]  -> Expenses
+            | [ "per-month" ] -> ExpensesPerMonth
+            | [ "per-category" ]
+            | _ -> ExpensesPerCategory
+
+[<JavaScript>]
 module App =
-    
-    type Endpoint =
-    | ExpensesPerMonth
-    | ExpensesPerCategory
 
     let route = 
-        RouteMap.Create 
-            (function
-             | ExpensesPerMonth -> [ "per-month" ]
-             | _ -> [ "per-category" ])
-            (function
-             | [ "per-month" ] -> ExpensesPerMonth
-             | _ -> ExpensesPerCategory)
+        RouteMap.Create Endpoint.Route Endpoint.ReverseRoute
         |> RouteMap.Install
 
     let nav = 
         Nav.Doc(
-            View.Map (function ExpensesPerMonth -> "Expenses per month" | _ -> "Expenses per category") route.View, 
+            View.Map string route.View, 
             "Data expenses", 
             [ Nav.Category.Doc("Expenses", 
                 [ aAttr 
+                    [ attr.href ""
+                      on.click(fun _ _ -> 
+                        route.Value <- Expenses
+                        toggleSideMenu()) ]
+                    [ text "All" ]
+                    
+                  aAttr 
                     [ attr.href ""
                       on.click(fun _ _ -> 
                         route.Value <- ExpensesPerMonth
@@ -45,8 +73,4 @@ module App =
                     [ text "Per cateogry" ] ]) ])
 
     let main =
-        Doc.BindView 
-            (function
-             | ExpensesPerMonth -> ExpensesPerMonth.Client.page
-             | _ -> ExpensesPerCategory.Client.page)
-            route.View
+        Doc.BindView Endpoint.Page route.View
