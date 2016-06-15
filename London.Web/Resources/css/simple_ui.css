@@ -2217,8 +2217,8 @@
       -o-transition: margin 0.2s ease-out, width 0.2s ease-out, left 0.2s ease-out;
       transition: margin 0.2s ease-out, width 0.2s ease-out, left 0.2s ease-out; }
       .card .card-content .card-list-item.active {
-        width: 105%;
-        margin: 30px -2.5%;
+        width: 103%;
+        margin: 30px -1.5%;
         -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
         -moz-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
         box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
