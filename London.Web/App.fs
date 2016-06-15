@@ -47,30 +47,16 @@ module App =
         |> RouteMap.Install
 
     let nav = 
+        let link title endpoint =
+            aAttr [ attr.href ""; on.click(fun _ _ -> Var.Set route endpoint; toggleSideMenu()) ] [ text title ]
+
         Nav.Doc(
             View.Map string route.View, 
             "London expenses", 
             [ Nav.Category.Doc("Expenses", 
-                [ aAttr 
-                    [ attr.href ""
-                      on.click(fun _ _ -> 
-                        route.Value <- Expenses
-                        toggleSideMenu()) ]
-                    [ text "All" ]
-                    
-                  aAttr 
-                    [ attr.href ""
-                      on.click(fun _ _ -> 
-                        route.Value <- ExpensesPerMonth
-                        toggleSideMenu()) ] 
-                    [ text "Per month" ]
-
-                  aAttr 
-                    [ attr.href ""
-                      on.click(fun _ _ -> 
-                        route.Value <- ExpensesPerCategory
-                        toggleSideMenu()) ]
-                    [ text "Per cateogry" ] ]) ])
+                [ link "All" Expenses
+                  link "Per month" ExpensesPerMonth
+                  link "Per category" ExpensesPerCategory ]) ])
 
     let main =
         Doc.BindView Endpoint.Page route.View
