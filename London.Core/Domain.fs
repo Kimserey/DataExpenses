@@ -107,7 +107,7 @@ module Domain =
         >> label ".*COFFEE REPUBLIC.*"                                                  "COFFEE REPUBLIC"                    SweetAndSavoury
         >> label ".*PASTY SHOP.*"                                                       "PASTY SHOP PUFF"                    SweetAndSavoury
         >> label ".*AVID.*"                                                             "AVID CHOCOLATE"                     SweetAndSavoury
-        >> label ".*EAT BLUEWATER.*"                                                    "EAT"                                SweetAndSavoury
+        >> label ".*(EAT BLUEWATER|EAT CANARY WHARF).*"                                 "EAT"                                SweetAndSavoury
         >> label ".*LOLAS.*"                                                            "LOLAS"                              SweetAndSavoury
         >> label ".*STICKY RICE.*"                                                      "STICKY RICE"                        SweetAndSavoury
         >> label ".*CAFFE NERO.*"                                                       "CAFFE NERO"                         SweetAndSavoury
@@ -117,6 +117,7 @@ module Domain =
         >> label ".*AMAZON.*"                                                           "AMAZON"                             Online
         >> label ".*(GOOGLE|Non-Sterling Transaction Fee).*"                            "GOOGLE ACCOUNT (OR RELATED)"        Online
         >> label ".*PAYPAL.*"                                                           "PAYPAL"                             Online
+        >> label ".*NAME-CHEAP.COM.*"                                                   "NAME-CHEAP"                         Online
 
         >> label ".*WASABI.*"                                                           "WASABI JAP"                         Restaurant
         >> label ".*MONGOLIAN GRILL.*"                                                  "MONGOLIAN GRILL"                    Restaurant
@@ -132,6 +133,7 @@ module Domain =
         >> label ".*WAGAMAMA.*"                                                         "WAGAMAMA"                           Restaurant
         >> label ".*GOLD MINE.*"                                                        "GOLD MINE"                          Restaurant
         >> label ".*THE BREAKFAST CLUB.*"                                               "THE BREAKFAST CLUB"                 Restaurant
+        >> label ".*JUST EAT.*"                                                         "JUST EAT"                           Restaurant
     
         >> label ".*PET SUPPLIES.*"                                                     "PET SUPPLIES GIFT"                  Other
         >> label ".*AUDIBLE.*"                                                          "AUDIBLE"                            Other
@@ -146,3 +148,5 @@ module Domain =
         >> label ".*GIFFGAFF.*"                                                         "GIFFGAFF"                           Other
         >> label ".*(CINEMA|EVERYMAN|VUE).*"                                            "CINEMA"                             Other
         >> label ".*THE GENTRY BARBER.*"                                                "THE GENTRY BARBER"                  Other
+        >> label ".*HYPEROPTIC.*"                                                       "HYPEROPTIC"                         Other
+        

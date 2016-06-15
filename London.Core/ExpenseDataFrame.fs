@@ -129,6 +129,20 @@ type ExpenseDataFrame = {
             |> Seq.toList)
         |> Seq.toList
 
+    static member GetAllExpenses sortBy exp =
+        exp
+        |> Frame.filterRowValues(fun c -> c?Amount < 0.)
+        |> Frame.sortRows sortBy
+        |> Frame.rows
+        |> Series.observations
+        |> Seq.map (fun (_, s) -> 
+            { Date = s.GetAs<DateTime>("Date")
+              Title = s.GetAs<string>("Title")
+              Label = s.GetAs<string>("Label")
+              Amount = s?Amount
+              Category = s.GetAs<string>("Category") })
+        |> Seq.toList
+
 module Dataframe =
     open System.IO
 

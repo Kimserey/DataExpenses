@@ -9,17 +9,7 @@ open System.Text.RegularExpressions
 open Deedle
 open London.Core
 
-(** 
-    Script boot up, massage and label data
-    --------------------------------------
-    - Set environment as current file script location
-    - Load all data from .csv files into Expenses (assuming no duplicate in .csv)
-    - Load all data to a dataframe
-    - Label the stores
-**)
-
 Environment.CurrentDirectory <- __SOURCE_DIRECTORY__
-
 let df =
     ExpenseDataFrame.FromFile <| Directory.GetFiles(Environment.CurrentDirectory + "/data","*.csv")
     |> ExpenseDataFrame.GetFrame
@@ -39,12 +29,7 @@ df
 |> ExpenseDataFrame.GetExpensesPerMonth
 |> List.iter (fun (Month (month, _), Year y, Sum sum, expenses) ->
     printfn "%s %f" (month + " " + string y) sum
-    expenses 
-    |> List.iter (fun (Title category, Sum sum, expenses) -> 
-        printfn "  %20s %2f" category sum
-        expenses
-        |> List.iter (fun e ->
-            printfn "    %40s %50s %50s %10.2f %50s" (e.Date.ToShortDateString()) e.Title e.Label (e.Amount) e.Category)))
+    expenses |> List.iter (fun (_, _, expenses) -> expenses |> List.iter (fun e -> printfn "  %20s %50s %10.2f %50s" (e.Date.ToShortDateString()) e.Label (e.Amount) e.Category)))
 
 (**
     Total monthly expenses - pretty display
@@ -60,17 +45,24 @@ df
       November : -198.72
 **)
 df
-|> Frame.filterRowValues(fun c -> c?Amount < 0.)
-|> Frame.groupRowsUsing(fun _ c -> c.GetAs<DateTime>("Date").Month)
-|> Frame.getNumericCols
-|> Series.mapValues (Stats.levelSum fst)
-|> Series.observations
-|> Seq.head
-|> snd
-|> Series.map(fun k t -> monthToString k, t)
-|> Series.observations
-|> Seq.iter (fun (_, (month, amount)) -> printfn "%10s : %.2f" month amount)
+|> ExpenseDataFrame.GetExpensesPerMonth
+|> List.iter (fun (Month (month, _), Year y, Sum sum, _) -> printfn "%30s :  %.2f" (month + " " + string y) sum)
 
+(**
+    All sorted expenses - pretty display
+    ------------------------------------
+    01/12/2015              SOMETHING    -51.00
+    09/02/2016    SOMETHING SOMETHING    -30.00
+    13/01/2016        AGAIN SOMETHING     -4.00
+**)
+
+df
+|> ExpenseDataFrame.GetAllExpenses "Date"
+|> List.iter (fun e -> printfn "%s %80s %10.2f %20s" (e.Date.ToShortDateString()) e.Title e.Amount e.Category)
+
+df
+|> ExpenseDataFrame.GetAllExpenses "Amount"
+|> List.iter (fun e -> printfn "%s %80s %10.2f %20s" (e.Date.ToShortDateString()) e.Title e.Amount e.Category)
 
 (**
     Top three monthly expenses - frame
@@ -122,23 +114,6 @@ df
             (s.GetAs<DateTime>("Date").ToShortDateString()) 
             (s.GetAs<string>("Title"))
             s?Amount))
-
-(**
-    All sorted expenses - pretty display
-    ------------------------------------
-    01/12/2015              SOMETHING    -51.00
-    09/02/2016    SOMETHING SOMETHING    -30.00
-    13/01/2016        AGAIN SOMETHING     -4.00
-**)
-df
-|> Frame.rows
-|> Series.sortBy(fun s -> s?Amount)
-|> Series.observations
-|> Seq.iter (fun (_, s) -> 
-    printfn "%s %50s %10.2f" 
-        (s.GetAs<DateTime>("Date").ToShortDateString()) 
-        (s.GetAs<string>("Title"))
-        s?Amount)
 
 (**
     Grouped by title sorted expenses - pretty display
