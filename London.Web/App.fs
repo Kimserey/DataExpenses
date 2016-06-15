@@ -49,7 +49,7 @@ module App =
     let nav = 
         Nav.Doc(
             View.Map string route.View, 
-            "Data expenses", 
+            "London expenses", 
             [ Nav.Category.Doc("Expenses", 
                 [ aAttr 
                     [ attr.href ""
