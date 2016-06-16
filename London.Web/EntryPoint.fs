@@ -12,16 +12,6 @@ open Microsoft.Owin.FileSystems
 open WebSharper.Owin
 
 module EntryPoint =
-    
-    let page = 
-        Templates.Index.Doc(
-            Title = "London expenses",
-            Nav = [ client <@ App.nav @> ],
-            Main = [ client <@ App.main @> ])
-        |> Content.Page
-
-    let app = 
-        Application.SinglePage(fun _ -> page)
 
     [<EntryPoint>]
     let Main args =
@@ -34,7 +24,7 @@ module EntryPoint =
         use server = 
             WebApp.Start(url, fun appB ->
                 appB.UseStaticFiles(StaticFileOptions(FileSystem = PhysicalFileSystem(root)))
-                    .UseSitelet(root, app)
+                    .UseSitelet(root, Sitelet.sitelet)
                     |> ignore)
         
         stdout.WriteLine("Serving {0}", url)
