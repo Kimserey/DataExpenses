@@ -4,17 +4,11 @@ open WebSharper
 open WebSharper.Resources
 
 module Resources =
-    
-    module FontAwesome = 
-        [<assembly:System.Web.UI.WebResource("FontAwesome.otf", "");
-          assembly:System.Web.UI.WebResource("fontawesome-webfont.eot", "");
-          assembly:System.Web.UI.WebResource("fontawesome-webfont.svg", "");
-          assembly:System.Web.UI.WebResource("fontawesome-webfont.ttf", "");
-          assembly:System.Web.UI.WebResource("fontawesome-webfont.woff", "");
-          assembly:System.Web.UI.WebResource("fontawesome-webfont.woff2", "")>]
-        do()
+
+    type Fontawesome() =
+        inherit BaseResource("https://use.fontawesome.com/269e7d57ca.js")
         
-    module SimpleUI =
-        [<assembly:System.Web.UI.WebResource("simple_ui.css", "text/css");
-          assembly:System.Web.UI.WebResource("simple_ui.js", "text/javascript");>]
-        do()
+    [<assembly:Require(typeof<Fontawesome>);
+      assembly:System.Web.UI.WebResource("SimpleUI.css", "text/css");
+      assembly:System.Web.UI.WebResource("SimpleUI.js", "text/javascript")>]
+    do()

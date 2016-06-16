@@ -1,4 +1,5 @@
 source https://www.nuget.org/api/v2
+
 nuget Deedle
 nuget IntelliFactory.Xml 0.6.63.95 framework: >= net45
 nuget Microsoft.Owin 3.0.1 framework: >= net45
@@ -13,3 +14,6 @@ nuget WebSharper 3.6.14.237 framework: >= net45
 nuget WebSharper.Html 3.6.10.22 framework: >= net45
 nuget WebSharper.Owin 3.6.11.126 framework: >= net45
 nuget WebSharper.UI.Next
+
+github Kimserey/SimpleUI dist/css/SimpleUI.css
+github Kimserey/SimpleUI dist/js/SimpleUI.js

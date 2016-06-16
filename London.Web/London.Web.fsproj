@@ -67,8 +67,51 @@
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
-  <Import Project="..\packages\WebSharper\build\WebSharper.targets" Condition="Exists('..\packages\WebSharper\build\WebSharper.targets')" Label="Paket" />
   <Import Project="..\.paket\paket.targets" />
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.fs" />
+    <EmbeddedResource Include="..\paket-files\Kimserey\SimpleUI\dist\css\SimpleUI.css">
+      <Link>Resources\SimpleUI.css</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\paket-files\Kimserey\SimpleUI\dist\js\SimpleUI.js">
+      <Link>Resources\SimpleUI.js</Link>
+    </EmbeddedResource>
+    <Compile Include="Resources\Resources.fs" />
+    <None Include="Templates\template-card.html" />
+    <None Include="Templates\template-card-list.html" />
+    <None Include="Templates\template-card-table.html" />
+    <None Include="Templates\template-nav.html" />
+    <None Include="Templates\index.html" />
+    <Compile Include="Templates\Templates.fs" />
+    <Compile Include="Pages\Pages.Common.Client.fs" />
+    <Compile Include="Pages\Pages.ExpensesPerMonth.fs" />
+    <Compile Include="Pages\Pages.ExpensesPerCategory.fs" />
+    <Compile Include="Pages\Pages.Expenses.fs" />
+    <Compile Include="App.fs" />
+    <Compile Include="EntryPoint.fs" />
+    <Content Include="App.config" />
+    <Content Include="paket.references" />
+    <None Include="BuildAndRun.cmd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="FSharp.Core, Version=$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <ProjectReference Include="..\London.Core\London.Core.fsproj">
+      <Name>London.Core</Name>
+      <Project>{4c61acb9-941f-4faa-8fb6-b9640538bead}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2')">
       <ItemGroup>
@@ -301,50 +344,5 @@
       </ItemGroup>
     </When>
   </Choose>
-  <ItemGroup>
-    <Compile Include="AssemblyInfo.fs" />
-    <EmbeddedResource Include="Resources\fonts\FontAwesome.otf" />
-    <EmbeddedResource Include="Resources\fonts\fontawesome-webfont.eot" />
-    <EmbeddedResource Include="Resources\fonts\fontawesome-webfont.svg" />
-    <EmbeddedResource Include="Resources\fonts\fontawesome-webfont.ttf" />
-    <EmbeddedResource Include="Resources\fonts\fontawesome-webfont.woff" />
-    <EmbeddedResource Include="Resources\fonts\fontawesome-webfont.woff2" />
-    <EmbeddedResource Include="Resources\css\simple_ui.css" />
-    <EmbeddedResource Include="Resources\js\simple_ui.js" />
-    <Compile Include="Resources\Resources.fs" />
-    <None Include="Templates\template-card.html" />
-    <None Include="Templates\template-card-list.html" />
-    <None Include="Templates\template-card-table.html" />
-    <None Include="Templates\template-nav.html" />
-    <None Include="Templates\index.html" />
-    <Compile Include="Templates\Templates.fs" />
-    <Compile Include="Pages\Pages.Common.Client.fs" />
-    <Compile Include="Pages\Pages.ExpensesPerMonth.fs" />
-    <Compile Include="Pages\Pages.ExpensesPerCategory.fs" />
-    <Compile Include="Pages\Pages.Expenses.fs" />
-    <Compile Include="App.fs" />
-    <Compile Include="EntryPoint.fs" />
-    <Content Include="App.config" />
-    <Content Include="paket.references" />
-    <None Include="BuildAndRun.cmd" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="mscorlib" />
-    <Reference Include="FSharp.Core, Version=$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-    <ProjectReference Include="..\London.Core\London.Core.fsproj">
-      <Name>London.Core</Name>
-      <Project>{4c61acb9-941f-4faa-8fb6-b9640538bead}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-  </ItemGroup>
+  <Import Project="..\packages\WebSharper\build\WebSharper.targets" Condition="Exists('..\packages\WebSharper\build\WebSharper.targets')" Label="Paket" />
 </Project>

@@ -1,7 +1,7 @@
 NUGET
   remote: https://www.nuget.org/api/v2
   specs:
-    Deedle (1.2.4)
+    Deedle (1.2.5)
     IntelliFactory.Xml (0.6.63.95) - framework: >= net45
     Microsoft.Owin (3.0.1) - framework: >= net45
       Owin (>= 1.0)
@@ -29,3 +29,8 @@ NUGET
       WebSharper (>= 3.6.12.235)
     WebSharper.UI.Next (3.6.15.211)
       WebSharper (>= 3.6.12.235)
+GITHUB
+  remote: Kimserey/SimpleUI
+  specs:
+    dist/css/SimpleUI.css (224d9e66b557d02f6d11b7a4a94ae6183386b762)
+    dist/js/SimpleUI.js (224d9e66b557d02f6d11b7a4a94ae6183386b762)
