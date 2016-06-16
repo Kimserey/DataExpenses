@@ -49,6 +49,56 @@ df
 |> List.iter (fun (Month (month, _), Year y, Sum sum, _) -> printfn "%30s :  %.2f" (month + " " + string y) sum)
 
 (**
+    Expenses per month for a category - pretty display
+    --------------------------------------------------
+    Supermarket
+            October   -24.03 GBP
+           December   -83.32 GBP
+    AsianSupermarket
+            January   -14.55 GBP
+           February   -15.14 GBP
+    SweetAndSavoury
+            October   -35.40 GBP
+           November   -31.69 GBP
+**)
+
+df
+|> ExpenseDataFrame.GetExpensesPerCategory
+|> List.iter (fun (Title title, Sum sum, expenses) ->
+    printfn "%s %.2f" title sum
+    expenses |> List.iter (fun (_, _, expenses) -> expenses |> List.iter (fun e -> printfn "  %20s %50s %10.2f %50s" (e.Date.ToShortDateString()) e.Label (e.Amount) e.Category)))
+
+let showExpensesPerMonth (categories: Category list) =
+    categories
+    |> List.map string
+    |> List.iter (fun category ->
+        printfn "%s" category
+        df.Columns.[ [ "Date"; "Category"; "Amount" ] ]
+        |> Frame.filterRowValues(fun c -> 
+            c?Amount < 0. 
+            && c.GetAs<string>("Category") = category)
+        |> Frame.groupRowsUsing(fun _ c -> 
+            c.GetAs<DateTime>("Date").Month)
+        |> Frame.getNumericCols
+        |> Series.mapValues (Stats.levelSum fst)
+        |> Series.observations
+        |> Seq.collect (snd >> Series.observations)
+        |> Seq.iter (fun (month, value) -> 
+            printfn "%15s %8.2f GBP" (monthToString month) value))
+
+showExpensesPerMonth 
+    [ Category.Supermarket
+      Category.AsianSupermarket
+      Category.SweetAndSavoury
+      Category.Restaurant
+      Category.Clothing
+      Category.Cash
+      Category.DepartmentStore
+      Category.Electronics
+      Category.FastFood
+      Category.Other ]
+
+(**
     All sorted expenses - pretty display
     ------------------------------------
     01/12/2015              SOMETHING    -51.00
@@ -63,6 +113,7 @@ df
 df
 |> ExpenseDataFrame.GetAllExpenses "Amount"
 |> List.iter (fun e -> printfn "%s %80s %10.2f %20s" (e.Date.ToShortDateString()) e.Title e.Amount e.Category)
+
 
 (**
     Top three monthly expenses - frame
@@ -317,48 +368,6 @@ df.Columns.[ [ "Date"; "Category"; "Label"; "Amount" ]]
              |> Series.observations 
              |> Seq.sumBy snd)))
 
-(**
-    Expenses per month for a category - pretty display
-    --------------------------------------------------
-    Supermarket
-            October   -24.03 GBP
-           December   -83.32 GBP
-    AsianSupermarket
-            January   -14.55 GBP
-           February   -15.14 GBP
-    SweetAndSavoury
-            October   -35.40 GBP
-           November   -31.69 GBP
-**)
-let showExpensesPerMonth (categories: Category list) =
-    categories
-    |> List.map string
-    |> List.iter (fun category ->
-        printfn "%s" category
-        df.Columns.[ [ "Date"; "Category"; "Amount" ] ]
-        |> Frame.filterRowValues(fun c -> 
-            c?Amount < 0. 
-            && c.GetAs<string>("Category") = category)
-        |> Frame.groupRowsUsing(fun _ c -> 
-            c.GetAs<DateTime>("Date").Month)
-        |> Frame.getNumericCols
-        |> Series.mapValues (Stats.levelSum fst)
-        |> Series.observations
-        |> Seq.collect (snd >> Series.observations)
-        |> Seq.iter (fun (month, value) -> 
-            printfn "%15s %8.2f GBP" (monthToString month) value))
-
-showExpensesPerMonth 
-    [ Category.Supermarket
-      Category.AsianSupermarket
-      Category.SweetAndSavoury
-      Category.Restaurant
-      Category.Clothing
-      Category.Cash
-      Category.DepartmentStore
-      Category.Electronics
-      Category.FastFood
-      Category.Other ]
 
 (**
     Expenses per month for each day of the week - pretty display

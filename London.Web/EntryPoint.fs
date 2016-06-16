@@ -25,13 +25,16 @@ module EntryPoint =
 
     [<EntryPoint>]
     let Main args =
-        let rootDirectory = ".."
-        let url = "http://+:9100/"
+
+        let root, url =
+            match args with
+            | [| root; url |] -> root, url
+            | _ -> "..", "http://localhost:9100/"
 
         use server = 
             WebApp.Start(url, fun appB ->
-                appB.UseStaticFiles(StaticFileOptions(FileSystem = PhysicalFileSystem(rootDirectory)))
-                    .UseSitelet(rootDirectory, app)
+                appB.UseStaticFiles(StaticFileOptions(FileSystem = PhysicalFileSystem(root)))
+                    .UseSitelet(root, app)
                     |> ignore)
         
         stdout.WriteLine("Serving {0}", url)

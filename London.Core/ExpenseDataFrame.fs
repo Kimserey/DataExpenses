@@ -31,13 +31,11 @@ type ExpenseDataFrame = {
             files
             |> Seq.map (fun (path: string) -> Frame.ReadCsv(path, hasHeaders = false))
             |> Seq.map (fun df -> df |> Frame.indexColsWith [ "Date"; "Title"; "Amount" ])
-            |> Seq.map (fun df -> df.GetRows())
-            |> Seq.collect (fun s -> s.Values)
-            |> Seq.map (fun s -> s?Date, s?Title, s?Amount)
-            |> Seq.map (fun (date, title, amount) -> 
-                { Date = string date |> DateTime.Parse
-                  Title = string title
-                  Amount = string amount |> float
+            |> Seq.collect (fun df -> df |> Frame.rows |> Series.observations)
+            |> Seq.map (fun (_, s) ->
+                { Date = s.GetAs<DateTime>("Date")
+                  Title = s.GetAs<string>("Title")
+                  Amount = s?Amount
                   Label = ""
                   Category = "" })
             |> Frame.ofRecords
