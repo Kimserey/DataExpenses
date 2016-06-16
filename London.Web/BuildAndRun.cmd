@@ -10,6 +10,8 @@ echo %solutiondir%
 "C:\Program Files (x86)\MSBuild\14.0\bin\MSBuild.exe" /maxcpucount /verbosity:minimal /nologo /property:SolutionDir=%solutiondir%
 
 pushd ".\bin"
-London.Web.exe ".." "http://+:9100"
+
+REM I use //+:9600 because I reserved the url
+London.Web.exe ".." "http://+:9600"
 popd
 
