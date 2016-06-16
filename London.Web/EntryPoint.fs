@@ -19,7 +19,7 @@ module EntryPoint =
         let root, url =
             match args with
             | [| root; url |] -> root, url
-            | _ -> "..", "http://localhost:9100/"
+            | _ -> "..", "http://localhost:9600/"
 
         use server = 
             WebApp.Start(url, fun appB ->
