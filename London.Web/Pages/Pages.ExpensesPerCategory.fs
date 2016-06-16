@@ -39,7 +39,7 @@ module ExpensesPerCategory =
                                                 "card-" + string cardIndex + "-content-" + string contentIndex,
                                                 month,
                                                 sum |> parseFloat 2 |> string,
-                                                [ CardTable.Doc (List.map Expense.ToTableRow values) ]))) ])
+                                                [ CardTable.Doc (List.mapi Expense.ToTableRow values) ]))) ])
                         |> Doc.Concat
             }
             |> Doc.Async

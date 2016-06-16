@@ -27,6 +27,6 @@ module Expenses =
         let page =
             async {
                 let! expenses = Rpcs.get "Date"
-                return Card.Doc [ CardTable.Doc (List.map Expense.ToTableRow expenses) ]
+                return Card.Doc [ CardTable.Doc (List.mapi Expense.ToTableRow expenses) ]
             }
             |> Doc.Async
