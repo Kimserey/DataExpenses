@@ -12,10 +12,7 @@ open London.Web.Templates
 module Common =   
     type Expense with
         static member ToTableRow (index: int) x =
-            CardTable.Row.Doc (string index, x.Date.ToLongDateString(), x.Label, string x.Amount, x.Category)
-
-    [<Inline "parseFloat($1).toFixed($0)">]
-    let parseFloat (d: int) (x: float) = X<float>
+            CardTable.Row.Doc (string index, x.Date.ToLongDateString(), x.Label, x.Amount.JS.ToFixed 2, x.Category)
 
     [<Direct "simpleUI.toggleSideMenu()">]
     let toggleSideMenu() = X<unit>

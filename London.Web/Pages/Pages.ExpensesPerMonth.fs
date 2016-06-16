@@ -33,14 +33,14 @@ module ExpensesPerMonth =
                             Card.Doc [
                                CardList.Doc(
                                    month + " " + string year,
-                                   sum |> parseFloat 2 |> string,
+                                   sum.JS.ToFixed 2,
                                    expenses
                                    |> List.sortBy (fun (Title c, _, _) -> c)
                                    |> List.mapi (fun contentIndex (Title category, Sum sum, expenses) ->
                                         CardList.Item.Doc(
                                             "card-" + string cardIndex + "-content-" + string contentIndex,
                                             category,
-                                            sum |> parseFloat 2 |> string,
+                                            sum.JS.ToFixed 2,
                                             [ CardTable.Doc (List.mapi Expense.ToTableRow expenses) ]))) ])
                         |> Doc.Concat
             }
