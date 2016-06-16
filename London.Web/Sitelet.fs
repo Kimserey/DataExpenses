@@ -17,6 +17,12 @@ module Sitelet =
     and ApiEndPoint =
         | [<EndPoint "/expenses">] Expenses of string
 
+    type Chart<'label, 'value> = {
+        Title: string
+        Labels: 'label list
+        Values: 'value list
+    }
+
     let sitelet =
         Sitelet.Infer (fun ctx ->
             function
@@ -28,6 +34,11 @@ module Sitelet =
                 |> Content.Page
             
             | Api (Expenses sortBy) ->
-                expenses
-                |> ExpenseDataFrame.GetAllExpenses sortBy
+                let expenses =
+                    expenses
+                    |> ExpenseDataFrame.GetAllExpenses sortBy
+
+                { Title = "All expenses"
+                  Labels = expenses |> List.map (fun e -> e.Date.Date) |> List.sort |> List.map (fun e -> e.ToShortDateString())
+                  Values = expenses |> List.map (fun e -> e.Amount) }
                 |> Content.Json)
