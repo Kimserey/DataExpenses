@@ -15,39 +15,10 @@ module Sitelet =
     | [<EndPoint "/api">] Api of ApiEndPoint
 
     and ApiEndPoint =
-        | [<EndPoint "/expenses">] Expenses of string
-
-    type Chart<'label, 'value> = {
-        Title: string
-        Labels: 'label list
-        Values: 'value list
-    }
+        | [<EndPoint "/expenses">] Expenses
 
     let sitelet =
         Sitelet.Infer (fun ctx ->
             function
-            | App ->
-                Templates.Index.Doc(
-                    Title = "London expenses",
-                    Nav = [ client <@ App.nav @> ],
-                    Main = [ client <@ App.main @> ])
-                |> Content.Page
-            
-            | Api (Expenses sortBy) ->
-                
-                // CORS - authorize request
-                let headers =
-                    ctx.Request.Headers
-                    |> Seq.tryFind (fun h -> h.Name = "Origin")
-                    |> Option.map (fun origin -> Http.Header.Custom "Access-Control-Allow-Origin" origin.Value)
-                    |> Option.toList
-
-                let expenses =
-                    expenses
-                    |> ExpenseDataFrame.GetAllExpenses sortBy
-
-                { Title = "All expenses"
-                  Labels = expenses |> List.map (fun e -> e.Date.Date) |> List.sort |> List.map (fun e -> e.ToShortDateString())
-                  Values = expenses |> List.map (fun e -> e.Amount) }
-                |> Content.Json
-                |> Content.WithHeaders headers)
+            | App          -> App.content ctx
+            | Api Expenses -> Api.content ctx)

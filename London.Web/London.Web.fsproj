@@ -88,6 +88,7 @@
     <Compile Include="Pages\Pages.ExpensesPerCategory.fs" />
     <Compile Include="Pages\Pages.Expenses.fs" />
     <Compile Include="App.fs" />
+    <Compile Include="Api.fs" />
     <Compile Include="Sitelet.fs" />
     <Compile Include="EntryPoint.fs" />
     <Content Include="App.config" />

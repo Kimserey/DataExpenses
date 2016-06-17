@@ -141,6 +141,28 @@ type ExpenseDataFrame = {
               Category = s.GetAs<string>("Category") })
         |> Seq.toList
 
+    static member GetAllExpensesChart exp =
+        let pivotTable =
+            exp
+            |> Frame.pivotTable
+                (fun _ r -> r.GetAs<DateTime>("Date"))
+                (fun _ r -> r.GetAs<string>("Category"))
+                (fun frame -> frame?Amount |> Stats.mean)
+
+        pivotTable.RowKeys
+        |> Seq.toList,
+        pivotTable
+        |> Frame.cols
+        |> Series.observations
+        |> Seq.map (fun (title, series) -> 
+            title, 
+            series 
+            |> Series.observationsAll 
+            |> Seq.map (fun (date, value) -> date, defaultArg (value |> Option.map (fun x -> x :?> float)) 0.) 
+            |> Seq.sortBy fst
+            |> Seq.toList)
+        |> Seq.toList
+
 module Dataframe =
     open System.IO
 

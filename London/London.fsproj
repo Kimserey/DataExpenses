@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <None Include="Expenses.fsx" />
+    <None Include="Chart.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
