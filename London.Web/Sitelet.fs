@@ -34,6 +34,14 @@ module Sitelet =
                 |> Content.Page
             
             | Api (Expenses sortBy) ->
+                
+                // CORS - authorize request
+                let headers =
+                    ctx.Request.Headers
+                    |> Seq.tryFind (fun h -> h.Name = "Origin")
+                    |> Option.map (fun origin -> Http.Header.Custom "Access-Control-Allow-Origin" origin.Value)
+                    |> Option.toList
+
                 let expenses =
                     expenses
                     |> ExpenseDataFrame.GetAllExpenses sortBy
@@ -41,4 +49,5 @@ module Sitelet =
                 { Title = "All expenses"
                   Labels = expenses |> List.map (fun e -> e.Date.Date) |> List.sort |> List.map (fun e -> e.ToShortDateString())
                   Values = expenses |> List.map (fun e -> e.Amount) }
-                |> Content.Json)
+                |> Content.Json
+                |> Content.WithHeaders headers)
