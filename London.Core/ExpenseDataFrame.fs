@@ -144,12 +144,14 @@ type ExpenseDataFrame = {
     static member GetAllExpensesChart exp =
         let pivotTable =
             exp
+            |> Frame.filterRowValues(fun c -> c?Amount < 0.)
             |> Frame.pivotTable
                 (fun _ r -> r.GetAs<DateTime>("Date"))
                 (fun _ r -> r.GetAs<string>("Category"))
                 (fun frame -> frame?Amount |> Stats.mean)
 
         pivotTable.RowKeys
+        |> Seq.sort
         |> Seq.toList,
         pivotTable
         |> Frame.cols
