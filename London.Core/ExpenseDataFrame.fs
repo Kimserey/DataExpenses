@@ -160,7 +160,7 @@ type ExpenseDataFrame = {
             |> Frame.pivotTable
                 (fun _ r -> r.GetAs<DateTime>("Date"))
                 (fun _ r -> r.GetAs<string>("Category"))
-                (fun frame -> frame?Amount |> Stats.mean)
+                (fun frame -> frame?Amount |> Stats.sum)
 
         pivotTable.RowKeys
         |> Seq.sort
