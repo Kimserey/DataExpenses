@@ -20,15 +20,14 @@ module Api =
         Title: string
         Values: 'T list
     }
+    
+    let addCORSHeader ctx =
+        ctx.Request.Headers
+        |> Seq.tryFind (fun h -> h.Name = "Origin")
+        |> Option.map (fun origin -> Http.Header.Custom "Access-Control-Allow-Origin" origin.Value)
+        |> Option.toList
 
-    let content ctx =
-        // CORS - authorize request
-        let headers =
-            ctx.Request.Headers
-            |> Seq.tryFind (fun h -> h.Name = "Origin")
-            |> Option.map (fun origin -> Http.Header.Custom "Access-Control-Allow-Origin" origin.Value)
-            |> Option.toList
-
+    let allExpenses ctx =
         let labels, expenses =
             expenses
             |> ExpenseDataFrame.GetAllExpensesChart
@@ -37,4 +36,15 @@ module Api =
           Labels = labels |> List.map (fun d -> d.ToShortDateString())
           DataSeriesList = expenses |> List.map (fun (title, expenses) -> { Title = title; Values = expenses |> List.map snd }) }
         |> Content.Json
-        |> Content.WithHeaders headers
+        |> Content.WithHeaders (addCORSHeader ctx)
+
+    let expenseLevelsCount ctx =
+        let counts =
+            expenses
+            |> ExpenseDataFrame.GetExpenseLevelCount
+
+        { Title = "All expenses"
+          Labels = [ "0-20"; "21-50"; "51-70"; "71-90"; "91-max" ]
+          DataSeriesList = counts |> List.map (fun (category, counts) -> { Title = category; Values = counts |> List.map snd }) }
+        |> Content.Json
+        |> Content.WithHeaders (addCORSHeader ctx)

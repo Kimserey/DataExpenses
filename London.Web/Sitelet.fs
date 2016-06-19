@@ -15,7 +15,8 @@ module Sitelet =
     | [<EndPoint "/api">] Api of ApiEndPoint
 
     and ApiEndPoint =
-        | [<EndPoint "/expenses">] Expenses
+        | [<EndPoint "/expenses">]      Expenses
+        | [<EndPoint "/levelcounts">]   LevelCounts
 
     let sitelet =
         Sitelet.Infer (fun ctx ->
@@ -27,4 +28,5 @@ module Sitelet =
                     Main = [ client <@ App.main @> ])
                 |> Content.Page
             
-            | Api Expenses -> Api.content ctx)
+            | Api Expenses    -> Api.allExpenses ctx
+            | Api LevelCounts -> Api.expenseLevelsCount ctx)

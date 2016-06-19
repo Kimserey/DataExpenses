@@ -58,6 +58,17 @@ type ExpenseDataFrame = {
             |> Frame.getCol "Date" 
             |> Series.mapValues (fun date -> DateTime.Parse(date).Month |> monthToString))
 
+        frame.AddColumn(
+            "ExpenseLevel", 
+            frame
+            |> Frame.getCol "Amount" 
+            |> Series.mapValues (fun (amount: float) ->
+                if amount >= -20.   then 1
+                elif amount >= -50. then 2
+                elif amount >= -70. then 3
+                elif amount >= -90. then 4
+                else 5))
+
         { Frame = frame }
 
     static member GetSum exp =
@@ -141,6 +152,7 @@ type ExpenseDataFrame = {
               Category = s.GetAs<string>("Category") })
         |> Seq.toList
 
+    //Temporary name
     static member GetAllExpensesChart exp =
         let pivotTable =
             exp
@@ -154,14 +166,33 @@ type ExpenseDataFrame = {
         |> Seq.sort
         |> Seq.toList,
         pivotTable
+        |> Frame.fillMissingWith 0.
         |> Frame.cols
         |> Series.observations
         |> Seq.map (fun (title, series) -> 
             title, 
             series 
-            |> Series.observationsAll 
-            |> Seq.map (fun (date, value) -> date, defaultArg (value |> Option.bind tryUnbox |> Option.map (fun (x: float) -> Math.Abs x)) 0.) 
+            |> Series.observations
+            |> Seq.map (fun (date, value) -> date,  Math.Abs(unbox<float> value)) 
             |> Seq.sortBy fst
+            |> Seq.toList)
+        |> Seq.toList
+
+    static member GetExpenseLevelCount exp =
+        exp
+        |> Frame.filterRowValues(fun c -> c?Amount < 0.)
+        |> Frame.pivotTable
+            (fun _ r -> r.GetAs<int>("ExpenseLevel"))
+            (fun _ r -> r.GetAs<string>("Category"))
+            (fun frame -> frame |> Frame.countRows)
+        |> Frame.sortRowsByKey
+        |> Frame.fillMissingWith 0
+        |> Frame.getCols
+        |> Series.observations
+        |> Seq.map (fun (category, levels: Series<int, int>) ->
+            category,
+            levels
+            |> Series.observations
             |> Seq.toList)
         |> Seq.toList
 
