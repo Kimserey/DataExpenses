@@ -160,7 +160,7 @@ type ExpenseDataFrame = {
             title, 
             series 
             |> Series.observationsAll 
-            |> Seq.map (fun (date, value) -> date, defaultArg (value |> Option.map (fun x -> x :?> float)) 0.) 
+            |> Seq.map (fun (date, value) -> date, defaultArg (value |> Option.bind tryUnbox |> Option.map (fun (x: float) -> Math.Abs x)) 0.) 
             |> Seq.sortBy fst
             |> Seq.toList)
         |> Seq.toList

@@ -93,7 +93,6 @@
     <Compile Include="EntryPoint.fs" />
     <Content Include="App.config" />
     <Content Include="paket.references" />
-    <None Include="BuildAndRun.cmd" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
