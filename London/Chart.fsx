@@ -24,10 +24,8 @@ df
     |> List.iter (fun (date, amount) -> printfn "%10s %A" (date.ToShortDateString()) amount))
 
 df
-|> Frame.filterRowValues(fun c -> c?Amount < 0.)
-|> Frame.pivotTable
-    (fun _ r -> r.GetAs<int>("ExpenseLevel"))
-    (fun _ r -> r.GetAs<string>("Category"))
-    (fun frame -> frame |> Frame.countRows)
-|> Frame.sortRowsByKey
-|> Frame.fillMissingWith 0
+|> ExpenseDataFrame.GetExpenseLevelCount
+|> List.iter (fun (category, counts) ->
+    printfn "%s" category
+    counts
+    |> List.iter (fun (level, count) -> printfn "%10i %5i" level count))
