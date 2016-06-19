@@ -11,7 +11,7 @@ open London.Core.Dataframe
 module Sitelet =
     
     type EndPoint =
-    | [<EndPoint "/">] App
+    | [<EndPoint "/">] Home
     | [<EndPoint "/api">] Api of ApiEndPoint
 
     and ApiEndPoint =
@@ -20,5 +20,11 @@ module Sitelet =
     let sitelet =
         Sitelet.Infer (fun ctx ->
             function
-            | App          -> App.content ctx
+            | Home ->
+                Templates.Index.Doc(
+                    Title = "London expenses",
+                    Nav = [ client <@ App.nav @> ],
+                    Main = [ client <@ App.main @> ])
+                |> Content.Page
+            
             | Api Expenses -> Api.content ctx)

@@ -1,5 +1,6 @@
 namespace London.Web
 
+open System
 open WebSharper
 open WebSharper.Sitelets
 open WebSharper.UI.Next
@@ -18,8 +19,8 @@ module EntryPoint =
 
         let root, url =
             match args with
-            | [| root; url |] -> root, url
-            | _ -> "..", "http://localhost:9600/"
+            | [| r; u |] -> r, u
+            | _ -> "..", "http://+:9600/"
 
         use server = 
             WebApp.Start(url, fun appB ->
