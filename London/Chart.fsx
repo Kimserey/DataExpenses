@@ -29,3 +29,8 @@ df
     printfn "%s" category
     counts
     |> List.iter (fun (level, count) -> printfn "%10i %5i" level count))
+
+
+df
+|> Frame.filterRowsBy "Category" (string Supermarket)
+|> Frame.sortRows "Date"
