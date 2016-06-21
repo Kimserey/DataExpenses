@@ -54,6 +54,7 @@
     <None Include="Expenses.fsx" />
     <None Include="Chart.fsx" />
     <None Include="Windowed_dataframe.fsx" />
+    <None Include="Following_Expense._Analyse.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

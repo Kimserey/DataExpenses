@@ -155,6 +155,30 @@ type ExpenseDataFrame = {
         
     // Get all expenses for a certain category
     static member GetExpenses (category: Category) sortBy exp =
+        let frame =
+            exp
+            |> Frame.filterRowValues(fun c -> 
+                c?Amount < 0.
+                && c.GetAs<string>("Category") = (string category))
+            |> Frame.sortRows sortBy
+
+        frame
+        |> Frame.rows
+        |> Series.observations
+        |> Seq.map (fun (_, s) -> 
+            { Date = s.GetAs<DateTime>("Date")
+              Title = s.GetAs<string>("Title")
+              Label = s.GetAs<string>("Label")
+              Amount = s?Amount
+              Category = s.GetAs<string>("Category") })
+        |> Seq.toList,
+        frame
+        |> Frame.getCol "Amount"
+        |> Stats.stdDev
+
+
+    // Get all expenses for a certain category
+    static member GetSmoothExpenses (category: Category) sortBy exp =
         exp
         |> Frame.filterRowValues(fun c -> 
             c?Amount < 0.
@@ -170,30 +194,6 @@ type ExpenseDataFrame = {
               Category = s.GetAs<string>("Category") })
         |> Seq.toList
 
-
-    // Get all expenses for a certain category
-    static member GetSmoothExpenses (category: Category) sortBy exp =
-        let frame = 
-            exp
-            |> Frame.filterRowValues(fun c -> 
-                c?Amount < 0.
-                && c.GetAs<string>("Category") = (string category))
-
-        let mean, std =
-            Stats.mean (frame |> Frame.getCol "Amount" |> Series.mapValues (unbox<float> >> Math.Abs)), Stats.stdDev (frame |> Frame.getCol "Amount")
-
-        frame
-        |> Frame.sortRows sortBy
-        |> Frame.filterRowValues (fun r -> Math.Abs(r?Amount) <= mean + std)
-        |> Frame.rows
-        |> Series.observations
-        |> Seq.map (fun (_, s) -> 
-            { Date = s.GetAs<DateTime>("Date")
-              Title = s.GetAs<string>("Title")
-              Label = s.GetAs<string>("Label")
-              Amount = s?Amount
-              Category = s.GetAs<string>("Category") })
-        |> Seq.toList
 
     // Gt all expens
     static member GetAllExpensesChart exp =

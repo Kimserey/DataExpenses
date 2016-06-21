@@ -38,6 +38,31 @@ module Api =
         |> Content.Json
         |> Content.WithHeaders (addCORSHeader ctx)
 
+    let expensesForCategory category ctx =
+        let expenses =
+            expenses
+            |> ExpenseDataFrame.GetExpenses category "Date"
+            |> List.sortBy (fun e -> e.Date)
+            
+        { Title = string category + " - Expenses"
+          Labels = expenses |> List.map (fun e -> e.Date.ToShortDateString())
+          DataSeriesList = [ { Title = string category + " - Expenses"; Values = expenses } ] }
+        |> Content.Json
+        |> Content.WithHeaders (addCORSHeader ctx)
+
+    let smoothExpensesForCategory category ctx =
+        let expenses =
+            expenses
+            |> ExpenseDataFrame.GetSmoothExpenses category "Date"
+            |> List.sortBy (fun e -> e.Date)
+            
+        { Title = string category + " - Expenses"
+          Labels = expenses |> List.map (fun e -> e.Date.ToShortDateString())
+          DataSeriesList = [ { Title = string category + " - Expenses"; Values = expenses } ] }
+        |> Content.Json
+        |> Content.WithHeaders (addCORSHeader ctx)
+        
+
     let expenseLevelsCount ctx =
         let counts =
             expenses

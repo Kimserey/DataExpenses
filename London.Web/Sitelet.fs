@@ -15,9 +15,11 @@ module Sitelet =
     | [<EndPoint "/api">] Api of ApiEndPoint
 
     and ApiEndPoint =
-        | [<EndPoint "/expenses">]      Expenses
-        | [<EndPoint "/levelcounts">]   LevelCounts
-        | [<EndPoint "/dayspan">]       DaySpan
+        | [<EndPoint "/expenses">]            Expenses
+        | [<EndPoint "/supermarket">]         Supermarket
+        | [<EndPoint "/smoothsupermarket">]   SmoothSupermarket
+        | [<EndPoint "/levelcounts">]         LevelCounts
+        | [<EndPoint "/dayspan">]             DaySpan
 
     let sitelet =
         Sitelet.Infer (fun ctx ->
@@ -29,6 +31,8 @@ module Sitelet =
                     Main = [ client <@ App.main @> ])
                 |> Content.Page
             
-            | Api Expenses    -> Api.allExpenses ctx
-            | Api LevelCounts -> Api.expenseLevelsCount ctx
-            | Api DaySpan     -> Api.daySpanExpenses ctx)
+            | Api Expenses          -> Api.allExpenses ctx
+            | Api Supermarket       -> Api.expensesForCategory Category.Supermarket ctx
+            | Api SmoothSupermarket -> Api.smoothExpensesForCategory Category.Supermarket ctx
+            | Api LevelCounts       -> Api.expenseLevelsCount ctx
+            | Api DaySpan           -> Api.daySpanExpenses ctx)

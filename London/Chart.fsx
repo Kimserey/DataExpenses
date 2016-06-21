@@ -29,3 +29,8 @@ df
     printfn "%s" category
     counts
     |> List.iter (fun (level, count) -> printfn "%10i %5i" level count))
+
+df
+|> ExpenseDataFrame.GetSmoothExpenses Category.Supermarket "Date"
+|> List.iter (fun e -> printfn "%10s %5.2f" (e.Date.ToShortDateString()) e.Amount))
+
