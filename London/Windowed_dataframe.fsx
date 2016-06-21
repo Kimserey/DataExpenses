@@ -44,12 +44,16 @@ df.Columns.[ [ "Date"; "Amount"; "Category" ] ]
 |> Series.mapValues (Stats.levelSum fst)
 |> Series.get "Amount"
 |> Series.sortByKey
-|> Series.window 2
-|> Series.mapValues (fun (s: Series<DateTime, float>) ->
-    match s |> Series.observations |> Seq.toList with
-    | [ (d1, p1); (d2, _) ] -> (d2 - d1).TotalDays, p1
-    | _ ->  failwith "incomplete window are skipped by deedle")
+|> Series.windowInto 2
+    (fun (s: Series<DateTime, float>) ->
+        match s |> Series.observations |> Seq.toList with
+        | [ (d1, p1); (d2, _) ] -> (d2 - d1).TotalDays, p1
+        | _ ->  failwith "incomplete window are skipped by deedle")
 |> Series.observations
 |> Seq.map snd
 |> Seq.sortBy fst
+|> Seq.iter(fun x -> printfn "%A" x)
+
+df
+|> ExpenseDataFrame.GetWindowedSuperMarketExpenses Category.Supermarket
 |> Seq.iter(fun x -> printfn "%A" x)

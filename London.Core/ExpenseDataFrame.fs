@@ -196,6 +196,23 @@ type ExpenseDataFrame = {
             |> Seq.toList)
         |> Seq.toList
 
+    static member GetWindowedSuperMarketExpenses (category: Category) (exp: Frame<_, string>): seq<int * float> =
+        exp.Columns.[ [ "Date"; "Amount"; "Category" ] ]
+        |> Frame.filterRowValues(fun c -> c?Amount < 0. && c.GetAs<string>("Category") = "Supermarket")
+        |> Frame.groupRowsBy "Date"
+        |> Frame.getNumericCols
+        |> Series.mapValues (Stats.levelSum fst)
+        |> Series.get "Amount"
+        |> Series.sortByKey
+        |> Series.windowInto 2
+            (fun (s: Series<DateTime, float>) ->
+                match s |> Series.observations |> Seq.toList with
+                | [ (d1, p1); (d2, _) ] -> (d2 - d1).TotalDays, p1
+                | _ ->  failwith "incomplete window are skipped by deedle")
+        |> Series.observations
+        |> Seq.map (fun (_, (days, value)) -> int days, value)
+        |> Seq.sortBy fst
+
 module Dataframe =
     open System.IO
 
