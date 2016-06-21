@@ -29,3 +29,19 @@ df
     printfn "%s" category
     counts
     |> List.iter (fun (level, count) -> printfn "%10i %5i" level count))
+
+
+df.Columns.[ [ "Date"; "Amount" ] ]
+|> Frame.filterRowValues(fun c -> c?Amount < 0.)
+|> Frame.groupRowsBy "Date"
+|> Frame.cols
+|> Series.mapValues (Stats.levelMean fst)
+
+|> Frame.getNumericCols
+
+
+|> Frame.mapValues (Stats.levelMean fst)
+|> Series.observations
+|> Seq.iter (fun (k, v) -> printfn "%A" v)
+
+|> Series.mapValues Stats.mean
