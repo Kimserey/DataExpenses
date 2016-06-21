@@ -32,5 +32,5 @@ df
 
 df
 |> ExpenseDataFrame.GetSmoothExpenses Category.Supermarket "Date"
-|> List.iter (fun e -> printfn "%10s %5.2f" (e.Date.ToShortDateString()) e.Amount))
+|> List.iter (fun e -> printfn "%10s %5.2f" (e.Date.ToShortDateString()) e.Amount)
 
