@@ -31,6 +31,24 @@ df
     |> List.iter (fun (level, count) -> printfn "%10i %5i" level count))
 
 
-df
-|> Frame.filterRowsBy "Category" (string Supermarket)
-|> Frame.sortRows "Date"
+df.Columns.[ [ "Date"; "Amount"; "Category" ] ]
+|> Frame.filterRowValues(fun c -> c?Amount < 0. && c.GetAs<string>("Category") = "Supermarket")
+|> Frame.groupRowsBy "Date"
+|> Frame.getNumericCols
+|> Series.mapValues (Stats.levelSum fst)
+|> Series.get "Amount"
+|> Series.sortByKey
+|> Series.observations
+|> Seq.iter(fun x -> printfn "%A" x)
+
+
+df.Columns.[ [ "Date"; "Amount"; "Category" ] ]
+|> Frame.filterRowValues(fun c -> c?Amount < 0. && c.GetAs<string>("Category") = "Supermarket")
+|> Frame.groupRowsBy "Date"
+|> Frame.getNumericCols
+|> Series.mapValues (Stats.levelSum fst)
+|> Series.get "Amount"
+|> Series.sortByKey
+|> Series.window 2
+|> Series.observations
+|> Seq.iter(fun x -> printfn "%A" x)
