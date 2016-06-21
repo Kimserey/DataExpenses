@@ -196,7 +196,7 @@ type ExpenseDataFrame = {
             |> Seq.toList)
         |> Seq.toList
 
-    static member GetWindowedSuperMarketExpenses (category: Category) (exp: Frame<_, string>): seq<int * float> =
+    static member GetDaySpanExpenses (category: Category) (exp: Frame<_, string>): seq<float * int> =
         exp.Columns.[ [ "Date"; "Amount"; "Category" ] ]
         |> Frame.filterRowValues(fun c -> c?Amount < 0. && c.GetAs<string>("Category") = "Supermarket")
         |> Frame.groupRowsBy "Date"
@@ -207,10 +207,10 @@ type ExpenseDataFrame = {
         |> Series.windowInto 2
             (fun (s: Series<DateTime, float>) ->
                 match s |> Series.observations |> Seq.toList with
-                | [ (d1, p1); (d2, _) ] -> (d2 - d1).TotalDays, p1
+                | [ (d1, p1); (d2, _) ] -> Math.Abs p1, (d2 - d1).TotalDays
                 | _ ->  failwith "incomplete window are skipped by deedle")
         |> Series.observations
-        |> Seq.map (fun (_, (days, value)) -> int days, value)
+        |> Seq.map (fun (_, (days, value)) -> days, int value)
         |> Seq.sortBy fst
 
 module Dataframe =

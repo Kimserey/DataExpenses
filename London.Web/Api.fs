@@ -48,3 +48,10 @@ module Api =
           DataSeriesList = counts |> List.map (fun (category, counts) -> { Title = category; Values = counts |> List.map snd }) }
         |> Content.Json
         |> Content.WithHeaders (addCORSHeader ctx)
+
+    let daySpanExpenses ctx =
+        expenses
+        |> ExpenseDataFrame.GetDaySpanExpenses Category.Supermarket
+        |> Seq.toList
+        |> Content.Json
+        |> Content.WithHeaders (addCORSHeader ctx)
