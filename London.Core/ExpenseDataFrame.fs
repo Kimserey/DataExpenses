@@ -272,8 +272,8 @@ type ExpenseDataFrame = {
         |> Series.get "Amount"
         |> Series.sortByKey
         |> Series.mapValues (fun v -> if Math.Abs (unbox<float> v) <= mean then v, 0 else v, 1)
-        |> Series.map (fun k (v, v') -> k, v, v')
         |> Series.observations
+        |> Seq.map (fun (k, (v, v')) -> k, v, v')
 
 module Dataframe =
     open System.IO
