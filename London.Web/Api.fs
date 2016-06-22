@@ -80,3 +80,10 @@ module Api =
         |> Seq.toList
         |> Content.Json
         |> Content.WithHeaders (addCORSHeader ctx)
+
+    let binaryExpenses ctx =
+        expenses
+        |> ExpenseDataFrame.GetBinaryExpenses Category.Supermarket
+        |> Seq.toList
+        |> Content.Json
+        |> Content.WithHeaders (addCORSHeader ctx)

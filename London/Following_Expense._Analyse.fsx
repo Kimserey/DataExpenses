@@ -1,20 +1,12 @@
-﻿#I __SOURCE_DIRECTORY__
-#load "../packages/Deedle/Deedle.fsx"
-#r "../London.Core/bin/Debug/London.Core.dll"
-
+﻿#load "_references.fsx"
+open _references
 open System
-open System.IO
-open System.Globalization
-open System.Text.RegularExpressions
 open Deedle
 open London.Core
 
-Environment.CurrentDirectory <- __SOURCE_DIRECTORY__
-
-let df =
-    ExpenseDataFrame.FromFile <| Directory.GetFiles(Environment.CurrentDirectory + "/data","*.csv")
-    |> ExpenseDataFrame.GetFrame
-
+(*
+    Experimentation
+*)
 df.Columns.[ [ "Date"; "Amount"; "Category" ] ]
 |> Frame.filterRowValues(fun c -> c?Amount < 0. && c.GetAs<string>("Category") = "Supermarket")
 |> Frame.groupRowsBy "Date"
@@ -54,6 +46,10 @@ df.Columns.[ [ "Date"; "Amount"; "Category" ] ]
 |> Seq.sortBy fst
 |> Seq.iter(fun x -> printfn "%A" x)
 
+
+(*
+    Call from library
+*)
 df
 |> ExpenseDataFrame.GetDaySpanExpenses Category.Supermarket
 |> Seq.iter(fun x -> printfn "%A" x)

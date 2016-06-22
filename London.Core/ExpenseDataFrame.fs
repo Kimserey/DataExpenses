@@ -256,6 +256,25 @@ type ExpenseDataFrame = {
         |> Seq.map (fun (_, (days, value)) -> days, int value)
         |> Seq.sortBy fst
 
+    static member GetBinaryExpenses (category: Category) (exp: Frame<_, string>): seq<DateTime * float * int> =
+        let mean =
+                exp.Columns.[ [ "Date"; "Amount"; "Category" ] ]
+                |> Frame.filterRowValues(fun c -> c?Amount < 0. && c.GetAs<string>("Category") = (string category))
+                |> Frame.getCol "Amount"
+                |> Stats.mean
+                |> Math.Abs
+        
+        exp
+        |> Frame.filterRowValues(fun c -> c?Amount < 0. && c.GetAs<string>("Category") = "Supermarket")
+        |> Frame.groupRowsBy "Date"
+        |> Frame.getNumericCols
+        |> Series.mapValues (Stats.levelSum fst)
+        |> Series.get "Amount"
+        |> Series.sortByKey
+        |> Series.mapValues (fun v -> if Math.Abs (unbox<float> v) <= mean then v, 0 else v, 1)
+        |> Series.map (fun k (v, v') -> k, v, v')
+        |> Series.observations
+
 module Dataframe =
     open System.IO
 

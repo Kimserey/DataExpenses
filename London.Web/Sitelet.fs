@@ -20,6 +20,7 @@ module Sitelet =
         | [<EndPoint "/smoothsupermarket">]   SmoothSupermarket
         | [<EndPoint "/levelcounts">]         LevelCounts
         | [<EndPoint "/dayspan">]             DaySpan
+        | [<EndPoint "/binaryexpenses">]      Binary
 
     let sitelet =
         Sitelet.Infer (fun ctx ->
@@ -35,4 +36,5 @@ module Sitelet =
             | Api Supermarket       -> Api.expensesForCategory Category.Supermarket ctx
             | Api SmoothSupermarket -> Api.smoothExpensesForCategory Category.Supermarket ctx
             | Api LevelCounts       -> Api.expenseLevelsCount ctx
-            | Api DaySpan           -> Api.daySpanExpenses ctx)
+            | Api DaySpan           -> Api.daySpanExpenses ctx
+            | Api Binary            -> Api.binaryExpenses ctx)
