@@ -308,7 +308,7 @@ type ExpenseDataFrame = {
             c |> Series.mapValues (fun v -> unbox v * 100. / total))
         |> Series.sortByKey
         |> Series.observations
-        |> Seq.map (fun (k, v) -> k, Series.observations v |> Seq.toList)
+        |> Seq.map (fun (k, v) -> k.ToString("MMM yyyy"), Series.observations v |> Seq.toList)
         |> Seq.toList
 
 module Dataframe =
