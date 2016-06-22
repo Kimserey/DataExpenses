@@ -94,3 +94,10 @@ module Api =
         |> Seq.toList
         |> Content.Json
         |> Content.WithHeaders (addCORSHeader ctx)
+        
+    let categoryRatioPerMonth ctx =
+        expenses
+        |> ExpenseDataFrame.GetCategoryRatioPerMonth
+        |> Content.Json
+        |> Content.WithHeaders (addCORSHeader ctx)
+        

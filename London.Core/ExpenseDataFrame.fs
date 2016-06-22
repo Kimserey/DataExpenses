@@ -287,6 +287,30 @@ type ExpenseDataFrame = {
         |> Stats.expandingMean
         |> Series.observations
 
+    static member GetCategoryRatioPerMonth exp =
+         exp
+        |> Frame.filterRowValues(fun c -> c?Amount < 0.)
+        |> Frame.pivotTable
+            (fun _ r ->
+                let date = r.GetAs<DateTime>("Date")
+                new DateTime(date.Year, date.Month, 1))
+            (fun _ c ->
+                c.GetAs<string>("Category"))
+            (fun frame ->
+                frame
+                |> Frame.getNumericCols
+                |> Series.get "Amount"
+                |> Stats.sum
+                |> Math.Abs)
+        |> Frame.fillMissingWith 0.
+        |> Frame.mapRowValues (fun c ->
+            let total = c |> Series.values |> Seq.cast<float> |> Seq.sum
+            c |> Series.mapValues (fun v -> unbox v * 100. / total))
+        |> Series.sortByKey
+        |> Series.observations
+        |> Seq.map (fun (k, v) -> k, Series.observations v |> Seq.toList)
+        |> Seq.toList
+
 module Dataframe =
     open System.IO
 
