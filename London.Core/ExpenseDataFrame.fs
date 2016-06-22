@@ -275,6 +275,18 @@ type ExpenseDataFrame = {
         |> Series.observations
         |> Seq.map (fun (k, (v, v')) -> k, v, v')
 
+    static member GetExpendingMean (category: Category) exp =
+        exp
+        |> Frame.filterRowValues(fun c -> c?Amount < 0. && c.GetAs<string>("Category") = "Supermarket")
+        |> Frame.groupRowsBy "Date"
+        |> Frame.getNumericCols
+        |> Series.mapValues (Stats.levelSum fst)
+        |> Series.get "Amount"
+        |> Series.mapValues (unbox<float> >> Math.Abs)
+        |> Series.sortByKey
+        |> Stats.expandingMean
+        |> Series.observations
+
 module Dataframe =
     open System.IO
 

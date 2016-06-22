@@ -87,3 +87,10 @@ module Api =
         |> Seq.toList
         |> Content.Json
         |> Content.WithHeaders (addCORSHeader ctx)
+
+    let expendingExpenses ctx =
+        expenses
+        |> ExpenseDataFrame.GetExpendingMean Category.Supermarket
+        |> Seq.toList
+        |> Content.Json
+        |> Content.WithHeaders (addCORSHeader ctx)

@@ -57,6 +57,7 @@
     <None Include="Windowed_dataframe.fsx" />
     <None Include="Following_Expense._Analyse.fsx" />
     <None Include="Binary_Mean_Expenses.fsx" />
+    <None Include="Expending_Mean.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
