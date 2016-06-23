@@ -24,6 +24,11 @@ Used to see trends with the hypotheses that one will spend less frequently after
 
 ![pie](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/pie.png)
 
+## Drilldown to the expenses
+
+Lookup for a particular expense through the list.
+
+![table]()
 
 Built with:
  - WebSharper
