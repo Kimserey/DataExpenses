@@ -34,6 +34,8 @@ _Experiment -_ Used to see trends with the hypotheses that one will spend less f
 
 ## Monitor the expense ratio of each category
 
+Ratio of expenses per month for each category.
+
 ![pie](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/pie.png)
 
 ## Drilldown to the expenses
