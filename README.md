@@ -28,7 +28,7 @@ Used to see trends with the hypotheses that one will spend less frequently after
 
 Lookup for a particular expense through the list.
 
-![table]()
+![table](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/table.png)
 
 Built with:
  - WebSharper
