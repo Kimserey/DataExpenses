@@ -16,7 +16,7 @@ Expending average calculates the average from inception till x.
 
 ## Visualize amount spent against day intervals
 
-Used to see trends with the hypotheses that one will spend less frequently after paying a higher amount.
+_Experiment -_ Used to see trends with the hypotheses that one will spend less frequently after paying a higher amount.
 
 ![scatter](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/scatter.png)
 
