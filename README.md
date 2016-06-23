@@ -4,9 +4,9 @@ A data expenses manager which takes .CSV as input and categorize expenses.
 
 ## Why am I doing this?
 
-There are a lot of expense manager already.
-Those are centered around the money earned versus the money spent.
-While it is great for tracking expenses and managing budget, it isn't great in correcting expense behaviours in long term.
+There are a lot of expense managers already.
+Those are centered around money earned versus money spent.
+While it is great for tracking expenses and managing budgets, it isn't great in correcting expense behaviours in long term.
 
 I believe that the best way to analyze your expenses is to do it yourself.
 In order to create good analysis, one needs to be intimate with the data.
