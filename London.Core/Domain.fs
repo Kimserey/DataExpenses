@@ -20,6 +20,7 @@ module Domain =
         | Online
         | Cash
         | Other
+        | RentAndBills
         with
             override x.ToString() =
                 match x with
@@ -35,6 +36,7 @@ module Domain =
                 | Online -> "Online"
                 | Cash -> "Cash"
                 | Other -> "Other"
+                | RentAndBills -> "Rent And Bills"
 
     let printTitle title =
         printfn "\n%s:\n" title
@@ -144,9 +146,11 @@ module Domain =
         >> label "^[A-Z0-9]{8}\sGB[A-Z0-9]{14}\s"                                       "FUND TRANSFER (OR RELATED)"         Other
         >> label ".*(LONDON & SOUTH EAS|GWR BURNHAM TO BURHAM|GREATER ANGLIA).*"        "RAILWAY"                            Other
         >> label ".*EURO LIVERPOOL.*"                                                   "EEA"                                Other
-        >> label ".*FOXTONS.*"                                                          "FOXTONS"                            Other
-        >> label ".*GIFFGAFF.*"                                                         "GIFFGAFF"                           Other
         >> label ".*(CINEMA|EVERYMAN|VUE).*"                                            "CINEMA"                             Other
         >> label ".*THE GENTRY BARBER.*"                                                "THE GENTRY BARBER"                  Other
-        >> label ".*HYPEROPTIC.*"                                                       "HYPEROPTIC"                         Other
+
+        >> label ".*GIFFGAFF.*"                                                         "GIFFGAFF"                           RentAndBills
+        >> label ".*HYPEROPTIC.*"                                                       "HYPEROPTIC"                         RentAndBills
+        >> label ".*FOXTONS.*"                                                          "FOXTONS"                            RentAndBills
+        >> label ".*SPARK.*"                                                            "SPARK"                              RentAndBills
         
