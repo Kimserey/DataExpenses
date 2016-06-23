@@ -48,7 +48,7 @@ Built with:
  - WebSharper
  - Deedle
  - Highcharts
+ - SimpleUI - [https://github.com/Kimserey/SimpleUI](https://github.com/Kimserey/SimpleUI)
 
 Related:
  - [A primer on manipulating data frame with Deedle](https://kimsereyblog.blogspot.co.uk/2016/04/a-primer-on-manipulating-data-frame.html)
-
