@@ -9,7 +9,7 @@ Those are centered around the money earned versus the money spent.
 While it is great for tracking expenses and managing budget, it isn't great in correcting expense behaviours in long term.
 
 I believe that the best way to analyze your expenses is to do it yourself.
-In order to create good analysis, I believe that one needs to be intimate with the data.
+In order to create good analysis, one needs to be intimate with the data.
 You must know the data and understand it clearly, this requires a lot of time.
 Fortunately, I am intimate with my own expenses therefore I am creating this application with the goal of finding patterns and behaviours which I can correct for long term savings!
 
