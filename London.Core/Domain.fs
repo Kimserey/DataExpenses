@@ -139,6 +139,8 @@ module Domain =
         >> label ".*GOLD MINE.*"                                                        "GOLD MINE"                          Restaurant
         >> label ".*THE BREAKFAST CLUB.*"                                               "THE BREAKFAST CLUB"                 Restaurant
         >> label ".*JUST EAT.*"                                                         "JUST EAT"                           Restaurant
+        >> label ".*LOTUS LEAF.*"                                                       "LOTUS LEAF"                         Restaurant
+        >> label ".*FRANCO MANCA .*"                                                    "FRANCO MANCA PIZZA"                 Restaurant
     
         >> label ".*PET SUPPLIES.*"                                                     "PET SUPPLIES GIFT"                  Other
         >> label ".*AUDIBLE.*"                                                          "AUDIBLE"                            Other
