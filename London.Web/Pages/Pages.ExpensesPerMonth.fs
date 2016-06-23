@@ -16,11 +16,13 @@ module ExpensesPerMonth =
             expenses
             |> ExpenseDataFrame.GetExpensesPerMonth
             |> async.Return
-                
+
     [<JavaScript>]
     module Client =
         open WebSharper.UI.Next
+        open WebSharper.UI.Next.Html
         open WebSharper.UI.Next.Client
+        open WebSharper.JQuery
         open WebSharper.JavaScript
         open London.Web.Templates       
         
@@ -41,7 +43,21 @@ module ExpensesPerMonth =
                                             "card-" + string cardIndex + "-content-" + string contentIndex,
                                             category,
                                             sum.JS.ToFixed 2,
-                                            [ CardTable.Doc (List.mapi Expense.ToTableRow expenses) ]))) ])
+                                            [ CardTable.Doc (List.mapi Expense.ToTableRow expenses) ]))) 
+                                            
+                               divAttr 
+                                [ on.afterRender (fun el -> 
+                                    JQuery
+                                        .Of(el)
+                                        .Highcharts(
+                                        {
+                                            Chart = { Type = "spline" }
+                                            Title = { Text = "Something" }
+                                            XAxis = { Categories = [| "1"; "2"; "3" |] }
+                                            YAxis = { Title = { Text = "Amount" } }
+                                            Series = [| { Name = "Serie 1"; Data = [| 1.; 10.; 22. |] } |]
+                                        }) |> ignore) ] [] :> Doc
+                            ])
                         |> Doc.Concat
             }
             |> Doc.Async
