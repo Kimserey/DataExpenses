@@ -21,6 +21,7 @@ module Domain =
         | Cash
         | Other
         | RentAndBills
+        | Leisure
         with
             override x.ToString() =
                 match x with
@@ -37,6 +38,7 @@ module Domain =
                 | Cash -> "Cash"
                 | Other -> "Other"
                 | RentAndBills -> "Rent And Bills"
+                | Leisure -> "Leisure"
 
     let printTitle title =
         printfn "\n%s:\n" title
@@ -90,6 +92,7 @@ module Domain =
         >> label ".*PRIMARK.*"                                                          "PRIMARK"                            Clothing
         >> label ".*DEBENHAMS.*"                                                        "DEBENHAMS"                          Clothing
         >> label ".*MONSOON.*"                                                          "MONSOON"                            Clothing
+        >> label ".*ZARA.*"                                                             "ZARA"                               Clothing
 
         >> label ".*SPECSAVERS.*"                                                       "SPECSAVERS"                         HealthAndBeauty
         >> label ".*THE BODY SHOP.*"                                                    "THE BODY SHOP"                      HealthAndBeauty
@@ -141,12 +144,10 @@ module Domain =
         >> label ".*AUDIBLE.*"                                                          "AUDIBLE"                            Other
         >> label ".*POST OFFICE.*"                                                      "POST OFFICE"                        Other
         >> label ".*DISNEY STORE.*"                                                     "DISNEY STORE"                       Other
-        >> label ".*(NRGGYM|HARLANDS).*"                                                "NRGGYM"                             Other
         >> label ".*(LUL TICKET MACHINE|DLR).*"                                         "UNDERGROUND / DLR"                  Other
         >> label "^[A-Z0-9]{8}\sGB[A-Z0-9]{14}\s"                                       "FUND TRANSFER (OR RELATED)"         Other
         >> label ".*(LONDON & SOUTH EAS|GWR BURNHAM TO BURHAM|GREATER ANGLIA).*"        "RAILWAY"                            Other
         >> label ".*EURO LIVERPOOL.*"                                                   "EEA"                                Other
-        >> label ".*(CINEMA|EVERYMAN|VUE).*"                                            "CINEMA"                             Other
         >> label ".*THE GENTRY BARBER.*"                                                "THE GENTRY BARBER"                  Other
 
         >> label ".*GIFFGAFF.*"                                                         "GIFFGAFF"                           RentAndBills
@@ -154,3 +155,5 @@ module Domain =
         >> label ".*FOXTONS.*"                                                          "FOXTONS"                            RentAndBills
         >> label ".*SPARK.*"                                                            "SPARK"                              RentAndBills
         
+        >> label ".*(CINEMA|EVERYMAN|VUE).*"                                            "CINEMA"                             Leisure
+        >> label ".*(NRGGYM|HARLANDS).*"                                                "NRGGYM"                             Leisure
