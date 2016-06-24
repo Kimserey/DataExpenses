@@ -20,19 +20,11 @@ module Common =
 
     type JQuery with
         [<Inline """$0.highcharts($1)""">]
-        member x.Highcharts (chart: HighchartsOptions) = X<JQuery>
-    and HighchartsOptions = {
-        [<Name "chart">]
-        Chart: Chart
-        [<Name "title">]
-        Title: Title
-        [<Name "xAxis">]
-        XAxis: XAxis
-        [<Name "yAxis">]
-        YAxis: YAxis
-        [<Name "series">]
-        Series: Series []
-    }
+        member x.LineChart (options: LineChartOptions) = X<JQuery>
+        [<Inline """$0.highcharts($1)""">]
+        member x.PieChart (options: PieChartOptions) = X<JQuery>
+
+    // Common options
     and Chart = {
         [<Name "type">]
         Type: string
@@ -49,9 +41,71 @@ module Common =
         [<Name "text">]
         Text: string
     }
-    and Series = {
+    and PlotOptionsDataLabels = {
+        [<Name "enabled">]
+        Enabled: bool
+    }
+    and Tooltip = {
+        [<Name "pointFormat">]
+        PointFormat: string    
+    }
+
+    // Line specific options
+    and LineChartOptions = {
+        [<Name "chart">]
+        Chart: Chart
+        [<Name "title">]
+        Title: Title
+        [<Name "xAxis">]
+        XAxis: XAxis
+        [<Name "yAxis">]
+        YAxis: YAxis
+        [<Name "series">]
+        Series: LineSeries []
+        [<Name "tooltip">]
+        Tooltip: Tooltip
+    }
+    and LineSeries = {
         [<Name "name">]
         Name: string
         [<Name "data">]
         Data: float []
+    }
+    
+    // Pie specific options
+    and PieChartOptions = {
+        [<Name "chart">]
+        Chart: Chart
+        [<Name "title">]
+        Title: Title
+        [<Name "xAxis">]
+        XAxis: XAxis
+        [<Name "yAxis">]
+        YAxis: YAxis
+        [<Name "series">]
+        Series: PieSeries []
+        [<Name "plotOptions">]
+        PlotOptions: PiePlotOptions
+        [<Name "tooltip">]
+        Tooltip: Tooltip
+    }
+    and PieSeries = {
+        [<Name "name">]
+        Name: string
+        [<Name "data">]
+        Data: PieData []
+    }
+    and PieData = {
+        [<Name "name">]
+        Name: string
+        [<Name "y">]
+        Y: float
+    }
+    and PiePlotOptions = {
+        [<Name "pie">]
+        Pie: PiePlotOptionsPie
+    }
+    and PiePlotOptionsPie = {
+        [<Name "datalabels">]
+        DataLabels: PlotOptionsDataLabels
     }

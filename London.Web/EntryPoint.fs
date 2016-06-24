@@ -23,9 +23,14 @@ module EntryPoint =
             | _ -> "..", "http://+:9600/"
 
         use server = 
+            let options = 
+                new WebSharperOptions<Sitelet.EndPoint>(
+                    Debug = true, 
+                    ServerRootDirectory = root)
+
             WebApp.Start(url, fun appB ->
                 appB.UseStaticFiles(StaticFileOptions(FileSystem = PhysicalFileSystem(root)))
-                    .UseSitelet(root, Sitelet.sitelet)
+                    .UseWebSharper(options.WithSitelet(Sitelet.sitelet))
                     |> ignore)
         
         stdout.WriteLine("Serving {0}", url)

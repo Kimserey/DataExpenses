@@ -20,8 +20,10 @@ module ExpensesPerCategory =
     [<JavaScript>]
     module Client =
         open WebSharper.UI.Next
+        open WebSharper.UI.Next.Html
         open WebSharper.UI.Next.Client
         open WebSharper.JavaScript
+        open WebSharper.JQuery
         open London.Web.Templates
         
         let page =
@@ -39,7 +41,22 @@ module ExpensesPerCategory =
                                                 "card-" + string cardIndex + "-content-" + string contentIndex,
                                                 month,
                                                 sum.JS.ToFixed 2,
-                                                [ CardTable.Doc (List.mapi Expense.ToTableRow values) ]))) ])
+                                                [ CardTable.Doc (List.mapi Expense.ToTableRow values) ]))) 
+                                  
+                                  divAttr 
+                                   [ on.afterRender (fun el -> 
+                                       JQuery
+                                           .Of(el)
+                                           .LineChart(
+                                           {
+                                               Chart = { Type = "spline" }
+                                               Title = { Text = "" }
+                                               XAxis = { Categories = subCategory |> List.map (fun (Title title, _, _) -> title) |> Array.ofList }
+                                               YAxis = { Title = { Text = "Amount" } }
+                                               Series = [| { Name = "Total"; Data = subCategory |> List.map (fun (_, Sum sum, _) -> sum) |> Array.ofList } |]
+                                               Tooltip = { PointFormat = "{point.y:.2f} GBP" }
+                                           }) |> ignore) ] [] :> Doc 
+                            ])
                         |> Doc.Concat
             }
             |> Doc.Async

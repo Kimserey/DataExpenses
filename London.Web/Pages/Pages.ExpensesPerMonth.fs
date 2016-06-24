@@ -17,6 +17,13 @@ module ExpensesPerMonth =
             |> ExpenseDataFrame.GetExpensesPerMonth
             |> async.Return
 
+        [<Rpc>]
+        let getRatio(): Async<_> =
+            expenses
+            |> ExpenseDataFrame.GetCategoryRatioPerMonth
+            |> List.map (fun (d, x) -> DateTime.ParseExact(d, "MMM yyyy", Globalization.CultureInfo.InvariantCulture), x)
+            |> async.Return
+
     [<JavaScript>]
     module Client =
         open WebSharper.UI.Next
@@ -29,9 +36,11 @@ module ExpensesPerMonth =
         let page =
             async {
                 let! expensesPerMonth = Rpcs.get()
+                let! ratio = Rpcs.getRatio()
+
                 return expensesPerMonth
                         |> List.sortByDescending (fun (Month (_, month), Year year, _, _) -> month + year * 100)
-                        |> List.mapi (fun cardIndex (Month (month, _), Year year, Sum sum, expenses) ->
+                        |> List.mapi (fun cardIndex (Month (month, m), Year year, Sum sum, expenses) ->
                             Card.Doc [
                                CardList.Doc(
                                    month + " " + string year,
@@ -43,20 +52,27 @@ module ExpensesPerMonth =
                                             "card-" + string cardIndex + "-content-" + string contentIndex,
                                             category,
                                             sum.JS.ToFixed 2,
-                                            [ CardTable.Doc (List.mapi Expense.ToTableRow expenses) ]))) 
-                                            
-                               divAttr 
-                                [ on.afterRender (fun el -> 
-                                    JQuery
-                                        .Of(el)
-                                        .Highcharts(
-                                        {
-                                            Chart = { Type = "spline" }
-                                            Title = { Text = "Something" }
-                                            XAxis = { Categories = [| "1"; "2"; "3" |] }
-                                            YAxis = { Title = { Text = "Amount" } }
-                                            Series = [| { Name = "Serie 1"; Data = [| 1.; 10.; 22. |] } |]
-                                        }) |> ignore) ] [] :> Doc
+                                            [ CardTable.Doc (List.mapi Expense.ToTableRow expenses) ])))
+                                
+                               ratio
+                               |> List.tryFind (fun (d, x) -> d.Month = m && d.Year = year)
+                               |> Option.map (fun (_, expenses) ->
+                                   divAttr 
+                                    [ on.afterRender (fun el -> 
+                                        JQuery
+                                            .Of(el)
+                                            .PieChart(
+                                            {
+                                                Chart = { Type = "pie" }
+                                                Title = { Text = "" }
+                                                XAxis = { Categories = expenses |> List.map fst |> Array.ofList }
+                                                YAxis = { Title = { Text = "Amount" } }
+                                                Series = [| { Name = "Total"; Data = expenses |> List.map (fun (k, v) -> { Name = k; Y = v }) |> List.toArray } |]
+                                                PlotOptions = { Pie = { DataLabels = { Enabled = true } } }
+                                                Tooltip = { PointFormat = "{point.y:.2f}%" }
+                                            }) |> ignore) ] [] :> Doc)
+                               |> Option.toList
+                               |> Doc.Concat
                             ])
                         |> Doc.Concat
             }

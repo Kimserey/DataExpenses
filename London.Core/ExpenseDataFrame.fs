@@ -122,8 +122,8 @@ type ExpenseDataFrame = {
             frame
             |> Frame.nest
             |> Series.observations
-            |> Seq.map (fun (month, frame) ->
-                Title month,
+            |> Seq.map (fun (monthAndYear, frame) ->
+                Title monthAndYear,
                 ExpenseDataFrame.GetSum frame,
                 frame
                 |> Frame.rows
