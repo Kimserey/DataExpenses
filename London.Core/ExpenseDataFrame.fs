@@ -277,7 +277,7 @@ type ExpenseDataFrame = {
 
     static member GetExpendingMean (category: Category) exp =
         exp
-        |> Frame.filterRowValues(fun c -> c?Amount < 0. && c.GetAs<string>("Category") = "Supermarket")
+        |> Frame.filterRowValues(fun c -> c?Amount < 0. && c.GetAs<string>("Category") = string category)
         |> Frame.groupRowsBy "Date"
         |> Frame.getNumericCols
         |> Series.mapValues (Stats.levelSum fst)
