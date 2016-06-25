@@ -311,6 +311,34 @@ type ExpenseDataFrame = {
         |> Seq.map (fun (k, v) -> k.ToString("MMM yyyy"), Series.observations v |> Seq.toList)
         |> Seq.toList
 
+    static member GetLabelsPerMonth exp =
+        exp
+        |> Frame.filterRowValues(fun c -> c?Amount < 0.)
+        |> Frame.pivotTable
+            (fun _ r ->
+                let date = r.GetAs<DateTime>("Date")
+                new DateTime(date.Year, date.Month, 1))
+            (fun _ c ->
+                c.GetAs<string>("Label"))
+            (fun frame ->
+                frame
+                |> Frame.getNumericCols
+                |> Series.get "Amount"))
+        |> Frame.fillMissingWith 0.
+        |> Frame.getRows
+        |> Series.sortByKey
+        |> Series.observations
+        |> Seq.map (fun (k, v) -> 
+            Title <| k.ToString("MMM yyyy"), 
+            v
+            |> Series.mapValues ()
+            v
+            |> Series.sortByKey
+            |> Series.observations
+            |> Seq.map (fun (k, v) -> Title k, Sum v) 
+            |> Seq.toList)
+        |> Seq.toList
+
 module Dataframe =
     open System.IO
 

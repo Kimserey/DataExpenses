@@ -23,6 +23,7 @@ module Sitelet =
         | [<EndPoint "/binaryexpenses">]      Binary
         | [<EndPoint "/expending">]           Expending
         | [<EndPoint "/ratio">]               Ratio
+        | [<EndPoint "/labels">]              Labels
 
     let sitelet =
         Sitelet.Infer (fun ctx ->
@@ -41,4 +42,5 @@ module Sitelet =
             | Api DaySpan           -> Api.daySpanExpenses ctx
             | Api Binary            -> Api.binaryExpenses ctx
             | Api Expending         -> Api.expendingExpenses ctx
-            | Api Ratio             -> Api.categoryRatioPerMonth ctx)
+            | Api Ratio             -> Api.categoryRatioPerMonth ctx
+            | Api Labels            -> Api.labelsPerMonth ctx)

@@ -101,3 +101,9 @@ module Api =
         |> Content.Json
         |> Content.WithHeaders (addCORSHeader ctx)
         
+    let labelsPerMonth ctx =
+        expenses
+        |> ExpenseDataFrame.GetLabelsPerMonth
+        |> Content.Json
+        |> Content.WithHeaders (addCORSHeader ctx)
+        
