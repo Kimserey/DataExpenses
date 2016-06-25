@@ -31,12 +31,24 @@ __What's the purpose?__
 Look at the repartition of the expenses over the time.
 Monitor the evolution of the spending in each category.
 Check if a certain category dominate the spendings.
-Can be used to see irregularity in certain category.
+Detect irregularity in certain category.
 
 ### 1.2 Category breakdown
 
+Category breakdown of expenses grouped by months.
+
 ![category](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/category.png)
+
+Each category can be expended to view grouped expenses.
+
 ![category drilldown](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/category_dd.png)
+
+__What's the purpose?__
+
+Look at the evolution of a category spending over time.
+Detect irregularity for a particular month.
+Visualise trend.
+Approximate future spending (linear regression).
 
 ### 1.3 Shop breakdown
 
