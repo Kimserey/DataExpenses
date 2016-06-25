@@ -90,3 +90,4 @@ Built with:
 
 Related:
  - [A primer on manipulating data frame with Deedle](https://kimsereyblog.blogspot.co.uk/2016/04/a-primer-on-manipulating-data-frame.html)
+ - [Keep your UI framework up to date](https://kimsereyblog.blogspot.co.uk/2016/06/keep-your-ui-framework-up-to-date-for.html)
