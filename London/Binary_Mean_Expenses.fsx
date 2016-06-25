@@ -12,7 +12,6 @@ let mean =
     |> Frame.filterRowValues(fun c -> c?Amount < 0. && c.GetAs<string>("Category") = "Supermarket")
     |> Frame.getCol "Amount"
     |> Stats.mean
-    |> Math.Abs
 
 df.Columns.[ [ "Date"; "Amount"; "Category" ] ]
 |> Frame.filterRowValues(fun c -> c?Amount < 0. && c.GetAs<string>("Category") = "Supermarket")
@@ -21,7 +20,7 @@ df.Columns.[ [ "Date"; "Amount"; "Category" ] ]
 |> Series.mapValues (Stats.levelSum fst)
 |> Series.get "Amount"
 |> Series.sortByKey
-|> Series.mapValues (fun v -> if Math.Abs (unbox<float> v) <= mean then v, 0 else v, 1)
+|> Series.mapValues (fun v -> if unbox<float> v <= mean then v, 0 else v, 1)
 |> Series.observations
 |> Seq.iter(fun v -> printfn "%A" v)
 

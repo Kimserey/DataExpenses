@@ -27,8 +27,7 @@ df.Columns.[ [ "Date"; "Amount"; "Category" ] ]
         frame
         |> Frame.getNumericCols
         |> Series.get "Amount"
-        |> Stats.sum
-        |> Math.Abs)
+        |> Stats.sum)
 |> Frame.fillMissingWith 0.
 |> Frame.mapRowValues (fun c ->
     let total = c |> Series.values |> Seq.cast<float> |> Seq.sum
