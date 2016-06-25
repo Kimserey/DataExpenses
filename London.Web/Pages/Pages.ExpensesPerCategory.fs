@@ -49,9 +49,13 @@ module ExpensesPerCategory =
                                            .Of(el)
                                            .LineChart(
                                            {
-                                               Chart = { Type = "spline"; ZoomType = None }
+                                               Chart = { Type = "spline"; ZoomType = ""; MarginBottom = 0. }
                                                Title = { Text = "" }
-                                               XAxis = { Categories = subCategory |> List.map (fun (Title title, _, _) -> title) |> Array.ofList }
+                                               XAxis = 
+                                                { Categories = 
+                                                    subCategory 
+                                                    |> List.map (fun (Title title, _, _) -> title) 
+                                                    |> Array.ofList }
                                                YAxis = { Title = { Text = "Amount" } }
                                                Series = [| { Name = "Total"; Data = subCategory |> List.map (fun (_, Sum sum, _) -> sum) |> Array.ofList } |]
                                                Tooltip = { PointFormat = "{point.y:.2f} GBP" }

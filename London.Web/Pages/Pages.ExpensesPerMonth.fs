@@ -63,7 +63,7 @@ module ExpensesPerMonth =
                                             .Of(el)
                                             .PieChart(
                                             {
-                                                Chart = { Type = "pie"; ZoomType = None }
+                                                Chart = { Type = "pie"; ZoomType = ""; MarginBottom = 0. }
                                                 Title = { Text = "" }
                                                 XAxis = { Categories = expenses |> List.map fst |> Array.ofList }
                                                 YAxis = { Title = { Text = "Amount" } }

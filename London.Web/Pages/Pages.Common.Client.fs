@@ -28,10 +28,12 @@ module Common =
 
     // Common options
     and Chart = {
+        [<Name "marginBottom">]
+        MarginBottom: float
         [<Name "type">]
         Type: string
         [<Name "zoomType">]
-        ZoomType: string option
+        ZoomType: string
     }
     and XAxis = {
         [<Name "categories">]
@@ -52,6 +54,22 @@ module Common =
     and Tooltip = {
         [<Name "pointFormat">]
         PointFormat: string    
+    }
+    and Legend = {
+        [<Name "x">]
+        X: float
+        [<Name "y">]
+        Y: float
+        [<Name "align">]
+        Align: string
+        [<Name "verticalAlign">]
+        VerticalAlign: string
+        [<Name "floating">]
+        Floating: string
+        [<Name "borderColor">]
+        BorderColor: string
+        [<Name "borderWidth">]
+        BorderWidth: string
     }
 
     // Line specific options
@@ -128,6 +146,8 @@ module Common =
         Series: ColumnSeries []
         [<Name "tooltip">]
         Tooltip: Tooltip
+        [<Name "legend">]
+        Legend: Legend
     }
     and ColumnSeries = {
         [<Name "name">]
