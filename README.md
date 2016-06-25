@@ -1,5 +1,6 @@
-# DataExpenses
+# Data Expenses
 
+My attempt to pierce the secret of long term savings! 
 A data expenses manager which takes .CSV as input and categorize expenses.
 
 ## Why am I doing this?
