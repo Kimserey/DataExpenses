@@ -52,7 +52,7 @@ Approximate future spending (linear regression).
 
 ### 1.3 Shop breakdown
 
-Monthly (or label) breakdown of expenses grouped by 
+Monthly breakdown of expenses grouped by shops (label).
 
 ![shop](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/shop.png)
 
