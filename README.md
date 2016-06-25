@@ -18,8 +18,8 @@ Fortunately, I am intimate with my own expenses therefore I am creating this app
 
 ### Monthly breakdown
 
-![]()
-![]()
+![month](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/month.png)
+![month drilldown](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/month_dd.png)
 
 ### Category breakdown
 
