@@ -67,11 +67,14 @@ Lookup for a particular expense through the list.
 
 In development...
 
+# Stack
+
 Built with:
+ - F# (of course :))
  - WebSharper
  - Deedle
  - Highcharts
- - SimpleUI - [https://github.com/Kimserey/SimpleUI](https://github.com/Kimserey/SimpleUI)
+ - SimpleUI - my UI framework [https://github.com/Kimserey/SimpleUI](https://github.com/Kimserey/SimpleUI)
 
 Related:
  - [A primer on manipulating data frame with Deedle](https://kimsereyblog.blogspot.co.uk/2016/04/a-primer-on-manipulating-data-frame.html)
