@@ -23,8 +23,8 @@ Fortunately, I am intimate with my own expenses therefore I am creating this app
 
 ### Category breakdown
 
-![]()
-![]()
+![category](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/category.png)
+![category drilldown](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/category_dd.png)
 
 ### Shop breakdown
 
