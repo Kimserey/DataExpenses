@@ -30,6 +30,7 @@ __What's the purpose?__
 
 Look at the repartition of the expenses over the time.
 Monitor the evolution of the spending in each category.
+Check if a certain category dominate the spendings.
 Can be used to see irregularity in certain category.
 
 ### 1.2 Category breakdown
