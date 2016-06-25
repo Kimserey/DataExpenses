@@ -18,8 +18,17 @@ Fortunately, I am intimate with my own expenses therefore I am creating this app
 
 ### 1.1 Monthly breakdown
 
+Monthly breakdown of expenses grouped by categories.
+
 ![month](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/month.png)
+
+Each category can be expended to view grouped expenses.
+
 ![month drilldown](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/month_dd.png)
+
+_What's the purpose?_
+
+Look at the allocation of the expenses 
 
 ### 1.2 Category breakdown
 
