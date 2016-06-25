@@ -28,8 +28,8 @@ Fortunately, I am intimate with my own expenses therefore I am creating this app
 
 ### Shop breakdown
 
-![]()
-![]()
+![shop](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/shop.png)
+![shop drilldown](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/shop_dd.png)
 
 ## Analysis
 
