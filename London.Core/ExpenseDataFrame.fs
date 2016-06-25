@@ -27,7 +27,7 @@ type ExpenseDataFrame = {
         - Load all data to a dataframe
         - Label the stores
     **)
-    static member FromFile files =
+    static member FromFile config files =
         let frame =
             files
             |> Seq.map (fun (path: string) -> Frame.ReadCsv(path, hasHeaders = false))
@@ -72,7 +72,17 @@ type ExpenseDataFrame = {
                 elif amount >= -90. then 4
                 else 5))
 
-        { Frame = frame }
+        { Frame = 
+            match config with
+            | "demo" -> 
+                frame 
+                |> Frame.filterRowValues(fun c -> 
+                    let cat = c.GetAs<string>("Category") 
+                    cat <> string Cash 
+                    && cat <> string RentAndBills 
+                    && cat <> string BankTransfer)
+            | _ -> 
+                frame }
 
     static member GetSum exp =
         exp
@@ -346,5 +356,5 @@ module Dataframe =
 
     let expenses =
         Directory.GetFiles("data","*.csv")
-        |> ExpenseDataFrame.FromFile
+        |> ExpenseDataFrame.FromFile "debug"
         |> ExpenseDataFrame.GetFrame

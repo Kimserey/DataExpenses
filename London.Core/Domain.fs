@@ -22,6 +22,7 @@ module Domain =
         | Other
         | RentAndBills
         | Leisure
+        | BankTransfer
         with
             override x.ToString() =
                 match x with
@@ -39,6 +40,7 @@ module Domain =
                 | Other -> "Other"
                 | RentAndBills -> "Rent And Bills"
                 | Leisure -> "Leisure"
+                | BankTransfer -> "Bank Transfer"
 
     let printTitle title =
         printfn "\n%s:\n" title
@@ -147,7 +149,6 @@ module Domain =
         >> label ".*POST OFFICE.*"                                                      "POST OFFICE"                        Other
         >> label ".*DISNEY STORE.*"                                                     "DISNEY STORE"                       Other
         >> label ".*(LUL TICKET MACHINE|DLR).*"                                         "UNDERGROUND / DLR"                  Other
-        >> label "^[A-Z0-9]{8}\sGB[A-Z0-9]{14}\s"                                       "FUND TRANSFER (OR RELATED)"         Other
         >> label ".*(LONDON & SOUTH EAS|GWR BURNHAM TO BURHAM|GREATER ANGLIA).*"        "RAILWAY"                            Other
         >> label ".*EURO LIVERPOOL.*"                                                   "EEA"                                Other
         >> label ".*THE GENTRY BARBER.*"                                                "THE GENTRY BARBER"                  Other
@@ -159,3 +160,6 @@ module Domain =
         
         >> label ".*(CINEMA|EVERYMAN|VUE).*"                                            "CINEMA"                             Leisure
         >> label ".*(NRGGYM|HARLANDS).*"                                                "NRGGYM"                             Leisure
+
+        >> label "^[A-Z0-9]{8}\sGB[A-Z0-9]{14}\s"                                       "FUND TRANSFER (OR RELATED)"         BankTransfer
+        >> label ".*SEREY PAYMENT.*"                                                    "FUND TRANSFER (OR RELATED)"         BankTransfer
