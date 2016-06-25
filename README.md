@@ -14,7 +14,7 @@ In order to create good analysis, one needs to be intimate with the data.
 You must know the data and understand it clearly which requires a lot of time.
 Fortunately, I am intimate with my own expenses therefore I am creating this application with the goal of finding patterns and behaviours which I can correct for long term savings!
 
-## Expenses global view
+## Expenses breakdowns
 
 ### Monthly breakdown
 
