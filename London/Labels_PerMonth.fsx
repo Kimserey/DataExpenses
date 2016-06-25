@@ -14,22 +14,28 @@ df.Columns.[ [ "Date"; "Label"; "Amount" ] ]
 |> Series.observations
 |> Seq.iter(fun v -> printfn "%A" v)
 
+let empty: Expense list = []
 
-df.Columns.[ [ "Date"; "Label"; "Amount" ] ]
+df
 |> Frame.filterRowValues(fun c -> c?Amount < 0.)
 |> Frame.pivotTable
     (fun _ r ->
         let date = r.GetAs<DateTime>("Date")
         new DateTime(date.Year, date.Month, 1))
-    (fun _ c ->
-        c.GetAs<string>("Label"))
-    (fun frame ->
+    (fun _ c -> c.GetAs<string>("Label"))
+    (fun frame -> 
         frame
-        |> Frame.getNumericCols
-        |> Series.get "Amount"
-        |> Stats.sum
-        |> Math.Abs)
-|> Frame.fillMissingWith 0.
+        |> Frame.rows
+        |> Series.dropMissing
+        |> Series.observations
+        |> Seq.map (fun (_, s) ->  
+            { Date = s.GetAs<DateTime>("Date")
+              Label = s.GetAs<string>("Label")
+              Title = s.GetAs<string>("Title")
+              Amount = s?Amount
+              Category = s.GetAs<string>("Category") })
+        |> Seq.toList)
+|> Frame.fillMissingWith empty
 |> Frame.getRows
 |> Series.sortByKey
 |> Series.observations

@@ -14,7 +14,8 @@ type Expense = {
     Label: string
     Amount: float
     Category: string
-}
+} with
+    override x.ToString() = x.Title
 
 type ExpenseDataFrame = {
     Frame: Frame<int, string>
@@ -312,29 +313,44 @@ type ExpenseDataFrame = {
         |> Seq.toList
 
     static member GetLabelsPerMonth exp =
+        //Needed to pass Deedle type check for fillMissingWith
+        let empty: Expense list = []
+
         exp
         |> Frame.filterRowValues(fun c -> c?Amount < 0.)
         |> Frame.pivotTable
             (fun _ r ->
                 let date = r.GetAs<DateTime>("Date")
                 new DateTime(date.Year, date.Month, 1))
-            (fun _ c ->
-                c.GetAs<string>("Label"))
-            (fun frame ->
+            (fun _ c -> c.GetAs<string>("Label"))
+            (fun frame -> 
                 frame
-                |> Frame.getNumericCols
-                |> Series.get "Amount")
-        |> Frame.fillMissingWith 0.
+                |> Frame.rows
+                |> Series.dropMissing
+                |> Series.observations
+                |> Seq.map (fun (_, s) ->  
+                    { Date = s.GetAs<DateTime>("Date")
+                      Label = s.GetAs<string>("Label")
+                      Title = s.GetAs<string>("Title")
+                      Amount = s?Amount
+                      Category = s.GetAs<string>("Category") })
+                |> Seq.toList)
+        |> Frame.fillMissingWith empty
         |> Frame.getRows
         |> Series.sortByKey
         |> Series.observations
         |> Seq.map (fun (k, v) -> 
-            Title <| k.ToString("MMM yyyy"), 
-            v
-            |> Series.sortByKey
-            |> Series.observations
-            |> Seq.map (fun (k, v) -> Title k, Sum v) 
-            |> Seq.toList)
+            let obs =
+                v
+                |> Series.sortByKey
+                |> Series.observations
+                |> Seq.toList
+
+            Title <| k.ToString("MMM yyyy"),
+            Sum (obs |> List.collect snd |> List.sumBy (fun e -> e.Amount)),
+            obs
+            |> List.map (fun (shop, (expenses: Expense list)) -> 
+                Title shop, Sum (expenses |> List.sumBy (fun e -> e.Amount)), expenses))
         |> Seq.toList
 
 module Dataframe =
