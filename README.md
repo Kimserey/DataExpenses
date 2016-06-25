@@ -67,6 +67,9 @@ Monitor the evolution of the spending in each category.
 Check if a certain category dominate the spendings.
 Detect irregularity in certain category.
 
+Pie chart vs Bar chart: Bar gives a better indication of the amount while Pie gives a view of the repartition. 
+In the context of shops, I am more interested to visualise the actual amount per shop therefore having them side by side ease the comparaison.
+
 ## 2. Analysis
 
 In developement...
