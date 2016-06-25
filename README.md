@@ -62,6 +62,11 @@ Each category can be expended to view grouped expenses.
 
 __What's the purpose?__
 
+Look at the repartition of the expenses over the time.
+Monitor the evolution of the spending in each category.
+Check if a certain category dominate the spendings.
+Detect irregularity in certain category.
+
 ## 2. Analysis
 
 In developement...
