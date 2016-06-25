@@ -28,9 +28,9 @@ module LabelsPerMonth =
         
         let page =
             async {
-                let! labels = Rpcs.get()
+                let! months = Rpcs.get()
                 
-                return labels
+                return months
                        |> List.mapi (fun cardIndex (Title date, Sum sum, labels) ->
                                 Card.Doc 
                                     [ CardList.Doc(
@@ -43,7 +43,31 @@ module LabelsPerMonth =
                                                     "card-" + string cardIndex + "-content-" + string contentIndex,
                                                     label,
                                                     sum.JS.ToFixed 2,
-                                                    [ CardTable.Doc (List.mapi Expense.ToTableRow expenses) ]))) ])
+                                                    [ CardTable.Doc (List.mapi Expense.ToTableRow expenses) ]))) 
+                                      divAttr 
+                                        [ attr.style "height: 100%;"
+                                          on.afterRender (fun el -> 
+                                            JQuery
+                                                .Of(el)
+                                                .BarChart(
+                                                {
+                                                    Chart = { Type = "bar"; ZoomType = ""; MarginBottom = 100. }
+                                                    Title = { Text = "" }
+                                                    XAxis =
+                                                        { Categories = 
+                                                            labels 
+                                                            |> List.filter (fun (_, Sum sum, _) -> sum < 0.)
+                                                            |> List.map (fun (Title title, _, _) -> title) |> Array.ofList }
+                                                    YAxis = { Title = { Text = "Amount" } }
+                                                    PlotOptions = { Bar = { PointWidth = 10. } }
+                                                    Series = 
+                                                        [| { Name = date
+                                                             Data = 
+                                                                labels 
+                                                                |> List.filter (fun (_, Sum sum, _) -> sum < 0.)
+                                                                |> List.map (fun (_, Sum sum, _) -> Math.Abs sum) |> List.toArray } |]
+                                                    Tooltip = { PointFormat = "{series.name}: {point.y} GBP" }
+                                                }) |> ignore) ] [] :> Doc ])
                        |> Doc.Concat
                         
             }

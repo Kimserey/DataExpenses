@@ -24,7 +24,7 @@ module Common =
         [<Inline """$0.highcharts($1)""">]
         member x.PieChart (options: PieChartOptions) = X<JQuery>
         [<Inline """$0.highcharts($1)""">]
-        member x.ColumnChart (options: ColumnChartOptions) = X<JQuery>
+        member x.BarChart (options: BarChartOptions) = X<JQuery>
 
     // Common options
     and Chart = {
@@ -133,7 +133,7 @@ module Common =
     }
 
     // Column specific options
-    and ColumnChartOptions = {
+    and BarChartOptions = {
         [<Name "chart">]
         Chart: Chart
         [<Name "title">]
@@ -143,15 +143,23 @@ module Common =
         [<Name "yAxis">]
         YAxis: YAxis
         [<Name "series">]
-        Series: ColumnSeries []
+        Series: BarSeries []
         [<Name "tooltip">]
         Tooltip: Tooltip
-        [<Name "legend">]
-        Legend: Legend
+        [<Name "plotOptions">]
+        PlotOptions: BarPlotOptions
     }
-    and ColumnSeries = {
+    and BarSeries = {
         [<Name "name">]
         Name: string
         [<Name "data">]
         Data: float []
+    }
+    and BarPlotOptions = {
+        [<Name "bar">]
+        Bar: BarPlotOptionsBar
+    }
+    and BarPlotOptionsBar = {
+        [<Name "pointWidth">]
+        PointWidth: float
     }
