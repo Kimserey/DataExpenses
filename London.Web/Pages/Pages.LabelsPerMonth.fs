@@ -30,13 +30,13 @@ module LabelsPerMonth =
             async {
                 let! labels = Rpcs.get()
                 return labels
-                       |> List.filter (fun (_, Sum sum, _) -> sum = 0.)
                        |> List.mapi (fun cardIndex (Title date, Sum sum, labels) ->
                             Card.Doc 
                                 [ CardList.Doc(
                                        date,
                                        sum.JS.ToFixed 2,
                                        labels
+                                       |> List.filter (fun (_, Sum sum, _) -> sum < 0.)
                                        |> List.mapi (fun contentIndex (Title label, Sum sum, expenses) ->
                                             CardList.Item.Doc(
                                                 "card-" + string cardIndex + "-content-" + string contentIndex,
