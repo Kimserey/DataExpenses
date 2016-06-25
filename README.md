@@ -45,6 +45,8 @@ Can be used to see irregularity in certain category.
 
 ## 2. Analysis
 
+In developement...
+
 ### 2.1 Monitor expenses over time
 
 View your expenses stacked over time.
