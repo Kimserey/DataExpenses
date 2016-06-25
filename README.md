@@ -26,9 +26,11 @@ Each category can be expended to view grouped expenses.
 
 ![month drilldown](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/month_dd.png)
 
-_What's the purpose?_
+__What's the purpose?__
 
-Look at the allocation of the expenses 
+Look at the repartition of the expenses over the time.
+Monitor the evolution of the spending in each category.
+Can be used to see irregularity in certain category.
 
 ### 1.2 Category breakdown
 
