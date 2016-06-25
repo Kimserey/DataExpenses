@@ -44,20 +44,36 @@ module LabelsPerMonth =
                                                 sum.JS.ToFixed 2,
                                                 [ CardTable.Doc (List.mapi Expense.ToTableRow expenses) ]))) 
                                   
-//                                  divAttr 
-//                                   [ on.afterRender (fun el -> 
-//                                       JQuery
-//                                           .Of(el)
-//                                           .LineChart(
-//                                           {
-//                                               Chart = { Type = "spline" }
-//                                               Title = { Text = "" }
-//                                               XAxis = { Categories = subCategory |> List.map (fun (Title title, _, _) -> title) |> Array.ofList }
-//                                               YAxis = { Title = { Text = "Amount" } }
-//                                               Series = [| { Name = "Total"; Data = subCategory |> List.map (fun (_, Sum sum, _) -> sum) |> Array.ofList } |]
-//                                               Tooltip = { PointFormat = "{point.y:.2f} GBP" }
-//                                           }) |> ignore) ] [] :> Doc 
+                                  divAttr 
+                                   [ on.afterRender (fun el -> 
+                                       JQuery
+                                           .Of(el)
+                                           .ColumnChart(
+                                           {
+                                               Chart = { Type = "column"; ZoomType = Some "xy" }
+                                               Title = { Text = "" }
+                                               XAxis = { Categories = labels |> List.map (fun (Title title, _, _) -> title) |> Array.ofList }
+                                               YAxis = { Title = { Text = "Amount" } }
+                                               Series = 
+                                                labels 
+                                                |> List.map (fun (Title title, _, expenses) -> 
+                                                    { Name = title
+                                                      Data = expenses |> List.map (fun e -> e.Amount) |> Array.ofList }) 
+                                                |> Array.ofList
+                                               Tooltip = { PointFormat = "{series.name}: {point.y} GBP<br/>Total: {point.stackTotal} GBP" }
+                                           }) |> ignore) ] [] :> Doc 
                             ])
                         |> Doc.Concat
             }
             |> Doc.Async
+
+//            legend: {
+//                align: 'right',
+//                x: -30,
+//                verticalAlign: 'top',
+//                y: 25,
+//                floating: true,
+//                borderColor: '#CCC',
+//                borderWidth: 1,
+//                shadow: false
+//            }

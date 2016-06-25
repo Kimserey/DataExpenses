@@ -23,11 +23,15 @@ module Common =
         member x.LineChart (options: LineChartOptions) = X<JQuery>
         [<Inline """$0.highcharts($1)""">]
         member x.PieChart (options: PieChartOptions) = X<JQuery>
+        [<Inline """$0.highcharts($1)""">]
+        member x.ColumnChart (options: ColumnChartOptions) = X<JQuery>
 
     // Common options
     and Chart = {
         [<Name "type">]
         Type: string
+        [<Name "zoomType">]
+        ZoomType: string option
     }
     and XAxis = {
         [<Name "categories">]
@@ -108,4 +112,26 @@ module Common =
     and PiePlotOptionsPie = {
         [<Name "datalabels">]
         DataLabels: PlotOptionsDataLabels
+    }
+
+    // Column specific options
+    and ColumnChartOptions = {
+        [<Name "chart">]
+        Chart: Chart
+        [<Name "title">]
+        Title: Title
+        [<Name "xAxis">]
+        XAxis: XAxis
+        [<Name "yAxis">]
+        YAxis: YAxis
+        [<Name "series">]
+        Series: ColumnSeries []
+        [<Name "tooltip">]
+        Tooltip: Tooltip
+    }
+    and ColumnSeries = {
+        [<Name "name">]
+        Name: string
+        [<Name "data">]
+        Data: float []
     }
