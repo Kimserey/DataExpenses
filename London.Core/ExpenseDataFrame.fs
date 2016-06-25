@@ -323,15 +323,13 @@ type ExpenseDataFrame = {
             (fun frame ->
                 frame
                 |> Frame.getNumericCols
-                |> Series.get "Amount"))
+                |> Series.get "Amount")
         |> Frame.fillMissingWith 0.
         |> Frame.getRows
         |> Series.sortByKey
         |> Series.observations
         |> Seq.map (fun (k, v) -> 
             Title <| k.ToString("MMM yyyy"), 
-            v
-            |> Series.mapValues ()
             v
             |> Series.sortByKey
             |> Series.observations
