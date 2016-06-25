@@ -37,7 +37,6 @@ module LabelsPerMonth =
                                            date,
                                            sum.JS.ToFixed 2,
                                            labels
-                                           |> List.filter (fun (_, Sum sum, _) -> sum < 0.)
                                            |> List.mapi (fun contentIndex (Title label, Sum sum, expenses) ->
                                                 CardList.Item.Doc(
                                                     "card-" + string cardIndex + "-content-" + string contentIndex,
@@ -56,7 +55,6 @@ module LabelsPerMonth =
                                                     XAxis =
                                                         { Categories = 
                                                             labels 
-                                                            |> List.filter (fun (_, Sum sum, _) -> sum < 0.)
                                                             |> List.map (fun (Title title, _, _) -> title) |> Array.ofList }
                                                     YAxis = { Title = { Text = "Amount" } }
                                                     PlotOptions = { Bar = { PointWidth = 10. } }
@@ -64,8 +62,8 @@ module LabelsPerMonth =
                                                         [| { Name = date
                                                              Data = 
                                                                 labels 
-                                                                |> List.filter (fun (_, Sum sum, _) -> sum < 0.)
-                                                                |> List.map (fun (_, Sum sum, _) -> Math.Abs sum) |> List.toArray } |]
+                                                                |> List.map (fun (_, Sum sum, _) -> sum) 
+                                                                |> List.toArray } |]
                                                     Tooltip = { PointFormat = "{series.name}: {point.y} GBP" }
                                                 }) |> ignore) ] [] :> Doc ])
                        |> Doc.Concat

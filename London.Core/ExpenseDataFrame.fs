@@ -39,6 +39,8 @@ type ExpenseDataFrame = {
                   Amount = s?Amount
                   Label = ""
                   Category = "" })
+            |> Seq.filter (fun e -> e.Amount < 0.)
+            |> Seq.map (fun e -> { e with Amount = Math.Abs e.Amount })
             |> Frame.ofRecords
 
         frame.ReplaceColumn(
@@ -81,7 +83,6 @@ type ExpenseDataFrame = {
 
     static member GetExpensesPerMonth exp: List<Month * Year * Sum * List<Title * Sum * List<Expense>>> =
         exp
-        |> Frame.filterRowValues(fun c -> c?Amount < 0.)
         |> Frame.groupRowsByString "Category"
         |> Frame.groupRowsUsing(fun _ c -> c.GetAs<DateTime>("Date").Month, c.GetAs<DateTime>("Date").Year)
         |> Frame.sortRows "Date"
@@ -112,7 +113,6 @@ type ExpenseDataFrame = {
 
     static member GetExpensesPerCategory exp: List<Title * Sum * List<Title * Sum * List<Expense>>> =
         exp
-        |> Frame.filterRowValues(fun c -> c?Amount < 0.)
         |> Frame.groupRowsUsing(fun _ c ->  monthToString (c.GetAs<DateTime>("Date").Month) + " " + string (c.GetAs<DateTime>("Date").Year))
         |> Frame.groupRowsByString "Category"
         |> Frame.nest
@@ -142,7 +142,6 @@ type ExpenseDataFrame = {
     // Get all expenses
     static member GetAllExpenses sortBy exp =
         exp
-        |> Frame.filterRowValues(fun c -> c?Amount < 0.)
         |> Frame.sortRows sortBy
         |> Frame.rows
         |> Series.observations
@@ -157,9 +156,7 @@ type ExpenseDataFrame = {
     // Get all expenses for a certain category
     static member GetExpenses (category: Category) sortBy exp =
         exp
-        |> Frame.filterRowValues(fun c -> 
-            c?Amount < 0.
-            && c.GetAs<string>("Category") = (string category))
+        |> Frame.filterRowValues(fun c -> c.GetAs<string>("Category") = (string category))
         |> Frame.sortRows sortBy
         |> Frame.rows
         |> Series.observations
@@ -176,16 +173,14 @@ type ExpenseDataFrame = {
     static member GetSmoothExpenses (category: Category) sortBy exp =
         let frame = 
             exp
-            |> Frame.filterRowValues(fun c -> 
-                c?Amount < 0.
-                && c.GetAs<string>("Category") = (string category))
+            |> Frame.filterRowValues(fun c -> c.GetAs<string>("Category") = (string category))
 
         let mean, std =
-            Stats.mean (frame |> Frame.getCol "Amount" |> Series.mapValues (unbox<float> >> Math.Abs)), Stats.stdDev (frame |> Frame.getCol "Amount")
+            Stats.mean (frame |> Frame.getCol "Amount" |> Series.mapValues unbox<float>), Stats.stdDev (frame |> Frame.getCol "Amount")
 
         frame
         |> Frame.sortRows sortBy
-        |> Frame.filterRowValues (fun r -> Math.Abs(r?Amount) <= mean + std)
+        |> Frame.filterRowValues (fun r -> r?Amount <= mean + std)
         |> Frame.rows
         |> Series.observations
         |> Seq.map (fun (_, s) -> 
@@ -200,7 +195,6 @@ type ExpenseDataFrame = {
     static member GetAllExpensesChart exp =
         let pivotTable =
             exp
-            |> Frame.filterRowValues(fun c -> c?Amount < 0.)
             |> Frame.pivotTable
                 (fun _ r -> r.GetAs<DateTime>("Date"))
                 (fun _ r -> r.GetAs<string>("Category"))
@@ -217,14 +211,13 @@ type ExpenseDataFrame = {
             title, 
             series 
             |> Series.observations
-            |> Seq.map (fun (date, value) -> date,  Math.Abs(unbox<float> value)) 
+            |> Seq.map (fun (date, value) -> date,  unbox<float> value) 
             |> Seq.sortBy fst
             |> Seq.toList)
         |> Seq.toList
 
     static member GetExpenseLevelCount exp =
         exp
-        |> Frame.filterRowValues(fun c -> c?Amount < 0.)
         |> Frame.pivotTable
             (fun _ r -> r.GetAs<int>("ExpenseLevel"))
             (fun _ r -> r.GetAs<string>("Category"))
@@ -241,8 +234,8 @@ type ExpenseDataFrame = {
         |> Seq.toList
 
     static member GetDaySpanExpenses (category: Category) (exp: Frame<_, string>): seq<float * int> =
-        exp.Columns.[ [ "Date"; "Amount"; "Category" ] ]
-        |> Frame.filterRowValues(fun c -> c?Amount < 0. && c.GetAs<string>("Category") = "Supermarket")
+        exp
+        |> Frame.filterRowValues(fun c -> c.GetAs<string>("Category") = "Supermarket")
         |> Frame.groupRowsBy "Date"
         |> Frame.getNumericCols
         |> Series.mapValues (Stats.levelSum fst)
@@ -251,7 +244,7 @@ type ExpenseDataFrame = {
         |> Series.windowInto 2
             (fun (s: Series<DateTime, float>) ->
                 match s |> Series.observations |> Seq.toList with
-                | [ (d1, p1); (d2, _) ] -> Math.Abs p1, (d2 - d1).TotalDays
+                | [ (d1, p1); (d2, _) ] -> p1, (d2 - d1).TotalDays
                 | _ ->  failwith "incomplete window are skipped by deedle")
         |> Series.observations
         |> Seq.map (fun (_, (days, value)) -> days, int value)
@@ -259,38 +252,35 @@ type ExpenseDataFrame = {
 
     static member GetBinaryExpenses (category: Category) (exp: Frame<_, string>): seq<DateTime * float * int> =
         let mean =
-                exp.Columns.[ [ "Date"; "Amount"; "Category" ] ]
-                |> Frame.filterRowValues(fun c -> c?Amount < 0. && c.GetAs<string>("Category") = (string category))
+                exp
+                |> Frame.filterRowValues(fun c -> c.GetAs<string>("Category") = (string category))
                 |> Frame.getCol "Amount"
                 |> Stats.mean
-                |> Math.Abs
         
         exp
-        |> Frame.filterRowValues(fun c -> c?Amount < 0. && c.GetAs<string>("Category") = "Supermarket")
+        |> Frame.filterRowValues(fun c -> c.GetAs<string>("Category") = "Supermarket")
         |> Frame.groupRowsBy "Date"
         |> Frame.getNumericCols
         |> Series.mapValues (Stats.levelSum fst)
         |> Series.get "Amount"
         |> Series.sortByKey
-        |> Series.mapValues (fun v -> if Math.Abs (unbox<float> v) <= mean then v, 0 else v, 1)
+        |> Series.mapValues (fun v -> if unbox<float> v <= mean then v, 0 else v, 1)
         |> Series.observations
         |> Seq.map (fun (k, (v, v')) -> k, v, v')
 
     static member GetExpendingMean (category: Category) exp =
         exp
-        |> Frame.filterRowValues(fun c -> c?Amount < 0. && c.GetAs<string>("Category") = string category)
+        |> Frame.filterRowValues(fun c -> c.GetAs<string>("Category") = string category)
         |> Frame.groupRowsBy "Date"
         |> Frame.getNumericCols
         |> Series.mapValues (Stats.levelSum fst)
         |> Series.get "Amount"
-        |> Series.mapValues (unbox<float> >> Math.Abs)
         |> Series.sortByKey
         |> Stats.expandingMean
         |> Series.observations
 
     static member GetCategoryRatioPerMonth exp =
          exp
-        |> Frame.filterRowValues(fun c -> c?Amount < 0.)
         |> Frame.pivotTable
             (fun _ r ->
                 let date = r.GetAs<DateTime>("Date")
@@ -301,8 +291,7 @@ type ExpenseDataFrame = {
                 frame
                 |> Frame.getNumericCols
                 |> Series.get "Amount"
-                |> Stats.sum
-                |> Math.Abs)
+                |> Stats.sum)
         |> Frame.fillMissingWith 0.
         |> Frame.mapRowValues (fun c ->
             let total = c |> Series.values |> Seq.cast<float> |> Seq.sum
@@ -317,7 +306,6 @@ type ExpenseDataFrame = {
         let empty: Expense list = []
 
         exp
-        |> Frame.filterRowValues(fun c -> c?Amount < 0.)
         |> Frame.pivotTable
             (fun _ r ->
                 let date = r.GetAs<DateTime>("Date")
@@ -349,8 +337,8 @@ type ExpenseDataFrame = {
             Title <| k.ToString("MMM yyyy"),
             Sum (obs |> List.collect snd |> List.sumBy (fun e -> e.Amount)),
             obs
-            |> List.map (fun (shop, (expenses: Expense list)) -> 
-                Title shop, Sum (expenses |> List.sumBy (fun e -> e.Amount)), expenses))
+            |> List.map (fun (shop, (expenses: Expense list)) -> Title shop, Sum (expenses |> List.sumBy (fun e -> e.Amount)), expenses)
+            |> List.filter (fun (_, Sum sum, _) -> sum > 0.))
         |> Seq.toList
 
 module Dataframe =
