@@ -24,9 +24,7 @@ df
     (Stats.sum >> Series.get "Amount")
 |> Frame.fillMissingWith 0.
 |> Frame.getNumericCols
-|> Series.mapValues (fun s ->
-    s 
-    |> Series.mapValues (fun v -> v * 100. / (Stats.sum s)))
+|> Series.mapValues (fun s -> s |> Series.mapValues (fun v -> v * 100. / (Stats.sum s)))
 |> Series.sortByKey
 |> Series.observations
 |> Seq.iter(fun v -> printfn "%A" v)

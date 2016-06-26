@@ -299,9 +299,7 @@ type ExpenseDataFrame = {
             (Stats.sum >> Series.get "Amount")
         |> Frame.fillMissingWith 0.
         |> Frame.getNumericCols
-        |> Series.mapValues (fun s ->
-            s 
-            |> Series.mapValues (fun v -> v * 100. / (Stats.sum s)))
+        |> Series.mapValues (fun s -> s |> Series.mapValues (fun v -> v * 100. / (Stats.sum s)))
         |> Series.sortByKey
         |> Series.observations
         |> Seq.map (fun (k, v) -> k.ToString("MMM yyyy"), Series.observations v |> Seq.toList)
