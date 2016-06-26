@@ -43,7 +43,3 @@ let testDf =
 
 testDf
 |> Frame.rows
-
-let x: Series<int, Series<string, obj>>=
-    testDf
-    |> Frame.getRows
