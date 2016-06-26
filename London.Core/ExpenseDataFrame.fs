@@ -120,7 +120,6 @@ type ExpenseDataFrame = {
                 |> Seq.toList)
             |> Seq.toList)
         |> Seq.toList
-
     static member GetExpensesPerCategory exp: List<Title * Sum * List<Title * Sum * List<Expense>>> =
         exp
         |> Frame.groupRowsUsing(fun _ c ->  monthToString (c.GetAs<DateTime>("Date").Month) + " " + string (c.GetAs<DateTime>("Date").Year))
@@ -148,7 +147,7 @@ type ExpenseDataFrame = {
                 |> Seq.toList)
             |> Seq.toList)
         |> Seq.toList
-        
+            
     // Get all expenses
     static member GetAllExpenses sortBy exp =
         exp
@@ -288,7 +287,7 @@ type ExpenseDataFrame = {
         |> Series.sortByKey
         |> Stats.expandingMean
         |> Series.observations
-
+        
     static member GetCategoryRatioPerMonth exp =
         exp
         |> Frame.pivotTable
@@ -297,11 +296,7 @@ type ExpenseDataFrame = {
             (fun _ r ->
                 let date = r.GetAs<DateTime>("Date")
                 new DateTime(date.Year, date.Month, 1))
-            (fun frame ->
-                frame
-                |> Frame.getNumericCols
-                |> Series.get "Amount"
-                |> Stats.sum)
+            (Stats.sum >> Series.get "Amount")
         |> Frame.fillMissingWith 0.
         |> Frame.getNumericCols
         |> Series.mapValues (fun s ->

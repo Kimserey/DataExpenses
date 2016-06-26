@@ -21,11 +21,7 @@ df
     (fun _ r ->
         let date = r.GetAs<DateTime>("Date")
         new DateTime(date.Year, date.Month, 1))
-    (fun frame ->
-        frame
-        |> Frame.getNumericCols
-        |> Series.get "Amount"
-        |> Stats.sum)
+    (Stats.sum >> Series.get "Amount")
 |> Frame.fillMissingWith 0.
 |> Frame.getNumericCols
 |> Series.mapValues (fun s ->
