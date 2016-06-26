@@ -290,22 +290,23 @@ type ExpenseDataFrame = {
         |> Series.observations
 
     static member GetCategoryRatioPerMonth exp =
-         exp
+        exp
         |> Frame.pivotTable
+            (fun _ r ->
+                r.GetAs<string>("Category"))
             (fun _ r ->
                 let date = r.GetAs<DateTime>("Date")
                 new DateTime(date.Year, date.Month, 1))
-            (fun _ c ->
-                c.GetAs<string>("Category"))
             (fun frame ->
                 frame
                 |> Frame.getNumericCols
                 |> Series.get "Amount"
                 |> Stats.sum)
         |> Frame.fillMissingWith 0.
-        |> Frame.mapRowValues (fun c ->
-            let total = c |> Series.values |> Seq.cast<float> |> Seq.sum
-            c |> Series.mapValues (fun v -> unbox v * 100. / total))
+        |> Frame.getNumericCols
+        |> Series.mapValues (fun s ->
+            s 
+            |> Series.mapValues (fun v -> v * 100. / (Stats.sum s)))
         |> Series.sortByKey
         |> Series.observations
         |> Seq.map (fun (k, v) -> k.ToString("MMM yyyy"), Series.observations v |> Seq.toList)

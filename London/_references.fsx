@@ -12,5 +12,5 @@ open London.Core
 Environment.CurrentDirectory <- __SOURCE_DIRECTORY__
 
 let df =
-    ExpenseDataFrame.FromFile <| Directory.GetFiles(Environment.CurrentDirectory + "/data","*.csv")
+    ExpenseDataFrame.FromFile "" <| Directory.GetFiles(Environment.CurrentDirectory + "/data","*.csv")
     |> ExpenseDataFrame.GetFrame
