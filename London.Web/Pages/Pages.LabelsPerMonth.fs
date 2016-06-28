@@ -31,10 +31,11 @@ module LabelsPerMonth =
                 let! months = Rpcs.get()
                 
                 return months
-                       |> List.mapi (fun cardIndex (Title date, Sum sum, labels) ->
+                       |> List.sortByDescending (fun ((_, date), _, _) -> date)
+                       |> List.mapi (fun cardIndex ((Title title, date), Sum sum, labels) ->
                                 Card.Doc 
                                     [ CardList.Doc(
-                                           date,
+                                           title,
                                            sum.JS.ToFixed 2,
                                            labels
                                            |> List.mapi (fun contentIndex (Title label, Sum sum, expenses) ->
@@ -59,7 +60,7 @@ module LabelsPerMonth =
                                                     YAxis = { Title = { Text = "Amount" } }
                                                     PlotOptions = { Bar = { PointWidth = 10. } }
                                                     Series = 
-                                                        [| { Name = date
+                                                        [| { Name = title
                                                              Data = 
                                                                 labels 
                                                                 |> List.map (fun (_, Sum sum, _) -> sum) 

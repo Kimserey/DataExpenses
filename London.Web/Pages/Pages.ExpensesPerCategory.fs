@@ -30,6 +30,7 @@ module ExpensesPerCategory =
             async {
                 let! expenses = Rpcs.get()
                 return expenses
+                        |> List.sortBy (fun (Title title, _ , _) -> title)
                         |> List.mapi (fun cardIndex (Title category, Sum sum, subCategory) ->
                             Card.Doc 
                                 [ CardList.Doc(

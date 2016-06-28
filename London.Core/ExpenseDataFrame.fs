@@ -338,7 +338,7 @@ type ExpenseDataFrame = {
                 |> Series.observations
                 |> Seq.toList
 
-            Title <| k.ToString("MMM yyyy"),
+            (Title <| k.ToString("MMM yyyy"), k),
             Sum (obs |> List.collect snd |> List.sumBy (fun e -> e.Amount)),
             obs
             |> List.map (fun (shop, (expenses: Expense list)) -> Title shop, Sum (expenses |> List.sumBy (fun e -> e.Amount)), expenses)
