@@ -1,39 +1,63 @@
 namespace London.Web
 
 open System
-open WebSharper
-open WebSharper.Sitelets
-open WebSharper.UI.Next
-open WebSharper.UI.Next.Html
-open WebSharper.UI.Next.Server
 open global.Owin
 open Microsoft.Owin.Hosting
 open Microsoft.Owin.StaticFiles
 open Microsoft.Owin.FileSystems
 open WebSharper.Owin
+open Topshelf
+open Topshelf.ServiceConfigurators
+open Topshelf.HostConfigurators
 
 module EntryPoint =
+    
+    type OwinHost(rootDirectory: string, baseUrl: string) =
+        let mutable server: IDisposable = 
+            Unchecked.defaultof<IDisposable>
+        
+        let options = 
+            new WebSharperOptions<Sitelet.EndPoint>(
+                Debug = true, 
+                ServerRootDirectory = rootDirectory)
+
+        member x.Start() = 
+            server <-
+                WebApp.Start(baseUrl, fun appB ->
+                    appB.UseStaticFiles(StaticFileOptions(FileSystem = PhysicalFileSystem(rootDirectory)))
+                        .UseWebSharper(options.WithSitelet(Sitelet.sitelet))
+                        |> ignore)
+        
+            stdout.WriteLine("Serving {0}", baseUrl)
+
+        member x.Stop() =
+            server.Dispose()
 
     [<EntryPoint>]
     let Main args =
-
         let root, url =
             match args with
             | [| r; u |] -> r, u
             | _ -> "..", "http://+:9600/"
-
-        use server = 
-            let options = 
-                new WebSharperOptions<Sitelet.EndPoint>(
-                    Debug = true, 
-                    ServerRootDirectory = root)
-
-            WebApp.Start(url, fun appB ->
-                appB.UseStaticFiles(StaticFileOptions(FileSystem = PhysicalFileSystem(root)))
-                    .UseWebSharper(options.WithSitelet(Sitelet.sitelet))
-                    |> ignore)
         
-        stdout.WriteLine("Serving {0}", url)
-        stdin.ReadLine() |> ignore
+        HostFactory.Run(Action<HostConfigurator>(fun hostCfg ->
+        
+            hostCfg.ApplyCommandLine("")
+
+            hostCfg.Service<OwinHost>(Action<ServiceConfigurator<OwinHost>>(fun s ->
+                s.ConstructUsing(Func<OwinHost>(fun () -> new OwinHost(root, url)))
+                    .WhenStarted(Action<OwinHost>(fun s -> s.Start()))
+                    .WhenStopped(Action<OwinHost>(fun s -> s.Stop())) |> ignore)
+                ) |> ignore
+    
+            hostCfg
+                .RunAsLocalSystem()
+                .StartAutomatically() |> ignore
+
+            hostCfg.SetServiceName("London expenses")
+            hostCfg.SetDisplayName("London expenses")
+            hostCfg.SetDescription("London expeses manager. Author: Kimserey Lam.")))
+        |> ignore
+
         0
 

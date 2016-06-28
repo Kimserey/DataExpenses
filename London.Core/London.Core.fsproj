@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>London.Core</RootNamespace>
     <AssemblyName>London.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <TargetFSharpCoreVersion>4.4.0.0</TargetFSharpCoreVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Name>London.Core</Name>

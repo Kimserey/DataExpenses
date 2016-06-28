@@ -13,3 +13,5 @@ London.Web/bin/*
 London.Web/obj/*
 London.Web/Content
 London.Web/Scripts
+London.Core/bin
+London.Core/obj
