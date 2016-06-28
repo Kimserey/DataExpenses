@@ -95,7 +95,6 @@ type ExpenseDataFrame = {
         exp
         |> Frame.groupRowsByString "Category"
         |> Frame.groupRowsUsing(fun _ c -> c.GetAs<DateTime>("Date").Month, c.GetAs<DateTime>("Date").Year)
-        |> Frame.sortRows "Date"
         |> Frame.nest
         |> Series.observations
         |> Seq.map (fun ((m, y), frame) ->
@@ -120,6 +119,7 @@ type ExpenseDataFrame = {
                 |> Seq.toList)
             |> Seq.toList)
         |> Seq.toList
+        
     static member GetExpensesPerCategory exp: List<Title * Sum * List<Title * Sum * List<Expense>>> =
         exp
         |> Frame.groupRowsUsing(fun _ c ->  monthToString (c.GetAs<DateTime>("Date").Month) + " " + string (c.GetAs<DateTime>("Date").Year))
