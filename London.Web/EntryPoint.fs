@@ -57,12 +57,11 @@ module EntryPoint =
                 ) |> ignore
     
             hostCfg
-                .RunAsLocalSystem()
-                .StartAutomatically() |> ignore
+                .RunAsLocalSystem() |> ignore
 
-            hostCfg.SetServiceName("London expenses")
+            hostCfg.SetServiceName("london-expenses")
             hostCfg.SetDisplayName("London expenses")
-            hostCfg.SetDescription("London expeses manager. Author: Kimserey Lam.")))
+            hostCfg.SetDescription("London expenses manager. Author: Kimserey Lam.")))
         |> ignore
 
         0

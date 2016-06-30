@@ -13,9 +13,13 @@ pushd London.Web\bin
 
 REM I use //+:9600 because I reserved the url
 
-REM Topshelf command
+REM Topshelf command:
 REM Install service with: London.Web.exe install -args=..,http://+:9600
 REM Uinstall service with: London.Web.exe uninstall
+
+REM Start, Stop service:
+REM net start london-expenses
+REM net stop london-expenses
 
 London.Web.exe -args=..,http://+:9600
 
