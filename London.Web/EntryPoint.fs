@@ -35,14 +35,20 @@ module EntryPoint =
 
     [<EntryPoint>]
     let Main args =
-        let root, url =
-            match args with
-            | [| r; u |] -> r, u
-            | _ -> "..", "http://+:9600/"
-        
+        let mutable root = ".."
+        let mutable url = "http://+:9600/"
+
         HostFactory.Run(Action<HostConfigurator>(fun hostCfg ->
         
-            hostCfg.ApplyCommandLine("")
+            hostCfg.AddCommandLineDefinition("args", Action<string>(fun args -> 
+                let r, u =
+                    match args.Split(',') with
+                    | [| r; u |] -> r, u
+                    | _ -> failwith "Expecting -args=rootDirectory,baseUrl"
+                root <- r
+                url <- u))
+
+            hostCfg.ApplyCommandLine()
 
             hostCfg.Service<OwinHost>(Action<ServiceConfigurator<OwinHost>>(fun s ->
                 s.ConstructUsing(Func<OwinHost>(fun () -> new OwinHost(root, url)))
