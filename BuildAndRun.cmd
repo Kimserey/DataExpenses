@@ -12,7 +12,8 @@ echo %solutiondir%
 pushd London.Web\bin
 
 REM I use //+:9600 because I reserved the url
-London.Web.exe ".." "http://+:9600"
+REM Topshelf command
+London.Web.exe -args=..,http://+:9600
 
 popd
 popd
