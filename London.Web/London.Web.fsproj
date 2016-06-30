@@ -76,6 +76,8 @@
     <EmbeddedResource Include="..\paket-files\Kimserey\SimpleUI\dist\js\SimpleUI.js">
       <Link>Resources\SimpleUI.js</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Prescript.js" />
+    <EmbeddedResource Include="Resources\Postscript.js" />
     <Compile Include="Resources\Resources.fs" />
     <None Include="Templates\template-card.html" />
     <None Include="Templates\template-card-list.html" />

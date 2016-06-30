@@ -14,5 +14,7 @@ module Resources =
     [<assembly:Require(typeof<Fontawesome>);
       assembly:Require(typeof<Highcharts>);
       assembly:System.Web.UI.WebResource("SimpleUI.css", "text/css");
-      assembly:System.Web.UI.WebResource("SimpleUI.js", "text/javascript")>]
+      assembly:System.Web.UI.WebResource("SimpleUI.js", "text/javascript");
+      assembly:System.Web.UI.WebResource("Prescript.js", "text/javascript");
+      assembly:System.Web.UI.WebResource("Postscript.js", "text/javascript")>]
     do()
