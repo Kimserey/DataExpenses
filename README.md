@@ -112,11 +112,13 @@ In development...
 
 # Questions yet to be answered
 
- - Is the number of transaciton per month related to the amount?
- - Is there a correlation between the amount spent and the next amount spent directly under the same category?
- - Is there a correlation between the time gap between the previous transation and the amount spent?
- - Is there a correlation between the velocity of the spending at the beginning of the month and the total spent?
- - Is there a correlation between the velocity of the spending at the end of the month and the total spent?
+Is there a correlation between:
+ 
+ - the number of transacitons and full amount per month?
+ - the amount spent and the next amount spent directly under the same category?
+ - the time gap between the previous transation and the amount spent?
+ - the velocity of the spending at the beginning of the month and the total spent?
+ - the velocity of the spending at the end of the month and the total spent?
 
 # Stack
 
