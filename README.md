@@ -110,7 +110,7 @@ Lookup for a particular expense through the list.
 In development...
 
 
-## Ideas
+## Questions yet to be answered
 
  - Is the number of transaciton per month related to the amount?
  - Is there a correlation between the amount spent and the next amount spent directly under the same category?
