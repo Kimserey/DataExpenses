@@ -3,7 +3,7 @@
 My attempt to pierce the secret of long term savings! 
 A data expenses manager which takes .CSV as input and categorize expenses.
 
-## Why am I doing this?
+# Why am I doing this?
 
 There are a lot of expense managers already.
 Those are centered around money earned versus money spent.
@@ -14,6 +14,16 @@ I believe that the best way to analyze your expenses is to do it yourself.
 In order to create good analysis, one needs to be intimate with the data.
 You must know the data and understand it clearly which requires a lot of time.
 Fortunately, I am intimate with my own expenses therefore I am creating this application with the goal of finding patterns and behaviours which I can correct for long term savings!
+
+# Questions yet to be answered
+
+Is there a correlation between:
+ 
+ - the number of transacitons and full amount per month?
+ - the amount spent and the next amount spent directly under the same category?
+ - the time gap between the previous transation and the amount spent?
+ - the velocity of the spending at the beginning of the month and the total spent?
+ - the velocity of the spending at the end of the month and the total spent?
 
 ## 1. Expenses breakdowns
 
@@ -108,17 +118,6 @@ Lookup for a particular expense through the list.
 ## 3. Predictions
 
 In development...
-
-
-# Questions yet to be answered
-
-Is there a correlation between:
- 
- - the number of transacitons and full amount per month?
- - the amount spent and the next amount spent directly under the same category?
- - the time gap between the previous transation and the amount spent?
- - the velocity of the spending at the beginning of the month and the total spent?
- - the velocity of the spending at the end of the month and the total spent?
 
 # Stack
 
