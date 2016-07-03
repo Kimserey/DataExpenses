@@ -109,6 +109,15 @@ Lookup for a particular expense through the list.
 
 In development...
 
+
+## Ideas
+
+ - Is the number of transaciton per month related to the amount?
+ - Is there a correlation between the amount spent and the next amount spent directly under the same category?
+ - Is there a correlation between the time gap between the previous transation and the amount spent?
+
+
+
 # Stack
 
 Built with:
