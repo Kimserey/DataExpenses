@@ -25,6 +25,7 @@ module EntryPoint =
             server <-
                 WebApp.Start(baseUrl, fun appB ->
                     appB.UseStaticFiles(StaticFileOptions(FileSystem = PhysicalFileSystem(rootDirectory)))
+                        .UseStaticFiles(StaticFileOptions(FileSystem = PhysicalFileSystem("..\\..\\..\\Documents\\Expenses")))
                         .UseWebSharper(options.WithSitelet(Sitelet.sitelet))
                         |> ignore)
         
