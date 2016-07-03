@@ -14,6 +14,11 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "London.Web", "London.Web\Lo
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "London.Core", "London.Core\London.Core.fsproj", "{4C61ACB9-941F-4FAA-8FB6-B9640538BEAD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{5452F62B-413F-4F23-944A-FC40E0BDC13C}"
+	ProjectSection(SolutionItems) = preProject
+		BuildAndRun.cmd = BuildAndRun.cmd
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
