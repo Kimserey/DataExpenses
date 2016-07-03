@@ -19,7 +19,7 @@ Fortunately, I am intimate with my own expenses therefore I am creating this app
 
 Is there a correlation between:
  
- - the number of transacitons and full amount per month?
+ - the number of transactons and full amount per month?
  - the amount spent and the next amount spent directly under the same category?
  - the time gap between the previous transation and the amount spent?
  - the velocity of the spending at the beginning of the month and the total spent?
