@@ -121,7 +121,7 @@ In development...
 # Stack
 
 Built with:
- - F# (of course :))
+ - F#
  - WebSharper
  - Deedle
  - Highcharts
