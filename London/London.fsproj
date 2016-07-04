@@ -60,6 +60,7 @@
     <None Include="Expending_Mean.fsx" />
     <None Include="Category_Expense_Ratio_PerMonth.fsx" />
     <None Include="Labels_PerMonth.fsx" />
+    <None Include="Number_Transactions_Against_Amount_PerMonth.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

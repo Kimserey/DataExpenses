@@ -24,6 +24,7 @@ module Sitelet =
         | [<EndPoint "/expending">]           Expending
         | [<EndPoint "/ratio">]               Ratio
         | [<EndPoint "/labels">]              Labels
+        | [<EndPoint "/transactions">]        Transactions
 
     let sitelet =
         
@@ -55,4 +56,5 @@ module Sitelet =
             | Api Binary            -> expenses |> Api.binaryExpenses ctx
             | Api Expending         -> expenses |> Api.expendingExpenses ctx
             | Api Ratio             -> expenses |> Api.categoryRatioPerMonth ctx
-            | Api Labels            -> expenses |> Api.labelsPerMonth ctx)
+            | Api Labels            -> expenses |> Api.labelsPerMonth ctx
+            | Api Transactions      -> expenses |> Api.transactionsAndSumPerMonth ctx)

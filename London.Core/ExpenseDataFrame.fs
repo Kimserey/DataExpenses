@@ -345,6 +345,19 @@ type ExpenseDataFrame = {
             |> List.filter (fun (_, Sum sum, _) -> sum > 0.))
         |> Seq.toList
 
+    static member GetNumberTransactionsAndSumPerMonth exp =
+        exp
+        |> Frame.groupRowsUsing (fun _ c -> 
+            let date = c.GetAs<DateTime>("Date")
+            date.Year, date.Month)
+        |> Frame.nest
+        |> Series.mapValues (fun frame -> 
+            frame.RowCount,
+            frame |> Stats.sum |> Series.get "Amount")
+        |> Series.observations
+        |> Seq.map snd
+        |> Seq.toList
+
 module Dataframe =
     open System.IO
 

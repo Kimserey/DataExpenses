@@ -8,6 +8,9 @@ open WebSharper.UI.Next.Server
 open London.Core
 open London.Core.Dataframe
 
+(**
+    Lots of Json endpoints to be consumed by Ajax calls
+**)
 module Api =
     
     type Chart<'T> = {
@@ -107,3 +110,8 @@ module Api =
         |> Content.Json
         |> Content.WithHeaders (addCORSHeader ctx)
         
+    let transactionsAndSumPerMonth ctx expenses =
+        expenses
+        |> ExpenseDataFrame.GetNumberTransactionsAndSumPerMonth
+        |> Content.Json
+        |> Content.WithHeaders (addCORSHeader ctx)
