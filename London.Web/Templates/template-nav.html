@@ -7,9 +7,12 @@
     <div id="side-menu">
         <div class="brand">${Bramd}</div>
         <dl data-hole="Categories" data-children-template="Category">
-            <dt> ${Title}</dt>
+            <dt>${Title}</dt>
             <dd data-hole="Links"></dd>
         </dl>
+
+        <!-- TODO: Style a button... somewhere from Simple UI to place a refresh -->
+        <div style="cursor:pointer;margin:1em;" data-event-click="refresh">Refresh expenses</div>
     </div>
 </nav>
 

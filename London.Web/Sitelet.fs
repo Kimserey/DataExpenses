@@ -37,8 +37,8 @@ module Sitelet =
             | Home ->
                 Templates.Index.Doc(
                     Title = "London expenses",
-                    Nav = [ client <@ App.nav @> ],
-                    Main = [ client <@ App.main @> ])
+                    Nav = [ client <@ App.Client.nav @> ],
+                    Main = [ client <@ App.Client.main @> ])
                 |> Content.Page
 
             | Refresh ->
