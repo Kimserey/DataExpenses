@@ -20,14 +20,14 @@ module Api =
         Title: string
         Values: 'T list
     }
-    
+
     let addCORSHeader ctx =
         ctx.Request.Headers
         |> Seq.tryFind (fun h -> h.Name = "Origin")
         |> Option.map (fun origin -> Http.Header.Custom "Access-Control-Allow-Origin" origin.Value)
         |> Option.toList
 
-    let allExpenses ctx =
+    let allExpenses ctx expenses =
         let labels, expenses =
             expenses
             |> ExpenseDataFrame.GetAllExpensesChart
@@ -38,7 +38,7 @@ module Api =
         |> Content.Json
         |> Content.WithHeaders (addCORSHeader ctx)
 
-    let expensesForCategory category ctx =
+    let expensesForCategory category ctx expenses =
         let expenses =
             expenses
             |> ExpenseDataFrame.GetExpenses category "Date"
@@ -50,7 +50,7 @@ module Api =
         |> Content.Json
         |> Content.WithHeaders (addCORSHeader ctx)
 
-    let smoothExpensesForCategory category ctx =
+    let smoothExpensesForCategory category ctx expenses =
         let expenses =
             expenses
             |> ExpenseDataFrame.GetSmoothExpenses category "Date"
@@ -63,7 +63,7 @@ module Api =
         |> Content.WithHeaders (addCORSHeader ctx)
         
 
-    let expenseLevelsCount ctx =
+    let expenseLevelsCount ctx expenses =
         let counts =
             expenses
             |> ExpenseDataFrame.GetExpenseLevelCount
@@ -74,34 +74,34 @@ module Api =
         |> Content.Json
         |> Content.WithHeaders (addCORSHeader ctx)
 
-    let daySpanExpenses ctx =
+    let daySpanExpenses ctx expenses =
         expenses
         |> ExpenseDataFrame.GetDaySpanExpenses Category.Supermarket
         |> Seq.toList
         |> Content.Json
         |> Content.WithHeaders (addCORSHeader ctx)
 
-    let binaryExpenses ctx =
+    let binaryExpenses ctx expenses=
         expenses
         |> ExpenseDataFrame.GetBinaryExpenses Category.Supermarket
         |> Seq.toList
         |> Content.Json
         |> Content.WithHeaders (addCORSHeader ctx)
 
-    let expendingExpenses ctx =
+    let expendingExpenses ctx expenses =
         expenses
         |> ExpenseDataFrame.GetExpendingMean Category.Supermarket
         |> Seq.toList
         |> Content.Json
         |> Content.WithHeaders (addCORSHeader ctx)
         
-    let categoryRatioPerMonth ctx =
+    let categoryRatioPerMonth ctx expenses =
         expenses
         |> ExpenseDataFrame.GetCategoryRatioPerMonth
         |> Content.Json
         |> Content.WithHeaders (addCORSHeader ctx)
         
-    let labelsPerMonth ctx =
+    let labelsPerMonth ctx expenses =
         expenses
         |> ExpenseDataFrame.GetLabelsPerMonth
         |> Content.Json

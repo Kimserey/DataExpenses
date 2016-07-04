@@ -25,7 +25,11 @@ module Sitelet =
         | [<EndPoint "/ratio">]               Ratio
         | [<EndPoint "/labels">]              Labels
 
-    let sitelet =
+    let sitelet dataDirectory =
+        
+        let expenseDataframe =
+            London.Core.Dataframe.expenses dataDirectory
+
         Sitelet.Infer (fun ctx ->
             function
             | Home ->
@@ -35,12 +39,12 @@ module Sitelet =
                     Main = [ client <@ App.main @> ])
                 |> Content.Page
             
-            | Api Expenses          -> Api.allExpenses ctx
-            | Api Supermarket       -> Api.expensesForCategory Category.Supermarket ctx
-            | Api SmoothSupermarket -> Api.smoothExpensesForCategory Category.Supermarket ctx
-            | Api LevelCounts       -> Api.expenseLevelsCount ctx
-            | Api DaySpan           -> Api.daySpanExpenses ctx
-            | Api Binary            -> Api.binaryExpenses ctx
-            | Api Expending         -> Api.expendingExpenses ctx
-            | Api Ratio             -> Api.categoryRatioPerMonth ctx
-            | Api Labels            -> Api.labelsPerMonth ctx)
+            | Api Expenses          -> expenseDataframe |> Api.allExpenses ctx
+            | Api Supermarket       -> expenseDataframe |> Api.expensesForCategory Category.Supermarket ctx
+            | Api SmoothSupermarket -> expenseDataframe |> Api.smoothExpensesForCategory Category.Supermarket ctx
+            | Api LevelCounts       -> expenseDataframe |> Api.expenseLevelsCount ctx
+            | Api DaySpan           -> expenseDataframe |> Api.daySpanExpenses ctx
+            | Api Binary            -> expenseDataframe |> Api.binaryExpenses ctx
+            | Api Expending         -> expenseDataframe |> Api.expendingExpenses ctx
+            | Api Ratio             -> expenseDataframe |> Api.categoryRatioPerMonth ctx
+            | Api Labels            -> expenseDataframe |> Api.labelsPerMonth ctx)

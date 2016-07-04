@@ -12,7 +12,7 @@ open Topshelf.HostConfigurators
 
 module EntryPoint =
     
-    type OwinHost(rootDirectory: string, baseUrl: string) =
+    type OwinHost(rootDirectory: string, dataDirectory: string, baseUrl: string) =
         let mutable server: IDisposable = 
             Unchecked.defaultof<IDisposable>
         
@@ -25,10 +25,11 @@ module EntryPoint =
             server <-
                 WebApp.Start(baseUrl, fun appB ->
                     appB.UseStaticFiles(StaticFileOptions(FileSystem = PhysicalFileSystem(rootDirectory)))
-                        .UseStaticFiles(StaticFileOptions(FileSystem = PhysicalFileSystem("..\\..\\..\\Documents\\Expenses")))
-                        .UseWebSharper(options.WithSitelet(Sitelet.sitelet))
+                        .UseWebSharper(options.WithSitelet(Sitelet.sitelet dataDirectory))
                         |> ignore)
         
+            stdout.WriteLine("Root directory {0}", rootDirectory)
+            stdout.WriteLine("Data directory {0}", dataDirectory)
             stdout.WriteLine("Serving {0}", baseUrl)
 
         member x.Stop() =
@@ -37,22 +38,24 @@ module EntryPoint =
     [<EntryPoint>]
     let Main args =
         let mutable root = ".."
+        let mutable data = "..\\..\\..\\..\\Documents\\Expenses"
         let mutable url = "http://+:9600/"
 
         HostFactory.Run(Action<HostConfigurator>(fun hostCfg ->
         
             hostCfg.AddCommandLineDefinition("args", Action<string>(fun args -> 
-                let r, u =
+                let r, d, u =
                     match args.Split(',') with
-                    | [| r; u |] -> r, u
-                    | _ -> failwith "Expecting -args=rootDirectory,baseUrl"
+                    | [| r; d; u |] -> r, d, u
+                    | _ -> failwith "Expecting -args=rootDirectory,dataDirectory,baseUrl"
                 root <- r
+                data <- d
                 url <- u))
 
             hostCfg.ApplyCommandLine()
 
             hostCfg.Service<OwinHost>(Action<ServiceConfigurator<OwinHost>>(fun s ->
-                s.ConstructUsing(Func<OwinHost>(fun () -> new OwinHost(root, url)))
+                s.ConstructUsing(Func<OwinHost>(fun () -> new OwinHost(root, data, url)))
                     .WhenStarted(Action<OwinHost>(fun s -> s.Start()))
                     .WhenStopped(Action<OwinHost>(fun s -> s.Stop())) |> ignore)
                 ) |> ignore
