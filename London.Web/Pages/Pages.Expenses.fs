@@ -13,7 +13,8 @@ module Expenses =
     module Rpcs =
         [<Rpc>]
         let get sortBy: Async<_> =
-            expenses
+            Dataframe.agent.Get()
+            |> ExpenseDataFrame.GetFrame
             |> ExpenseDataFrame.GetAllExpenses sortBy
             |> async.Return
                 

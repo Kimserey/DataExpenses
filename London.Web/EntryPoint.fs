@@ -9,6 +9,7 @@ open WebSharper.Owin
 open Topshelf
 open Topshelf.ServiceConfigurators
 open Topshelf.HostConfigurators
+open London.Core
 
 module EntryPoint =
     
@@ -22,12 +23,16 @@ module EntryPoint =
                 ServerRootDirectory = rootDirectory)
 
         member x.Start() = 
+            
+            // Instantiate global dataframe
+            Dataframe.agent.Refresh (Some dataDirectory)
+
             server <-
                 WebApp.Start(baseUrl, fun appB ->
                     appB.UseStaticFiles(StaticFileOptions(FileSystem = PhysicalFileSystem(rootDirectory)))
-                        .UseWebSharper(options.WithSitelet(Sitelet.sitelet dataDirectory))
+                        .UseWebSharper(options.WithSitelet(Sitelet.sitelet))
                         |> ignore)
-        
+
             stdout.WriteLine("Root directory {0}", rootDirectory)
             stdout.WriteLine("Data directory {0}", dataDirectory)
             stdout.WriteLine("Serving {0}", baseUrl)

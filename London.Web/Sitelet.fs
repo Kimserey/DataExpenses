@@ -6,13 +6,13 @@ open WebSharper.UI.Next
 open WebSharper.UI.Next.Html
 open WebSharper.UI.Next.Server
 open London.Core
-open London.Core.Dataframe
 
 module Sitelet =
     
     type EndPoint =
-    | [<EndPoint "/">] Home
-    | [<EndPoint "/api">] Api of ApiEndPoint
+    | [<EndPoint "/">]          Home
+    | [<EndPoint "/refresh">]   Refresh
+    | [<EndPoint "/api">]       Api of ApiEndPoint
 
     and ApiEndPoint =
         | [<EndPoint "/expenses">]            Expenses
@@ -25,26 +25,34 @@ module Sitelet =
         | [<EndPoint "/ratio">]               Ratio
         | [<EndPoint "/labels">]              Labels
 
-    let sitelet dataDirectory =
+    let sitelet =
         
-        let expenseDataframe =
-            London.Core.Dataframe.expenses dataDirectory
+        Sitelet.Infer (fun ctx endpoint->
+            
+            let expenses =
+                Dataframe.agent.Get()
+                |> ExpenseDataFrame.GetFrame
 
-        Sitelet.Infer (fun ctx ->
-            function
+            match endpoint with
             | Home ->
                 Templates.Index.Doc(
                     Title = "London expenses",
                     Nav = [ client <@ App.nav @> ],
                     Main = [ client <@ App.main @> ])
                 |> Content.Page
+
+            | Refresh ->
+                // Refresh the dataframe - Useful when new CSV's are added
+                Dataframe.agent.Refresh None
+                Content.Text "Refresh dataframe"
+                |> Content.SetStatus Http.Status.Ok
             
-            | Api Expenses          -> expenseDataframe |> Api.allExpenses ctx
-            | Api Supermarket       -> expenseDataframe |> Api.expensesForCategory Category.Supermarket ctx
-            | Api SmoothSupermarket -> expenseDataframe |> Api.smoothExpensesForCategory Category.Supermarket ctx
-            | Api LevelCounts       -> expenseDataframe |> Api.expenseLevelsCount ctx
-            | Api DaySpan           -> expenseDataframe |> Api.daySpanExpenses ctx
-            | Api Binary            -> expenseDataframe |> Api.binaryExpenses ctx
-            | Api Expending         -> expenseDataframe |> Api.expendingExpenses ctx
-            | Api Ratio             -> expenseDataframe |> Api.categoryRatioPerMonth ctx
-            | Api Labels            -> expenseDataframe |> Api.labelsPerMonth ctx)
+            | Api Expenses          -> expenses |> Api.allExpenses ctx
+            | Api Supermarket       -> expenses |> Api.expensesForCategory Category.Supermarket ctx
+            | Api SmoothSupermarket -> expenses |> Api.smoothExpensesForCategory Category.Supermarket ctx
+            | Api LevelCounts       -> expenses |> Api.expenseLevelsCount ctx
+            | Api DaySpan           -> expenses |> Api.daySpanExpenses ctx
+            | Api Binary            -> expenses |> Api.binaryExpenses ctx
+            | Api Expending         -> expenses |> Api.expendingExpenses ctx
+            | Api Ratio             -> expenses |> Api.categoryRatioPerMonth ctx
+            | Api Labels            -> expenses |> Api.labelsPerMonth ctx)

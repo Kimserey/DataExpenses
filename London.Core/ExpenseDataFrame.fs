@@ -349,21 +349,20 @@ module Dataframe =
     open System.IO
 
     type ExpenseMessage =
-        | Get of replyChannel: AsyncReplyChannel<_>
-        | Refresh of replyChannel: AsyncReplyChannel<_> * dataDirectory: string option    
+        | Get of replyChannel: AsyncReplyChannel<ExpenseDataFrame>
+        | Refresh of dataDirectory: string option 
 
     type ExpenseAgent = {
-        GetExpenses: () -> Frame<_, string>
-        RefreshExpenses: string option -> Frame<_, string>
+        Get: unit -> ExpenseDataFrame
+        Refresh: string option -> unit
     }
 
     let build dataDirectory =
         Directory.GetFiles(dataDirectory,"*.csv")
         |> ExpenseDataFrame.FromFile "debug"
-        |> ExpenseDataFrame.GetFrame
     
-    let initExpenseAgent dataDirectory =
-        let agent =
+    let agent =
+        let mailbox =
             MailboxProcessor.Start(fun inbox ->
                 let rec loop expenses dir =
                     async {
@@ -380,20 +379,15 @@ module Dataframe =
                                 replyChannel.Reply expenses
                                 return! loop  (Some expenses) dir
 
-                        | Refresh (replyChannel, Some newDir) ->
+                        | Refresh (Some newDir) ->
                             let expenses = build newDir
-                            replyChannel.Reply expenses
-                            return! loop (Some expenses) dir
-                    
-                        | Refresh (replyChannel, None) ->
+                            return! loop (Some expenses) newDir
+
+                        | Refresh None ->
                             let expenses = build dir
-                            replyChannel.Reply expenses
                             return! loop (Some expenses) dir
                     }
-                loop None dataDirectory)
+                loop None "")
 
-        { GetExpenses = 
-            agent.PostAndReply Get
-          
-          RefreshExpenses = fun dir -> 
-            agent.PostAndReply(fun replyChannel -> Refresh(replyChannel, dir)) }
+        { Get = fun () -> mailbox.PostAndReply Get
+          Refresh = fun dataDirectory -> mailbox.Post (Refresh dataDirectory) }

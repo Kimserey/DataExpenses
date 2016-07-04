@@ -13,7 +13,8 @@ module ExpensesPerCategory =
     module Rpcs =
         [<Rpc>]
         let get(): Async<_> =
-            expenses
+            Dataframe.agent.Get()
+            |> ExpenseDataFrame.GetFrame
             |> ExpenseDataFrame.GetExpensesPerCategory
             |> async.Return
                 
