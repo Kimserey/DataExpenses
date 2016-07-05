@@ -269,3 +269,55 @@ $.getJSON('http://172.16.81.128:9600/api/ratio',
         });
     }
 );
+
+$.getJSON('http://172.16.81.128:9600/api/transactions',
+    function(data) {
+        $('#transactions').highcharts({
+            chart: {
+                type: 'scatter',
+                zoomType: 'xy'
+            },
+            title: {
+                text: 'Transactions versus amount spent for each month'
+            },
+            xAxis: {
+                title: {
+                    text: 'Number of transactions'
+                }
+            },
+            yAxis: {
+                title: {
+                    text: 'Total amount spent'
+                }
+            },
+            plotOptions: {
+                scatter: {
+                    marker: {
+                        radius: 5,
+                        states: {
+                            hover: {
+                                enabled: true,
+                                lineColor: 'rgb(100,100,100)'
+                            }
+                        }
+                    },
+                    states: {
+                        hover: {
+                            marker: {
+                                enabled: false
+                            }
+                        }
+                    },
+                    tooltip: {
+                        pointFormat: '{point.x} transactions, {point.y} GBP'
+                    }
+                }
+            },
+            series: [{
+                name: 'Expenses',
+                color: 'rgba(223, 83, 83, .5)',
+                data: data
+            }]
+        });
+    }
+);
