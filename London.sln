@@ -20,6 +20,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{5452F62B
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "prototype", "prototype", "{505F2346-B70C-47C0-999F-AE741A7ADD2A}"
+	ProjectSection(SolutionItems) = preProject
+		prototype\chart_test.html = prototype\chart_test.html
+		prototype\chart_test.js = prototype\chart_test.js
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
