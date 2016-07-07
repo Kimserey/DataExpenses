@@ -157,6 +157,7 @@ module Domain =
         >> label ".*HYPEROPTIC.*"                                                       "HYPEROPTIC"                         RentAndBills
         >> label ".*FOXTONS.*"                                                          "FOXTONS"                            RentAndBills
         >> label ".*SPARK.*"                                                            "SPARK"                              RentAndBills
+        >> label ".*(LONDON BOR NEWHAM|LONDON BOROUGH OF LONDON).*"                     "COUNCIL TAX"                        RentAndBills
 
         >> label ".*(LUL TICKET MACHINE|DLR).*"                                         "UNDERGROUND / DLR"                  Transport
         >> label ".*(LONDON & SOUTH EAS|GWR BURNHAM TO BURHAM|GREATER ANGLIA).*"        "RAILWAY"                            Transport
