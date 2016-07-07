@@ -15,7 +15,7 @@ In order to create good analysis, one needs to be intimate with the data.
 You must know the data and understand it clearly which requires a lot of time.
 Fortunately, I am intimate with my own expenses therefore I am creating this application with the goal of finding patterns and behaviours which I can correct for long term savings!
 
-# Questions yet to be answered
+# Questions yet to be answered and ideas to be implemented
 
 Is there a correlation between:
  
@@ -23,7 +23,11 @@ Is there a correlation between:
  - the amount spent and the next amount spent directly under the same category?
  - the time gap between the previous transation and the amount spent?
  - the velocity of the spending at the beginning of the month and the total spent?
- - the velocity of the spending at the end of the month and the total spent?
+ - the velocity of the spending at the end of the month and the total spent?\
+ 
+Ideas to implement:
+
+ - Check every month spending progression. By comparing it all on one graph, it can detect irregularity in the daily amount spent
 
 ## 1. Expenses breakdowns
 
