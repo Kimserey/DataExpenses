@@ -9,7 +9,7 @@ open London.Core
 open London.Core.Dataframe
 
 (**
-    Lots of Json endpoints to be consumed by Ajax calls
+    Lots of Json endpoints to be consumed by Ajax calls 
 **)
 module Api =
     
