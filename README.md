@@ -23,7 +23,7 @@ Is there a correlation between:
  - the amount spent and the next amount spent directly under the same category?
  - the time gap between the previous transation and the amount spent?
  - the velocity of the spending at the beginning of the month and the total spent?
- - the velocity of the spending at the end of the month and the total spent?\
+ - the velocity of the spending at the end of the month and the total spent?
  
 Ideas to implement:
 
