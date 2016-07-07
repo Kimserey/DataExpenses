@@ -5,7 +5,7 @@ cd C:\Projects\DataExpenses
 
 net stop london-expenses
 
-REM /E for Copy of subfolder
+REM /E for Copy of subfolders
 REM /Y for Supress prompt to confirm overwrite
 
 XCOPY London.Web\bin London.Web\Release /EY
