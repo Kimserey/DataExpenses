@@ -370,6 +370,24 @@ module Dataframe =
         Refresh: string option -> unit
     }
 
+    type State = {
+        DataDirectory: string
+        DataFrameState: DataFrameState
+    } with
+        static member Default =
+            { DataDirectory = ""
+              DataFrameState = NotReady }
+
+        static member SetDir dir x =
+            { x with DataDirectory = dir }
+
+        static member BecomeReady frame x =
+            { x with DataFrameState = Ready frame }
+    
+    and DataFrameState =
+        | Ready of ExpenseDataFrame
+        | NotReady
+
     let build dataDirectory =
         Directory.GetFiles(dataDirectory,"*.csv")
         |> ExpenseDataFrame.FromFile "debug"
@@ -377,30 +395,41 @@ module Dataframe =
     let agent =
         let mailbox =
             MailboxProcessor.Start(fun inbox ->
-                let rec loop expenses dir =
+                let rec loop state =
                     async {
                         let! msg = inbox.Receive()
                         match msg with
                         | Get replyChannel ->
-                            match expenses with
-                            | Some expenses -> 
+                            match state.DataFrameState with
+                            | Ready expenses  ->
+                                // The frame is already ready, returns it and wait for next message
                                 replyChannel.Reply expenses
-                                return! loop (Some expenses) dir
+                                return! loop state
 
-                            | None ->
-                                let expenses = build dir
+                            | NotReady ->
+                                // The frame is not ready, builds the frame and returns the result and wait for next message
+                                let expenses = build state.DataDirectory
                                 replyChannel.Reply expenses
-                                return! loop  (Some expenses) dir
+                                return! state 
+                                        |> State.BecomeReady expenses
+                                        |> loop
 
                         | Refresh (Some newDir) ->
+                            // Refresh the frame using the directory provided, returns the frame and wait for the next message
                             let expenses = build newDir
-                            return! loop (Some expenses) newDir
+                            return! state     
+                                    |> State.SetDir newDir 
+                                    |> State.BecomeReady expenses
+                                    |> loop
 
                         | Refresh None ->
-                            let expenses = build dir
-                            return! loop (Some expenses) dir
+                            // Refresh the frame using the current directory set, returns the frame and wait for the next message
+                            let expenses = build state.DataDirectory
+                            return! state 
+                                    |> State.BecomeReady expenses
+                                    |> loop
                     }
-                loop None "")
+                loop State.Default)
 
         { Get = fun () -> mailbox.PostAndReply Get
           Refresh = fun dataDirectory -> mailbox.Post (Refresh dataDirectory) }
