@@ -400,9 +400,10 @@ module Dataframe =
                         let! msg = inbox.Receive()
                         match msg with
                         | Get replyChannel ->
+
                             match state.DataFrameState with
                             | Ready expenses  ->
-                                // The frame is already ready, returns it and wait for next message
+                                // The frame is ready, returns it and wait for next message
                                 replyChannel.Reply expenses
                                 return! loop state
 
@@ -415,7 +416,7 @@ module Dataframe =
                                         |> loop
 
                         | Refresh (Some newDir) ->
-                            // Refresh the frame using the directory provided, returns the frame and wait for the next message
+                            // Refresh the frame using the directory provided and wait for the next message
                             let expenses = build newDir
                             return! state     
                                     |> State.SetDir newDir 
@@ -423,7 +424,7 @@ module Dataframe =
                                     |> loop
 
                         | Refresh None ->
-                            // Refresh the frame using the current directory set, returns the frame and wait for the next message
+                            // Refresh the frame using the current directory set and wait for the next message
                             let expenses = build state.DataDirectory
                             return! state 
                                     |> State.BecomeReady expenses
