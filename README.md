@@ -27,7 +27,7 @@ Is there a correlation between:
  
 Ideas to implement:
 
- - Check every month spending progression. By comparing it all on one graph, it can detect irregularity in the daily amount spent - Use expending sum per category and plot all months line graphs
+ - Check every month spending progression. By comparing it all on one graph, it can detect irregularity in the daily amount spent - Use expending sum per category and plot all months
 
 ## 1. Expenses breakdowns
 
