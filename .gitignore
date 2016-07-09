@@ -5,14 +5,5 @@ packages/
 .vs/
 .DS_Store
 London.userprefs
-London/bin/*
-London/obj/*
-London.Core/bin/Debug/*
-London.Core/obj/Debug/*
-London.Web/bin/*
-London.Web/obj/*
-London.Web/Content
-London.Web/Scripts
-London.Web/Release/*
-London.Core/bin
-London.Core/obj
+bin
+obj

@@ -37,12 +37,12 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <WarningLevel>3</WarningLevel>
   </PropertyGroup>
-  <!--<Target Name="IncludeContent" BeforeTargets="Compile">
+  <Target Name="IncludeContent" BeforeTargets="Compile">
     <ItemGroup>
       <Content Include="$(OutputPath)/httproot/Content/**/*.*" />
       <Content Include="$(OutputPath)/httproot/Scripts/**/*.*" />
     </ItemGroup>
-  </Target>-->
+  </Target>
   <!-- F# targets -->
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '11.0'">
