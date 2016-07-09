@@ -48,7 +48,7 @@ module EntryPoint =
 
     [<EntryPoint>]
     let Main args =
-        let mutable data = "Expenses"
+        let mutable data = "C:\\Documents\\Expenses"
         let mutable url = "http://+:9600/"
 
         HostFactory.Run(Action<HostConfigurator>(fun hostCfg ->
