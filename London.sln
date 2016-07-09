@@ -19,8 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{5452
 		scripts\Build.cmd = scripts\Build.cmd
 		scripts\BuildAndRun.cmd = scripts\BuildAndRun.cmd
 		scripts\Deploy.cmd = scripts\Deploy.cmd
-		scripts\InstallService.cmd = scripts\InstallService.cmd
-		scripts\UninstallService.cmd = scripts\UninstallService.cmd
+		scripts\Service_install.cmd = scripts\Service_install.cmd
+		scripts\Service_uninstall.cmd = scripts\Service_uninstall.cmd
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "prototype", "prototype", "{505F2346-B70C-47C0-999F-AE741A7ADD2A}"

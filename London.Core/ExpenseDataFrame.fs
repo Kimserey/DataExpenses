@@ -30,7 +30,7 @@ type ExpenseDataFrame = {
     static member FromFile config files =
         let frame =
             files
-            |> Seq.map (fun (path: string) -> Frame.ReadCsv(path, hasHeaders = false))
+            |> Seq.map (fun (path: string) -> Frame.ReadCsv(path, hasHeaders = false, culture = "en-GB"))
             |> Seq.map (fun df -> df |> Frame.indexColsWith [ "Date"; "Title"; "Amount" ])
             |> Seq.collect (fun df -> df |> Frame.rows |> Series.observations)
             |> Seq.map (fun (_, s) ->

@@ -67,6 +67,15 @@
   <Import Project="..\.paket\paket.targets" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
+    <Content Include="Expenses\201511.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Expenses\201512.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Expenses\201601.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <EmbeddedResource Include="..\paket-files\Kimserey\SimpleUI\dist\css\SimpleUI.css">
       <Link>Resources\SimpleUI.css</Link>
     </EmbeddedResource>
@@ -93,6 +102,9 @@
     <Compile Include="EntryPoint.fs" />
     <Content Include="App.config" />
     <Content Include="paket.references" />
+    <Content Include="Deployement_Instructions.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
