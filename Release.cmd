@@ -8,6 +8,6 @@ net stop london-expenses
 REM /E for Copy of subfolders
 REM /Y for Supress prompt to confirm overwrite
 
-XCOPY London.Web\bin London.Web\Release /EY
+xcopy London.Web\bin London.Web\Release /ey
 
 net start london-expenses
