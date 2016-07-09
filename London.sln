@@ -14,10 +14,11 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "London.Web", "London.Web\Lo
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "London.Core", "London.Core\London.Core.fsproj", "{4C61ACB9-941F-4FAA-8FB6-B9640538BEAD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{5452F62B-413F-4F23-944A-FC40E0BDC13C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{5452F62B-413F-4F23-944A-FC40E0BDC13C}"
 	ProjectSection(SolutionItems) = preProject
 		Build.cmd = Build.cmd
 		BuildAndRun.cmd = BuildAndRun.cmd
+		Package.cmd = Package.cmd
 		README.md = README.md
 		Release.cmd = Release.cmd
 	EndProjectSection
@@ -26,6 +27,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "prototype", "prototype", "{
 	ProjectSection(SolutionItems) = preProject
 		prototype\chart_test.html = prototype\chart_test.html
 		prototype\chart_test.js = prototype\chart_test.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{A1467084-1E98-413C-AA9F-5188574377F2}"
+	ProjectSection(SolutionItems) = preProject
+		libs\7za.dll = libs\7za.dll
+		libs\7za.exe = libs\7za.exe
+		libs\7zxa.dll = libs\7zxa.dll
 	EndProjectSection
 EndProject
 Global
