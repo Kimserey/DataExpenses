@@ -15,10 +15,6 @@ open London.Core
 module EntryPoint =
     
     let rootDirectory = "httproot"
-    
-    // bin directory is dependent on the compilation configuration.
-    // DEBUG/RELEASE are conditional compilation symbols defined
-    // in the .fsproj to detect the build configuration.
     let binDirectory = "."
 
     type OwinHost(dataDirectory: string, baseUrl: string) =

@@ -68,7 +68,7 @@ module App =
             
             Nav.Doc(
                 View.Map string route.View, 
-                "London expenses", 
+                "Ldn expenses", 
                 [ Nav.Category.Doc("fa-area-chart", "Expenses",
                     [ link "All" Expenses
                       link "Per month" ExpensesPerMonth
