@@ -1,6 +1,8 @@
 @echo off
 cls
 
+cd C:\Projects\DataExpenses\
+
 REM ---------------------------------------
 REM -     Build debug
 REM ---------------------------------------

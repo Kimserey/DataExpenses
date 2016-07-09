@@ -1,6 +1,7 @@
 namespace London.Web
 
 open System
+open System.IO
 open global.Owin
 open Microsoft.Owin.Hosting
 open Microsoft.Owin.StaticFiles
@@ -13,24 +14,33 @@ open London.Core
 
 module EntryPoint =
     
-    type OwinHost(rootDirectory: string, dataDirectory: string, baseUrl: string) =
+    let rootDirectory = "httproot"
+    
+    // bin directory is dependent on the compilation configuration.
+    // DEBUG/RELEASE are conditional compilation symbols defined
+    // in the .fsproj to detect the build configuration.
+    let binDirectory = "."
+
+    type OwinHost(dataDirectory: string, baseUrl: string) =
         let mutable server: IDisposable = 
             Unchecked.defaultof<IDisposable>
         
         let options = 
             new WebSharperOptions<Sitelet.EndPoint>(
                 Debug = true, 
-                ServerRootDirectory = rootDirectory)
+                ServerRootDirectory = rootDirectory,
+                BinDirectory = binDirectory,
+                Sitelet = Some Sitelet.sitelet)
 
         member x.Start() = 
             
             // Instantiate global dataframe
             Dataframe.agent.Refresh (Some dataDirectory)
-
+            
             server <-
                 WebApp.Start(baseUrl, fun appB ->
-                    appB.UseStaticFiles(StaticFileOptions(FileSystem = PhysicalFileSystem(rootDirectory)))
-                        .UseWebSharper(options.WithSitelet(Sitelet.sitelet))
+                    appB.UseWebSharper(options)
+                        .UseStaticFiles(StaticFileOptions(FileSystem = PhysicalFileSystem(rootDirectory)))
                         |> ignore)
 
             stdout.WriteLine("Root directory {0}", rootDirectory)
@@ -42,25 +52,23 @@ module EntryPoint =
 
     [<EntryPoint>]
     let Main args =
-        let mutable root = ".."
-        let mutable data = "..\\..\\..\\..\\Documents\\Expenses"
+        let mutable data = "C:\\Documents\\Expenses"
         let mutable url = "http://+:9600/"
 
         HostFactory.Run(Action<HostConfigurator>(fun hostCfg ->
         
             hostCfg.AddCommandLineDefinition("args", Action<string>(fun args -> 
-                let r, d, u =
+                let d, u =
                     match args.Split(',') with
-                    | [| r; d; u |] -> r, d, u
-                    | _ -> failwith "Expecting -args=rootDirectory,dataDirectory,baseUrl"
-                root <- r
+                    | [| d; u |] -> d, u
+                    | _ -> failwith "Expecting -args=dataDirectory,baseUrl"
                 data <- d
                 url <- u))
 
             hostCfg.ApplyCommandLine()
 
             hostCfg.Service<OwinHost>(Action<ServiceConfigurator<OwinHost>>(fun s ->
-                s.ConstructUsing(Func<OwinHost>(fun () -> new OwinHost(root, data, url)))
+                s.ConstructUsing(Func<OwinHost>(fun () -> new OwinHost(data, url)))
                     .WhenStarted(Action<OwinHost>(fun s -> s.Start()))
                     .WhenStopped(Action<OwinHost>(fun s -> s.Stop())) |> ignore)
                 ) |> ignore

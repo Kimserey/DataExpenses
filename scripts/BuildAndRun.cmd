@@ -1,6 +1,7 @@
 @echo off
 cls
-cd ..
+
+cd C:\Projects\DataExpenses\
 
 REM ---------------------------------------
 REM -     Build debug
@@ -13,8 +14,8 @@ REM ---------------------------------------
 REM -     Run debug
 REM ---------------------------------------
 
-pushd London.Web\bin
+pushd London.Web\bin\Debug
 
-London.Web.exe -args=..,C:/Documents/Expenses,http://+:9600
+London.Web.exe
 
-popd London.Web\bin
+popd London.Web\bin\Debug

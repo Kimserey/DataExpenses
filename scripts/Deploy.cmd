@@ -1,6 +1,5 @@
 @echo off
 cls
-cd ..
 
 REM ---------------------------------------
 REM -     Build release
