@@ -7,7 +7,6 @@
     <ProjectGuid>{c2e2942b-0812-4f3d-8834-7ad297416d39}</ProjectGuid>
     <WebSharperProject>Site</WebSharperProject>
     <WebProjectOutputDir>$(MSBuildThisFileDirectory)</WebProjectOutputDir>
-    <StartArguments>.. http://localhost:9000/</StartArguments>
     <TargetFSharpCoreVersion>4.4.0.0</TargetFSharpCoreVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>

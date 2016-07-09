@@ -16,11 +16,12 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "London.Core", "London.Core\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{5452F62B-413F-4F23-944A-FC40E0BDC13C}"
 	ProjectSection(SolutionItems) = preProject
-		Build.cmd = Build.cmd
-		BuildAndRun.cmd = BuildAndRun.cmd
-		Package.cmd = Package.cmd
+		scripts\Build.cmd = scripts\Build.cmd
+		scripts\BuildAndRun.cmd = scripts\BuildAndRun.cmd
+		scripts\Deploy.cmd = scripts\Deploy.cmd
+		scripts\InstallService.cmd = scripts\InstallService.cmd
+		scripts\UninstallService.cmd = scripts\UninstallService.cmd
 		README.md = README.md
-		Release.cmd = Release.cmd
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "prototype", "prototype", "{505F2346-B70C-47C0-999F-AE741A7ADD2A}"

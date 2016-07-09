@@ -13,6 +13,6 @@ London.Web/bin/*
 London.Web/obj/*
 London.Web/Content
 London.Web/Scripts
+London.Web/Release/*
 London.Core/bin
 London.Core/obj
-Release
