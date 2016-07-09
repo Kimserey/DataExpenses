@@ -5,4 +5,6 @@ REM ---------------------------------------
 REM -     Install service from Release
 REM ---------------------------------------
 
-C:\Projects\DataExpenses\London.Web\bin\Release\London.Web.exe install
+echo %1 
+
+C:\Projects\DataExpenses\London.Web\bin\Release\London.Web.exe install -args=%1
