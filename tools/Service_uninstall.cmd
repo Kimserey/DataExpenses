@@ -1,8 +1,9 @@
 @echo off
 cls
+cd C:\Projects\DataExpenses
 
 REM ---------------------------------------
 REM -     Uninstall service from Release
 REM ---------------------------------------
 
-C:\Projects\DataExpenses\London.Web\bin\Release\London.Web.exe uninstall
+London.Web\bin\Release\London.Web.exe uninstall

@@ -1,6 +1,5 @@
 @echo off
 cls
-
 cd C:\Projects\DataExpenses\
 
 REM ---------------------------------------
