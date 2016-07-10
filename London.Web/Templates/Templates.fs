@@ -16,6 +16,8 @@ module Templates =
     
     type Card = Templating.Template<"Templates/template-card.html">
     
+    type Tabs   = Templating.Template<"Templates/template-card-tabs.html">
+
     type Nav   = Templating.Template<"Templates/template-nav.html">
 
     type Index = Templating.Template<"Templates/index.html">

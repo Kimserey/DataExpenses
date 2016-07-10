@@ -88,6 +88,7 @@
     <None Include="Templates\template-card.html" />
     <None Include="Templates\template-card-list.html" />
     <None Include="Templates\template-card-table.html" />
+    <None Include="Templates\template-card-tabs.html" />
     <None Include="Templates\template-nav.html" />
     <None Include="Templates\index.html" />
     <Compile Include="Templates\Templates.fs" />
