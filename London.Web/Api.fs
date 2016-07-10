@@ -9,7 +9,10 @@ open London.Core
 open London.Core.Dataframe
 
 (**
-    Lots of Json endpoints to be consumed by Ajax calls 
+    Lots of Json endpoints to be consumed by Ajax calls.
+
+    This is mainly for me to prototype a proper graph and
+    work on the UI before placing it as a template and use a WebSharper RPC
 **)
 module Api =
     
@@ -30,6 +33,11 @@ module Api =
         |> Option.map (fun origin -> Http.Header.Custom "Access-Control-Allow-Origin" origin.Value)
         |> Option.toList
 
+    type Content with
+        static member JsonWithCORS ctx = 
+            Content.Json
+            >> Content.WithHeaders (addCORSHeader ctx)
+
     let allExpenses ctx expenses =
         let labels, expenses =
             expenses
@@ -38,8 +46,8 @@ module Api =
         { Title = "All expenses"
           Labels = labels |> List.map (fun d -> d.ToShortDateString())
           DataSeriesList = expenses |> List.map (fun (title, expenses) -> { Title = title; Values = expenses |> List.map snd }) }
-        |> Content.Json
-        |> Content.WithHeaders (addCORSHeader ctx)
+        |> Content.JsonWithCORS ctx
+
 
     let expensesForCategory category ctx expenses =
         let expenses =
@@ -50,8 +58,8 @@ module Api =
         { Title = string category + " - Expenses"
           Labels = expenses |> List.map (fun e -> e.Date.ToShortDateString())
           DataSeriesList = [ { Title = string category + " - Expenses"; Values = expenses } ] }
-        |> Content.Json
-        |> Content.WithHeaders (addCORSHeader ctx)
+        |> Content.JsonWithCORS ctx
+
 
     let smoothExpensesForCategory category ctx expenses =
         let expenses =
@@ -62,8 +70,7 @@ module Api =
         { Title = string category + " - Expenses"
           Labels = expenses |> List.map (fun e -> e.Date.ToShortDateString())
           DataSeriesList = [ { Title = string category + " - Expenses"; Values = expenses } ] }
-        |> Content.Json
-        |> Content.WithHeaders (addCORSHeader ctx)
+        |> Content.JsonWithCORS ctx
         
 
     let expenseLevelsCount ctx expenses =
@@ -74,22 +81,22 @@ module Api =
         { Title = "All expenses"
           Labels = [ "0-20"; "21-50"; "51-70"; "71-90"; "91-max" ]
           DataSeriesList = counts |> List.map (fun (category, counts) -> { Title = category; Values = counts |> List.map snd }) }
-        |> Content.Json
-        |> Content.WithHeaders (addCORSHeader ctx)
+        |> Content.JsonWithCORS ctx
+
 
     let daySpanExpenses ctx expenses =
         expenses
         |> ExpenseDataFrame.GetDaySpanExpenses Category.Supermarket
         |> Seq.toList
-        |> Content.Json
-        |> Content.WithHeaders (addCORSHeader ctx)
+        |> Content.JsonWithCORS ctx
+
 
     let binaryExpenses ctx expenses=
         expenses
         |> ExpenseDataFrame.GetBinaryExpenses Category.Supermarket
         |> Seq.toList
-        |> Content.Json
-        |> Content.WithHeaders (addCORSHeader ctx)
+        |> Content.JsonWithCORS ctx
+
 
     let expandingExpenses ctx expenses =
         expenses
@@ -101,17 +108,22 @@ module Api =
     let categoryRatioPerMonth ctx expenses =
         expenses
         |> ExpenseDataFrame.GetCategoryRatioPerMonth
-        |> Content.Json
-        |> Content.WithHeaders (addCORSHeader ctx)
+        |> Content.JsonWithCORS ctx
+
         
     let labelsPerMonth ctx expenses =
         expenses
         |> ExpenseDataFrame.GetLabelsPerMonth
-        |> Content.Json
-        |> Content.WithHeaders (addCORSHeader ctx)
+        |> Content.JsonWithCORS ctx
+
         
     let transactionsAndSumPerMonth ctx expenses =
         expenses
         |> ExpenseDataFrame.GetNumberTransactionsAndSumPerMonth
-        |> Content.Json
-        |> Content.WithHeaders (addCORSHeader ctx)
+        |> Content.JsonWithCORS ctx
+
+
+    let monthlyExpandingSumForEachDayPerCategory ctx expenses =
+        expenses
+        |> ExpenseDataFrame.GetMonthlyExpandingSumForEachDayPerCategory
+        |> Content.JsonWithCORS ctx
