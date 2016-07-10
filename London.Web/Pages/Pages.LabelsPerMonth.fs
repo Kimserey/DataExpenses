@@ -52,7 +52,7 @@ module LabelsPerMonth =
                                                 .Of(el)
                                                 .BarChart(
                                                 {
-                                                    Chart = { Type = "bar"; ZoomType = ""; MarginBottom = 100. }
+                                                    Chart = { Type = "bar"; ZoomType = "" }
                                                     Title = { Text = "" }
                                                     XAxis =
                                                         { Categories = 
@@ -66,7 +66,11 @@ module LabelsPerMonth =
                                                                 labels 
                                                                 |> List.map (fun (_, Sum sum, _) -> sum) 
                                                                 |> List.toArray } |]
-                                                    Tooltip = { PointFormat = "{series.name}: {point.y} GBP" }
+                                                    Tooltip =
+                                                        { 
+                                                            HeaderFormat = "<span style=\"font-size: 10px\">{point.key}</span><br/>"
+                                                            PointFormat = "{series.name}: {point.y} GBP" 
+                                                        }
                                                 }) |> ignore) ] [] :> Doc ])
                        |> Doc.Concat
                         

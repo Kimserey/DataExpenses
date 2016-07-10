@@ -65,13 +65,17 @@ module ExpensesPerMonth =
                                             .Of(el)
                                             .PieChart(
                                             {
-                                                Chart = { Type = "pie"; ZoomType = ""; MarginBottom = 0. }
+                                                Chart = { Type = "pie"; ZoomType = "" }
                                                 Title = { Text = "" }
                                                 XAxis = { Categories = expenses |> List.map fst |> Array.ofList }
                                                 YAxis = { Title = { Text = "Amount" } }
                                                 Series = [| { Name = "Total"; Data = expenses |> List.map (fun (k, v) -> { Name = k; Y = v }) |> List.toArray } |]
                                                 PlotOptions = { Pie = { DataLabels = { Enabled = true } } }
-                                                Tooltip = { PointFormat = "{point.y:.2f}%" }
+                                                Tooltip = 
+                                                    { 
+                                                        HeaderFormat = "<span style=\"font-size: 10px\">{point.key}</span><br/>"
+                                                        PointFormat = "{point.y:.2f}%" 
+                                                    }
                                             }) |> ignore) ] [] :> Doc)
                                |> Option.toList
                                |> Doc.Concat

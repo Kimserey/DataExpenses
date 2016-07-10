@@ -28,8 +28,6 @@ module Common =
 
     // Common options
     and Chart = {
-        [<Name "marginBottom">]
-        MarginBottom: float
         [<Name "type">]
         Type: string
         [<Name "zoomType">]
@@ -52,6 +50,8 @@ module Common =
         Enabled: bool
     }
     and Tooltip = {
+        [<Name "headerFormat">]
+        HeaderFormat: string
         [<Name "pointFormat">]
         PointFormat: string    
     }
@@ -86,12 +86,26 @@ module Common =
         Series: LineSeries []
         [<Name "tooltip">]
         Tooltip: Tooltip
+        [<Name "plotOptions">]
+        PlotOptions: SplinePlotOptions
     }
     and LineSeries = {
         [<Name "name">]
         Name: string
         [<Name "data">]
         Data: float []
+    }
+    and SplinePlotOptions = {
+        [<Name "spline">]
+        Spline: SplinePlotOptionsSpline
+    }
+    and SplinePlotOptionsSpline = {
+        [<Name "marker">]
+        Marker: LinePlotOptionsMarker
+    }
+    and LinePlotOptionsMarker = {
+        [<Name "enabled">]
+        Enabled: bool
     }
     
     // Pie specific options

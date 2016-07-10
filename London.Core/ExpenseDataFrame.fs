@@ -391,7 +391,7 @@ type ExpenseDataFrame = {
         |> Series.observations
         |> Seq.collect (fun ((month, year), frame) ->
             frame 
-            |> Frame.getCols
+            |> Frame.getNumericCols
             |> Series.observations
             |> Seq.map (fun (category, series) ->
                 Title category,

@@ -12,12 +12,19 @@ open Deedle
 module ExpensesPerCategory =
     module Rpcs =
         [<Rpc>]
-        let get(): Async<_> =
+        let getTotalSums(): Async<_> =
             Dataframe.agent.Get()
             |> ExpenseDataFrame.GetFrame
             |> ExpenseDataFrame.GetExpensesPerCategory
             |> async.Return
-                
+        
+        [<Rpc>]
+        let getExpandingSums(): Async<_> =
+            Dataframe.agent.Get()
+            |> ExpenseDataFrame.GetFrame
+            |> ExpenseDataFrame.GetCategoryExpandingSumForEachDayOfTheMonth
+            |> async.Return
+            
     [<JavaScript>]
     module Client =
         open WebSharper.UI.Next
@@ -29,7 +36,9 @@ module ExpensesPerCategory =
         
         let page =
             async {
-                let! expenses = Rpcs.get()
+                let! expenses = Rpcs.getTotalSums()
+                let! expandingSums = Rpcs.getExpandingSums()
+
                 return expenses
                         |> List.sortBy (fun (Title title, _ , _) -> title)
                         |> List.mapi (fun cardIndex (Title category, Sum sum, subCategory) ->
@@ -46,13 +55,14 @@ module ExpensesPerCategory =
                                                 [ CardTable.Doc (List.mapi Expense.ToTableRow values) ]))) 
                                   
                                   divAttr 
-                                   [ on.afterRender (fun el -> 
+                                   [ attr.``class`` "chart-card"
+                                     on.afterRender (fun el -> 
                                        JQuery
                                            .Of(el)
                                            .LineChart(
                                            {
-                                               Chart = { Type = "spline"; ZoomType = ""; MarginBottom = 0. }
-                                               Title = { Text = "" }
+                                               Chart = { Type = "spline"; ZoomType = "" }
+                                               Title = { Text = "Sum of all " + category + " expenses per month" }
                                                XAxis = 
                                                 { Categories = 
                                                     subCategory 
@@ -60,8 +70,45 @@ module ExpensesPerCategory =
                                                     |> Array.ofList }
                                                YAxis = { Title = { Text = "Amount" } }
                                                Series = [| { Name = "Total"; Data = subCategory |> List.map (fun (_, Sum sum, _) -> sum) |> Array.ofList } |]
-                                               Tooltip = { PointFormat = "{point.y:.2f} GBP" }
+                                               Tooltip =
+                                                {
+                                                    HeaderFormat = "<span style=\"font-size: 10px\">{point.key}</span><br/>"
+                                                    PointFormat = "{point.y:.2f} GBP"
+                                                }
+                                               PlotOptions = { Spline = { Marker = { Enabled = true } } }
                                            }) |> ignore) ] [] :> Doc 
+                                  
+                                  divAttr 
+                                   [ attr.``class`` "chart-card"
+                                     on.afterRender (fun el -> 
+                                       let data =
+                                        expandingSums
+                                        |> List.filter (fun (Title c, _, _, _) -> c = category)
+                                       
+                                       JQuery
+                                           .Of(el)
+                                           .LineChart(
+                                           {
+                                               Chart = { Type = "spline"; ZoomType = "xy" }
+                                               Title = { Text = "Daily expanding sum of " + category }
+                                               XAxis = Unchecked.defaultof<XAxis>
+                                               YAxis = Unchecked.defaultof<YAxis>
+                                               PlotOptions = { Spline = { Marker = { Enabled = false } } }
+                                               Series = 
+                                                data
+                                                |> List.map (fun (_, Month (m, _), Year y, values) -> 
+                                                    let series: LineSeries =
+                                                        { Name = sprintf "%s %i" m y
+                                                          Data = values |> List.map snd |> Array.ofList }
+                                                    series)
+                                                |> Array.ofList
+                                               Tooltip = 
+                                                { 
+                                                    HeaderFormat = "<span style=\"font-size: 10px\">Day {point.key}</span><br/>"
+                                                    PointFormat = "<span style=\"color:{point.color}\">► </span> {series.name}: <b>{point.y} GBP</b><br/>" 
+                                                }
+                                           }) |> ignore) ] [] :> Doc 
+
                             ])
                         |> Doc.Concat
             }
