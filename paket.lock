@@ -33,5 +33,5 @@ NUGET
 GITHUB
   remote: Kimserey/SimpleUI
   specs:
-    dist/css/SimpleUI.css (86fd6eaedf58b7478dcdcc211a6c0d855d4c6ac9)
-    dist/js/SimpleUI.js (86fd6eaedf58b7478dcdcc211a6c0d855d4c6ac9)
+    dist/css/SimpleUI.css (84a7333cf17c5e18e693514e28dfaffe32553b85)
+    dist/js/SimpleUI.js (84a7333cf17c5e18e693514e28dfaffe32553b85)
