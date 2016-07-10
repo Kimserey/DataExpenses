@@ -367,8 +367,12 @@ type ExpenseDataFrame = {
     
             // Here I know that the dates will never be None
             // otherwise something is seriously wrong in the data
-            let min = Stats.min dates |> Option.get
-            let max = Stats.max dates |> Option.get
+            let min = 
+                let d = Stats.min dates |> Option.get
+                new DateTime(d.Year, d.Month, 1)
+            let max = 
+                let d = Stats.max dates |> Option.get
+                (new DateTime(d.Year, d.Month + 1, 1)).AddDays(-1.)
     
             [0..(max - min).Days]
             |> List.map (float >> min.AddDays)

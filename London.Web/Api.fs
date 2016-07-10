@@ -133,7 +133,7 @@ module Api =
         Year: int
         Values: ExpandedValue list
     } and ExpandedValue = {
-        Date: DateTime
+        DayOfMonth: int
         Value: float
     }
 
@@ -152,6 +152,6 @@ module Api =
                       Values = 
                         values 
                         |> List.map (fun (date, value) ->
-                            { Date = date
+                            { DayOfMonth = date.Day
                               Value = value }) }) })
         |> Content.JsonWithCORS ctx
