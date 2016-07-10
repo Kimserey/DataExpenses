@@ -140,12 +140,12 @@ module Api =
     let categoryExpandingSumForEachDayOfTheMonth ctx expenses =
         expenses
         |> ExpenseDataFrame.GetCategoryExpandingSumForEachDayOfTheMonth
-        |> List.groupBy (fun (_,_, Title category,_) -> category)
+        |> List.groupBy (fun (Title category, _,_,_) -> category)
         |> List.map (fun (key, values) ->
             { Category = key
               ExpandedSums =
                 values
-                |> List.map (fun (Month (monthReadable, month), Year year, _, values) -> 
+                |> List.map (fun (_, Month (monthReadable, month), Year year, values) -> 
                     { Month = month
                       MonthReadable = monthReadable
                       Year = year

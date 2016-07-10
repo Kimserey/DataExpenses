@@ -390,9 +390,9 @@ type ExpenseDataFrame = {
             |> Frame.getCols
             |> Series.observations
             |> Seq.map (fun (category, series) ->
+                Title category,
                 Month (monthToString month, month),
                 Year year,
-                Title category,
                 series
                 |> Series.observations
                 |> Seq.toList)
