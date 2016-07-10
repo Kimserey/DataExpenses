@@ -19,6 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{5452F62B
 		tools\Build.cmd = tools\Build.cmd
 		tools\BuildAndRun.cmd = tools\BuildAndRun.cmd
 		tools\Deploy.cmd = tools\Deploy.cmd
+		tools\Release.cmd = tools\Release.cmd
 		tools\Service_install.cmd = tools\Service_install.cmd
 		tools\Service_uninstall.cmd = tools\Service_uninstall.cmd
 	EndProjectSection
