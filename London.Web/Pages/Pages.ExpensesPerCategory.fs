@@ -90,7 +90,7 @@ module ExpensesPerCategory =
                                            .LineChart(
                                            {
                                                Chart = { Type = "spline"; ZoomType = "xy" }
-                                               Title = { Text = "Daily expanding sum of " + category }
+                                               Title = { Text = "Daily expanding sum for " + category }
                                                XAxis = Unchecked.defaultof<XAxis>
                                                YAxis = Unchecked.defaultof<YAxis>
                                                PlotOptions = { Spline = { Marker = { Enabled = false } } }
