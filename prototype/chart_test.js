@@ -2,6 +2,55 @@
  For testing purposes and evaluate if the chart brings value
 */
 
+$.getJSON('http://172.16.81.128:9600/api/monthlyexpandingsum', 
+    function (data) {
+        function makeChart(chartData) {
+            return {
+                chart: {            
+                    type: 'spline'
+                },
+                title: {
+                    text: chartData.Category
+                },
+                tooltip: {
+                    headerFormat: '<span style="color:{point.color}">\u25CF</span>{series.name}:<br />',
+                    pointFormat: '<span>{point.date}: </span><b>{point.y} GBP</b><br/>'
+                },
+                plotOptions: {
+                    spline: {
+                        marker: {
+                            enabled: false
+                        }
+                    }
+                },
+                series: 
+                    chartData
+                        .ExpandedSums
+                        .map(function(sum) {
+                            return {
+                                name: sum.MonthReadable + " " + sum.Year,
+                                data: 
+                                    sum.Values
+                                       .map(function (value) {
+                                           return {
+                                               date: new Date(value.Date).toDateString(),
+                                               y: value.Value
+                                           };
+                                       })
+                            };
+                        })
+            };
+        }
+
+        data.forEach(function(data) {
+            $('<div style="width:50%; float:left;">')
+                .highcharts(makeChart(data))
+                .appendTo($('#expandedsum'));
+        });
+    }
+);
+
+
 $.getJSON('http://172.16.81.128:9600/api/expenses',
     function(data) {
         $('#expenses').highcharts({
@@ -203,15 +252,15 @@ $.getJSON('http://172.16.81.128:9600/api/binaryexpenses',
         });
     }
 );
-$.getJSON('http://172.16.81.128:9600/api/expending', 
+$.getJSON('http://172.16.81.128:9600/api/expanding', 
     function (data) {
-        $('#expendingmean').highcharts({
+        $('#expandingmean').highcharts({
             chart: {
                 type: 'spline',
                 zoomType: 'xy'
             },
             title: {
-                text: 'Supermarket - Expending mean'
+                text: 'Supermarket - Expanding mean'
             },
             xAxis: {
                 categories: data.map(function(d) { return new Date(d[0]).toDateString(); })
