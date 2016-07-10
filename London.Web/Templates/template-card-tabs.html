@@ -4,7 +4,11 @@
         <li data-target="${TargetId}" onclick="simpleUI.toggleTab(this)" data-template="InactiveTabLink">${Title}</li>
     </ul>
     <div class="tab-content" data-hole="Content">
-        <div id="${Id}" class="tab active" data-template="ActiveContent" data-hole="Body"></div>
-        <div id="${Id}" class="tab" data-template="InactieContent" data-hole="Body"></div>
+        <div id="${Id}" class="tab active" data-template="ActiveContent">
+            <div data-replace="Body"></div>
+        </div>
+        <div id="${Id}" class="tab" data-template="InactiveContent">
+            <div data-replace="Body"></div>
+        </div>
     </div>
 </div>
