@@ -1,5 +1,6 @@
 ﻿namespace London.Web
 
+open System
 open WebSharper
 open WebSharper.Sitelets
 open WebSharper.UI.Next
@@ -123,7 +124,21 @@ module Api =
         |> Content.JsonWithCORS ctx
 
 
-    let monthlyExpandingSumForEachDayPerCategory ctx expenses =
+    type ExpandedSumCategory = {
+        Category: string
+        ExpandedSums: ExpandedSum list
+    }
+    and ExpandedSum = {
+        Month: int
+        Year: int
+        Values: ExpandedValue list
+    }
+    and ExpandedValue = {
+        DateTime: DateTime
+        Value: float
+    }
+
+    let categoryExpandingSumForEachDayOfTheMonth ctx expenses =
         expenses
-        |> ExpenseDataFrame.GetMonthlyExpandingSumForEachDayPerCategory
+        |> ExpenseDataFrame.GetCategoryExpandingSumForEachDayOfTheMonth
         |> Content.JsonWithCORS ctx

@@ -39,5 +39,5 @@ df
     Call from Shared library
 *)
 df
-|> ExpenseDataFrame.GetMonthlyExpandingSumForEachDayPerCategory
+|> ExpenseDataFrame.GetCategoryExpandingSumForEachDayOfTheMonth
 |> Seq.iter(fun x -> printfn "%A" x)

@@ -1,6 +1,7 @@
 data
 London/data
 packages/
+*.TMP
 .paket/paket.exe
 .vs/
 .DS_Store

@@ -358,7 +358,7 @@ type ExpenseDataFrame = {
         |> Seq.map snd
         |> Seq.toList
 
-    static member GetMonthlyExpandingSumForEachDayPerCategory exp =
+    static member GetCategoryExpandingSumForEachDayOfTheMonth exp =
         let allDates =
             let dates =
                 exp
@@ -385,13 +385,13 @@ type ExpenseDataFrame = {
         |> Frame.nest
         |> Series.mapValues (Frame.getNumericCols >> (Series.mapValues Stats.expandingSum) >> Frame.ofColumns)
         |> Series.observations
-        |> Seq.map (fun ((month, year), frame) ->
-            Month (monthToString month, month),
-            Year year,
+        |> Seq.collect (fun ((month, year), frame) ->
             frame 
             |> Frame.getCols
             |> Series.observations
             |> Seq.map (fun (category, series) ->
+                Month (monthToString month, month),
+                Year year,
                 Title category,
                 series
                 |> Series.observations
