@@ -277,7 +277,7 @@ type ExpenseDataFrame = {
         |> Series.observations
         |> Seq.map (fun (k, (v, v')) -> k, v, v')
 
-    static member GetExpendingMean (category: Category) exp =
+    static member GetExpandingMean (category: Category) exp =
         exp
         |> Frame.filterRowValues(fun c -> c.GetAs<string>("Category") = string category)
         |> Frame.groupRowsBy "Date"

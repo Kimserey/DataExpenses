@@ -21,7 +21,7 @@ module Sitelet =
         | [<EndPoint "/levelcounts">]         LevelCounts
         | [<EndPoint "/dayspan">]             DaySpan
         | [<EndPoint "/binaryexpenses">]      Binary
-        | [<EndPoint "/expending">]           Expending
+        | [<EndPoint "/expanding">]           Expanding
         | [<EndPoint "/ratio">]               Ratio
         | [<EndPoint "/labels">]              Labels
         | [<EndPoint "/transactions">]        Transactions
@@ -54,7 +54,7 @@ module Sitelet =
             | Api LevelCounts       -> expenses |> Api.expenseLevelsCount ctx
             | Api DaySpan           -> expenses |> Api.daySpanExpenses ctx
             | Api Binary            -> expenses |> Api.binaryExpenses ctx
-            | Api Expending         -> expenses |> Api.expendingExpenses ctx
+            | Api Expanding         -> expenses |> Api.expandingExpenses ctx
             | Api Ratio             -> expenses |> Api.categoryRatioPerMonth ctx
             | Api Labels            -> expenses |> Api.labelsPerMonth ctx
             | Api Transactions      -> expenses |> Api.transactionsAndSumPerMonth ctx)

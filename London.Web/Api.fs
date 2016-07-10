@@ -91,9 +91,9 @@ module Api =
         |> Content.Json
         |> Content.WithHeaders (addCORSHeader ctx)
 
-    let expendingExpenses ctx expenses =
+    let expandingExpenses ctx expenses =
         expenses
-        |> ExpenseDataFrame.GetExpendingMean Category.Supermarket
+        |> ExpenseDataFrame.GetExpandingMean Category.Supermarket
         |> Seq.toList
         |> Content.Json
         |> Content.WithHeaders (addCORSHeader ctx)
