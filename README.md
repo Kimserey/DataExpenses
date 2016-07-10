@@ -27,7 +27,7 @@ Is there a correlation between:
  
 Ideas to implement:
 
- - Check every month spending progression. By comparing it all on one graph, it can detect irregularity in the daily amount spent - Use expending sum per category and plot all months
+ - Check every month spending progression. By comparing it all on one graph, it can detect irregularity in the daily amount spent - Use expanding sum per category and plot all months
 
 ## 1. Expenses breakdowns
 
@@ -95,9 +95,9 @@ View your expenses stacked over time.
 
 ![bar](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/bar.png)
 
-### 2.2 Monitor the evolution of your expense on a certain category with expending average
+### 2.2 Monitor the evolution of your expense on a certain category with expanding average
 
-Expending average calculates the average from inception till x.
+Expanding average calculates the average from inception till x.
 
 ![spline](https://raw.githubusercontent.com/Kimserey/DataExpenses/master/img/spline.png)
 
