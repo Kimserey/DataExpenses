@@ -2,7 +2,9 @@
 cls
 cd C:\Projects\DataExpenses
 
-net stop london-expenses
+if EXIST London.Web\bin\Release\London.Web.exe (
+	London.Web\bin\Release\London.Web.exe stop
+)
 
 REM ---------------------------------------
 REM -     Build release
@@ -32,6 +34,5 @@ REM ---------------------------------------
 REM -     End
 REM ---------------------------------------
 
+London.Web.exe start
 popd London.Web\bin\Release\
-
-net start london-expenses
