@@ -61,7 +61,7 @@
     <None Include="Category_Expense_Ratio_PerMonth.fsx" />
     <None Include="Labels_PerMonth.fsx" />
     <None Include="Number_Transactions_Against_Amount_PerMonth.fsx" />
-    <None Include="Monthly_Expenses_Per_Category_Expanding_Sum.fsx" />
+    <None Include="Monthly_ExpandingSum_ForEachDay_PerCategory.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
