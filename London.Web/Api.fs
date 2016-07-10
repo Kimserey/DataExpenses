@@ -123,22 +123,35 @@ module Api =
         |> ExpenseDataFrame.GetNumberTransactionsAndSumPerMonth
         |> Content.JsonWithCORS ctx
 
-
+    /// Serializable type used for Expanding sum for each day of the month per category
     type ExpandedSumCategory = {
         Category: string
         ExpandedSums: ExpandedSum list
-    }
-    and ExpandedSum = {
+    } and ExpandedSum = {
         Month: int
+        MonthReadable: string
         Year: int
         Values: ExpandedValue list
-    }
-    and ExpandedValue = {
-        DateTime: DateTime
+    } and ExpandedValue = {
+        Date: DateTime
         Value: float
     }
 
     let categoryExpandingSumForEachDayOfTheMonth ctx expenses =
         expenses
         |> ExpenseDataFrame.GetCategoryExpandingSumForEachDayOfTheMonth
+        |> List.groupBy (fun (_,_, Title category,_) -> category)
+        |> List.map (fun (key, values) ->
+            { Category = key
+              ExpandedSums =
+                values
+                |> List.map (fun (Month (monthReadable, month), Year year, _, values) -> 
+                    { Month = month
+                      MonthReadable = monthReadable
+                      Year = year
+                      Values = 
+                        values 
+                        |> List.map (fun (date, value) ->
+                            { Date = date
+                              Value = value }) }) })
         |> Content.JsonWithCORS ctx
