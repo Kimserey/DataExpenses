@@ -145,6 +145,9 @@ module Domain =
         >> label ".*JUST EAT.*"                                                         "JUST EAT"                           Restaurant
         >> label ".*LOTUS LEAF.*"                                                       "LOTUS LEAF"                         Restaurant
         >> label ".*FRANCO MANCA .*"                                                    "FRANCO MANCA PIZZA"                 Restaurant
+        >> label ".*PHO .*"                                                             "PHO VIETNAMESE"                     Restaurant
+        >> label ".*RHYTHM KICHEN.*"                                                    "RHYTHM KICHEN"                      Restaurant
+        >> label ".*ED'S EASY.*"                                                        "ED'S EASY DINER"                    Restaurant
     
         >> label ".*PET SUPPLIES.*"                                                     "PET SUPPLIES GIFT"                  Other
         >> label ".*AUDIBLE.*"                                                          "AUDIBLE"                            Other
