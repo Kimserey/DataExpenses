@@ -26,8 +26,10 @@ Is there a correlation between:
  - the velocity of the spending at the end of the month and the total spent?
  
 Ideas to implement:
-
- - Check every month spending progression. By comparing it all on one graph, it can detect irregularity in the daily amount spent - Use expanding sum per category and plot all months
+ - .
+ 
+Ideas implemented
+ - Check every month spending progression. By comparing it all on one graph, it can detect irregularity in the daily amount spent - Use expanding sum per category and plot all months. __10-07-2016__
 
 ## 1. Expenses breakdowns
 
