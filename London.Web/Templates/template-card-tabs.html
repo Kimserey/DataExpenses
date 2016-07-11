@@ -3,7 +3,8 @@
         <li data-target="${TargetId}" onclick="simpleUI.toggleTab(this)" class="active" data-template="ActiveTabLink">${Title}</li>
         <li data-target="${TargetId}" onclick="simpleUI.toggleTab(this)" data-template="InactiveTabLink">${Title}</li>
     </ul>
-    <div class="tab-content" data-hole="Content">
+    <!-- Fix height of content to height of the charts -->
+    <div class="tab-content" data-hole="Content" style="height:441px">
         <div id="${Id}" class="tab active" data-template="ActiveContent">
             <div data-replace="Body"></div>
         </div>
