@@ -23,5 +23,6 @@ df.Columns.[ [ "Date"; "Amount"; "Category" ] ]
     Call from Shared library
 *)
 df
+|> ExpenseDataFrame.FromFrame
 |> ExpenseDataFrame.GetExpendingMean Category.Supermarket
 |> Seq.iter(fun x -> printfn "%A" x)

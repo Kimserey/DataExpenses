@@ -26,5 +26,6 @@ df
     Call from Shared library
 *)
 df
+|> ExpenseDataFrame.FromFrame
 |> ExpenseDataFrame.GetNumberTransactionsAndSumPerMonth
 |> Seq.iter(fun x -> printfn "%A" x)

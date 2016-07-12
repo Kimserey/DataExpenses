@@ -43,5 +43,6 @@ df
     Call from Shared library
 *)
 df
+|> ExpenseDataFrame.FromFrame
 |> ExpenseDataFrame.GetDailyExpandingSumPerMonthPerCategory
 |> Seq.iter(fun x -> printfn "%A" x)

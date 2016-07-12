@@ -25,5 +25,6 @@ df
     Call from Shared library
 *)
 df
+|> ExpensesDataFrame.FromFrame
 |> ExpenseDataFrame.GetDailyExpandingSumPerMonth
 |> Seq.iter(fun x -> printfn "%A" x)

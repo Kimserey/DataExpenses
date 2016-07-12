@@ -45,5 +45,6 @@ df
     Call from Shared library
 *)
 df
+|> ExpenseDataFrame.FromFrame
 |> ExpenseDataFrame.GetLabelsPerMonth
 |> Seq.iter(fun x -> printfn "%A" x)

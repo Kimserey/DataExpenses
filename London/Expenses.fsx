@@ -19,6 +19,7 @@ open London.Core
 **)
 
 df
+|> ExpenseDataFrame.FromFrame
 |> ExpenseDataFrame.GetExpensesPerMonth
 |> List.iter (fun (Month (month, _), Year y, Sum sum, expenses) ->
     printfn "%s %f" (month + " " + string y) sum
@@ -38,6 +39,7 @@ df
       November : -198.72
 **)
 df
+|> ExpenseDataFrame.FromFrame
 |> ExpenseDataFrame.GetExpensesPerMonth
 |> List.iter (fun (Month (month, _), Year y, Sum sum, _) -> printfn "%30s :  %.2f" (month + " " + string y) sum)
 
@@ -56,6 +58,7 @@ df
 **)
 
 df
+|> ExpenseDataFrame.FromFrame
 |> ExpenseDataFrame.GetExpensesPerCategory
 |> List.iter (fun (Title title, Sum sum, expenses) ->
     printfn "%s %.2f" title sum
@@ -100,10 +103,12 @@ showExpensesPerMonth
 **)
 
 df
+|> ExpenseDataFrame.FromFrame
 |> ExpenseDataFrame.GetAllExpenses "Date"
 |> List.iter (fun e -> printfn "%s %80s %10.2f %20s" (e.Date.ToShortDateString()) e.Title e.Amount e.Category)
 
 df
+|> ExpenseDataFrame.FromFrame
 |> ExpenseDataFrame.GetAllExpenses "Amount"
 |> List.iter (fun e -> printfn "%s %80s %10.2f %20s" (e.Date.ToShortDateString()) e.Title e.Amount e.Category)
 

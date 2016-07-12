@@ -44,5 +44,6 @@ df.Columns.[ [ "Date"; "Amount"; "Category" ] ]
 |> Seq.iter(fun x -> printfn "%A" x)
 
 df
+|> ExpenseDataFrame.FromFrame
 |> ExpenseDataFrame.GetDaySpanExpenses Category.Supermarket
 |> Seq.iter(fun x -> printfn "%A" x)

@@ -51,5 +51,6 @@ df.Columns.[ [ "Date"; "Amount"; "Category" ] ]
     Call from library
 *)
 df
+|> ExpenseDataFrame.FromFrame
 |> ExpenseDataFrame.GetDaySpanExpenses Category.Supermarket
 |> Seq.iter(fun x -> printfn "%A" x)

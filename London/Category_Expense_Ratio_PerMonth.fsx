@@ -33,5 +33,6 @@ df
     Call from Shared library
 *)
 df
+|> ExpenseDataFrame.FromFrame
 |> ExpenseDataFrame.GetCategoryRatioPerMonth
 |> Seq.iter(fun x -> printfn "%A" x)

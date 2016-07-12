@@ -22,6 +22,9 @@ type ExpenseDataFrame = {
 } with
     static member GetFrame x = x.Frame
 
+    static member FromFrame frame =
+        { Frame = frame }
+
     (** 
         - Load all data from .csv files into Expenses (assuming no duplicate in .csv)
         - Load all data to a dataframe
