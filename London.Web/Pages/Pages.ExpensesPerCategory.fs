@@ -14,14 +14,12 @@ module ExpensesPerCategory =
         [<Rpc>]
         let getTotalSums(): Async<_> =
             Dataframe.agent.Get()
-            |> ExpenseDataFrame.GetFrame
             |> ExpenseDataFrame.GetExpensesPerCategory
             |> async.Return
         
         [<Rpc>]
         let getExpandingSums(): Async<_> =
             Dataframe.agent.Get()
-            |> ExpenseDataFrame.GetFrame
             |> ExpenseDataFrame.GetDailyExpandingSumPerMonthPerCategory
             |> async.Return
             

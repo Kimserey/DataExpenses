@@ -14,16 +14,20 @@ module ExpensesPerMonth =
         [<Rpc>]
         let get(): Async<_> =
             Dataframe.agent.Get()
-            |> ExpenseDataFrame.GetFrame
             |> ExpenseDataFrame.GetExpensesPerMonth
             |> async.Return
 
         [<Rpc>]
         let getRatio(): Async<_> =
             Dataframe.agent.Get()
-            |> ExpenseDataFrame.GetFrame
             |> ExpenseDataFrame.GetCategoryRatioPerMonth
             |> List.map (fun (d, x) -> DateTime.ParseExact(d, "MMM yyyy", Globalization.CultureInfo.InvariantCulture), x)
+            |> async.Return
+
+        [<Rpc>]
+        let getDailyExpandingSum(): Async<_> =
+            Dataframe.agent.Get()
+            |> ExpenseDataFrame.GetDailyExpandingSumPerMonth
             |> async.Return
 
     [<JavaScript>]

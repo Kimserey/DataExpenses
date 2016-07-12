@@ -14,7 +14,6 @@ module LabelsPerMonth =
         [<Rpc>]
         let get(): Async<_> =
             Dataframe.agent.Get()
-            |> ExpenseDataFrame.GetFrame
             |> ExpenseDataFrame.GetLabelsPerMonth
             |> async.Return
                 

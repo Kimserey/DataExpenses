@@ -33,7 +33,6 @@ module Sitelet =
             
             let expenses =
                 Dataframe.agent.Get()
-                |> ExpenseDataFrame.GetFrame
 
             match endpoint with
             | Home ->
