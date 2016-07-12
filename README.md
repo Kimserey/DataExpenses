@@ -26,7 +26,8 @@ Is there a correlation between:
  - the velocity of the spending at the end of the month and the total spent?
  
 Ideas to implement:
- - .
+ - Add a plot to visualise the expanding sum of all expenses of the month
+ - Use __Least square linear regression__ to provide an estimate of the rest of the month
  
 Ideas implemented
  - Check every month spending progression. By comparing it all on one graph, it can detect irregularity in the daily amount spent - Use expanding sum per category and plot all months. __10-07-2016__
