@@ -22,7 +22,7 @@ module ExpensesPerCategory =
         let getExpandingSums(): Async<_> =
             Dataframe.agent.Get()
             |> ExpenseDataFrame.GetFrame
-            |> ExpenseDataFrame.GetCategoryExpandingSumForEachDayOfTheMonth
+            |> ExpenseDataFrame.GetDailyExpandingSumPerMonthPerCategory
             |> async.Return
             
     [<JavaScript>]

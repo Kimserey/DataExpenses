@@ -138,9 +138,9 @@ module Api =
         Value: float
     }
 
-    let categoryExpandingSumForEachDayOfTheMonth ctx expenses =
+    let dailyExpandingSumPerMonthPerCategory ctx expenses =
         expenses
-        |> ExpenseDataFrame.GetCategoryExpandingSumForEachDayOfTheMonth
+        |> ExpenseDataFrame.GetDailyExpandingSumPerMonthPerCategory
         |> List.groupBy (fun (Title category, _,_,_) -> category)
         |> List.map (fun (key, values) ->
             { Category = key

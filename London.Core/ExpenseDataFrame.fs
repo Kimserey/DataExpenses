@@ -358,7 +358,7 @@ type ExpenseDataFrame = {
         |> Seq.map snd
         |> Seq.toList
 
-    static member GetCategoryExpandingSumForEachDayOfTheMonth exp =
+    static member GetDailyExpandingSumPerMonthPerCategory exp =
         let allDates =
             let dates =
                 exp
@@ -401,6 +401,29 @@ type ExpenseDataFrame = {
                 |> Series.observations
                 |> Seq.toList)
             |> Seq.toList)
+        |> Seq.toList
+
+    static member GetDailyExpandingSumPerMonth exp =
+        exp
+        |> Frame.pivotTable
+            (fun _ c ->  c.GetAs<DateTime>("Date").Day)
+            (fun _ c -> 
+                let d = c.GetAs<DateTime>("Date")
+                d.Month, d.Year)
+            (fun frame -> frame |> Stats.sum |> Series.get "Amount")
+        |> Frame.realignRows [1..31]
+        |> Frame.fillMissingWith 0.
+        |> Frame.getNumericCols
+        |> Series.mapValues Stats.expandingSum
+        |> Series.observations
+        |> Seq.collect (fun ((month, year), series) ->
+            series 
+            |> Series.observations
+            |> Seq.map (fun (day, value) ->
+                Month (monthToString month, month),
+                Year year,
+                day,
+                value))
         |> Seq.toList
 
 module Dataframe =

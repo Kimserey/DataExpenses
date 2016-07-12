@@ -51,6 +51,7 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
+    <None Include="Daily_ExpandingSum_PerMonth.fsx" />
     <None Include="_references.fsx" />
     <None Include="Expenses.fsx" />
     <None Include="Chart.fsx" />
@@ -61,7 +62,7 @@
     <None Include="Category_Expense_Ratio_PerMonth.fsx" />
     <None Include="Labels_PerMonth.fsx" />
     <None Include="Number_Transactions_Against_Amount_PerMonth.fsx" />
-    <None Include="Category_ExpandingSum_ForEachDay_OfTheMonth.fsx" />
+    <None Include="Daily_ExpandingSum_PerMonth_PerCategory.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
