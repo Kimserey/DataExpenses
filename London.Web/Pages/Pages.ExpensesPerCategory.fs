@@ -43,7 +43,7 @@ module ExpensesPerCategory =
                         .LineChart(
                         {
                             Chart = { Type = "spline"; ZoomType = "" }
-                            Title = { Text = "Sum of all " + category + " expenses per month" }
+                            Title = { Text = category + " - Monthly sum" }
                             XAxis = 
                              { Categories = 
                                  subCategory 
@@ -54,7 +54,7 @@ module ExpensesPerCategory =
                             Tooltip =
                              {
                                  HeaderFormat = "<span style=\"font-size: 10px\">{point.key}</span><br/>"
-                                 PointFormat = "{point.y:.2f} GBP"
+                                 PointFormat = "{point.y} GBP"
                              }
                             PlotOptions = { Spline = { Marker = { Enabled = true } } }
                         }) |> ignore) ] [] :> Doc 
@@ -72,9 +72,13 @@ module ExpensesPerCategory =
                         .LineChart(
                         {
                             Chart = { Type = "spline"; ZoomType = "xy" }
-                            Title = { Text = "Daily expanding sum for " + category }
-                            XAxis = Unchecked.defaultof<XAxis>
-                            YAxis = Unchecked.defaultof<YAxis>
+                            Title = { Text = category + " - Daily sum" }
+                            XAxis = 
+                             { Categories = 
+                                 [1..31]
+                                 |> List.map string
+                                 |> Array.ofList }
+                            YAxis = { Title = { Text = "Amount" } }
                             PlotOptions = { Spline = { Marker = { Enabled = false } } }
                             Series = 
                              data
@@ -121,7 +125,7 @@ module ExpensesPerCategory =
                                                 Title = "Monthly total")
                                             Tabs.InactiveTabLink.Doc(
                                                 TargetId = "chart-daily-expanded-sum-" + string cardIndex, 
-                                                Title = "Daily expanded sum")
+                                                Title = "Daily sum")
                                         ],
                                        Content =
                                         [
