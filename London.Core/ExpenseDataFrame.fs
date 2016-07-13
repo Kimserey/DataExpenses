@@ -3,6 +3,7 @@
 open System
 open Deedle
 
+type Day = Day of int
 type Month = Month of (string * int)
 type Year = Year of int
 type Title = Title of string
@@ -443,14 +444,15 @@ type ExpenseDataFrame = {
         |> Frame.getNumericCols
         |> Series.mapValues Stats.expandingSum
         |> Series.observations
-        |> Seq.collect (fun ((month, year), series) ->
+        |> Seq.map (fun ((month, year), series) ->
+            Month (monthToString month, month),
+            Year year,
             series 
             |> Series.observations
             |> Seq.map (fun (day, value) ->
-                Month (monthToString month, month),
-                Year year,
-                day,
-                value))
+                Day day,
+                Sum value)
+            |> Seq.toList)
         |> Seq.toList
 
 module Dataframe =
