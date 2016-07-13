@@ -132,7 +132,7 @@ module ExpensesPerMonth =
                                        Content =
                                         [
                                             Tabs.ActiveContent.Doc(
-                                                Id = "chart-ratio-" + string cardIndex, 
+                                                Id = "chart-ratios-" + string cardIndex, 
                                                 Body = [ makeRatioChart ratios month year])
                                             Tabs.InactiveContent.Doc(
                                                 Id = "chart-daily-expanding-sum-" + string cardIndex,
