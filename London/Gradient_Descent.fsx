@@ -8,11 +8,11 @@ open London.Core
     Experimentation
 *)
 
-let data =
+let getData month =
     df
     |> Frame.filterRowValues (fun c -> 
         let date = c.GetAs<DateTime>("Date")
-        date.Month = 5 && date.Year = 2016)
+        date.Month = month && date.Year = 2016)
     |> Frame.groupRowsBy "Date"
     |> Frame.sortRowsByKey
     |> Frame.getNumericCols
@@ -24,6 +24,10 @@ let data =
         float date.Day, value)
     |> Seq.toList
 
+let training    = getData 4
+let validation  = getData 5
+let validation' = getData 6
+
 // Apply linear regression to July 2016 to predict expenses of the monht
 // Least square cost cost function = 1/2N * Sum (estimate - real value) square
 // Estimate = Theta1 * x + Theta0
@@ -31,57 +35,61 @@ let data =
 // learning rate alpha
 let alpha = 0.006
 
-let m =
-    data.Length
-
-let costFunc thethas: float =
+let costFunc thethas (data: List<_>): float =
     match thethas with
     | thetha0::thetha1::_ ->
         let sum = 
-            [0..m - 1] 
+            [0..data.Length - 1] 
             |> List.map (fun i -> data.[i])
             |> List.map (fun (x, y) -> thetha0 + thetha1 * x - y)
             |> List.sum
 
-        (1./float m) * (Math.Pow(sum, 2.))
+        (1./float data.Length) * (Math.Pow(sum, 2.))
     | _ -> failwith "Could not compute cost function, thethas are not in correct format."
 
-let next thethas =
+let next thethas (data: List<_>) =
     match thethas with
     | thetha0::thetha1::_ ->
         let thetha0' = 
             let sum = 
-                [0..m - 1] 
+                [0..data.Length - 1] 
                 |> List.map (fun i -> data.[i])
                 |> List.map (fun (x, y) -> thetha0 + thetha1 * x - y)
                 |> List.sum
 
-            thetha0 - (alpha * (1./float m) * sum)
+            thetha0 - (alpha * (1./float data.Length) * sum)
 
         let thetha1' =
             let sum =
-                [0..m - 1]
+                [0..data.Length - 1]
                 |> List.map (fun i -> data.[i])
                 |> List.map (fun (x, y) -> (thetha0 + thetha1 * x - y) * x)
                 |> List.sum
         
-            thetha1 - (alpha * (1./float m) * sum)
+            thetha1 - (alpha * (1./float data.Length) * sum)
 
         [thetha0'; thetha1']
     | _ -> failwith "Could not compute next thethas, thethas are not in correct format."
 
-let compute iterations =
+let train iterations data =
     [0..iterations]
-    |> List.scan (fun thethas _ -> next thethas) [0.; 0.]
+    |> List.scan (fun thethas _ -> next thethas data) [0.; 0.]
     
-let thethas = 
-    compute 5000
-
+let allThetasIterations = 
+    train 5000 validation
+    
 let costs = 
-    thethas
+    allThetasIterations
     |> List.chunkBySize 100
     |> List.map List.last
-    |> List.mapi (fun i thethas -> float (i * 100), costFunc thethas)
+    |> List.mapi (fun i thethas -> float (i * 100), costFunc thethas training)
+
+let thethas = 
+    allThetasIterations |> List.last
+
+printfn "Cost with training data:    %10.4f" (costFunc thethas training)
+printfn "Cost with validation data:  %10.4f" (costFunc thethas validation)
+printfn "Cost with validation' data: %10.4f" (costFunc thethas validation')    
 
 (*
     Call from Shared library
@@ -115,21 +123,21 @@ type Data = {
     Y: float
 } with
     static member FromTuple (x, y) = { X = x; Y = y }
-
-let thethas' = 
-    thethas |> List.last
-
+    
 let app = 
     GET >=> choose
         [ path "/data" 
             >=> JSON 
                 [ 
-                    data 
+                    validation 
                     |> List.map Data.FromTuple
-                
-                    data 
+                    
+                    validation'
+                    |> List.map Data.FromTuple
+
+                    validation 
                     |> List.map fst 
-                    |> List.map (fun i -> i, thethas'.[0] + thethas'.[1] * i) 
+                    |> List.map (fun i -> i, thethas.[0] + thethas.[1] * i) 
                     |> List.map Data.FromTuple
                 ]
 

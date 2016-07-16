@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -39,8 +39,9 @@
 
         makeChart('data', 'Data', 'Days', 'Total expense', function (result) {
             return [
-                { name: "Data", data: result[0].map(function (d) { return d; }) },
-                { name: "Prediction", data: result[1].map(function (d) { return d; }) }
+                { name: "Validation", data: result[0].map(function (d) { return d; }) },
+                { name: "Validation'", data: result[1].map(function (d) { return d; }) },
+                { name: "Prediction", data: result[2].map(function (d) { return d; }) }
             ];
         });
 
