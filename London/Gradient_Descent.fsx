@@ -29,7 +29,7 @@ let data =
 // Estimate = Theta1 * x + Theta0
 
 // learning rate alpha
-let alpha = 0.1
+let alpha = 0.006
 
 let m =
     data.Length
@@ -75,15 +75,13 @@ let compute iterations =
     |> List.scan (fun thethas _ -> next thethas) [0.; 0.]
     
 let thethas = 
-    compute 3
-    |> List.map (fun x -> printfn "%A" x; x)
+    compute 5000
     |> List.last
 
 let cost = costFunc thethas
 
-printfn "%A  / cost: %.4f%%" thethas (cost * 100.)
-
-printfn "%A" ([1..10] |> List.map (fun i -> thethas.[0] + thethas.[1] * float i))
+printfn "thethas: %A" thethas
+printfn "cost: %.4f%%" (cost * 100.)
 
 (*
     Call from Shared library
@@ -120,6 +118,17 @@ type Data = {
 
 let app = 
     GET >=> choose
-        [ path "/data" >=> JSON [ data |> List.map Data.FromTuple ] ]
+        [ path "/data" 
+            >=> JSON 
+                [ 
+                    data 
+                    |> List.map Data.FromTuple
+                
+                    data 
+                    |> List.map fst 
+                    |> List.map (fun i -> i, thethas.[0] + thethas.[1] * i) 
+                    |> List.map Data.FromTuple  
+                ]
+        ]
 
 startWebServer defaultConfig app

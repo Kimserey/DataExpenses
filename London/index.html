@@ -30,6 +30,10 @@
                         {
                             name: "Data",
                             data: result[0].map(function (d) { return d; })
+                        },
+                        {
+                            name: "Prediction",
+                            data: result[1].map(function (d) { return d; })
                         }
                     ]
                 }).appendTo('body');
