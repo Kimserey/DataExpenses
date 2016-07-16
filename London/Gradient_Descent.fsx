@@ -12,7 +12,7 @@ let data =
     df
     |> Frame.filterRowValues (fun c -> 
         let date = c.GetAs<DateTime>("Date")
-        date.Month = 6 && date.Year = 2016 && c.GetAs<string>("Category") = "Supermarket")
+        date.Month = 5 && date.Year = 2016)
     |> Frame.groupRowsBy "Date"
     |> Frame.sortRowsByKey
     |> Frame.getNumericCols
@@ -76,12 +76,12 @@ let compute iterations =
     
 let thethas = 
     compute 5000
-    |> List.last
 
-let cost = costFunc thethas
-
-printfn "thethas: %A" thethas
-printfn "cost: %.4f%%" (cost * 100.)
+let costs = 
+    thethas
+    |> List.chunkBySize 100
+    |> List.map List.last
+    |> List.mapi (fun i thethas -> float (i * 100), costFunc thethas)
 
 (*
     Call from Shared library
@@ -116,6 +116,9 @@ type Data = {
 } with
     static member FromTuple (x, y) = { X = x; Y = y }
 
+let thethas' = 
+    thethas |> List.last
+
 let app = 
     GET >=> choose
         [ path "/data" 
@@ -126,8 +129,15 @@ let app =
                 
                     data 
                     |> List.map fst 
-                    |> List.map (fun i -> i, thethas.[0] + thethas.[1] * i) 
-                    |> List.map Data.FromTuple  
+                    |> List.map (fun i -> i, thethas'.[0] + thethas'.[1] * i) 
+                    |> List.map Data.FromTuple
+                ]
+
+          path "/costs"
+            >=> JSON
+                [
+                    costs
+                    |> List.map Data.FromTuple
                 ]
         ]
 

@@ -11,7 +11,7 @@
 </head>
 <body>
     <script>
-        function makeChart(endpoint, title) {
+        function makeChart(endpoint, title, xAxis, yAxis, makeSeries) {
             $.getJSON('http://localhost:8083/' + endpoint, function (result) {
                 $('<div class="chart-card" style="width:90%;">').highcharts({
                     chart: {
@@ -21,26 +21,34 @@
                     title: {
                         text: title
                     },
-                    yAxis: {
+                    xAxis: {
                         title: {
-                            text: 'Amount'
+                            text: xAxis
                         }
                     },
-                    series: [
-                        {
-                            name: "Data",
-                            data: result[0].map(function (d) { return d; })
-                        },
-                        {
-                            name: "Prediction",
-                            data: result[1].map(function (d) { return d; })
+                    yAxis: {
+                        title: {
+                            text: yAxis
                         }
-                    ]
+                    },
+                    series: makeSeries(result)
                 }).appendTo('body');
             });
         }
 
-        makeChart('data', 'Data');
+
+        makeChart('data', 'Data', 'Days', 'Total expense', function (result) {
+            return [
+                { name: "Data", data: result[0].map(function (d) { return d; }) },
+                { name: "Prediction", data: result[1].map(function (d) { return d; }) }
+            ];
+        });
+
+        makeChart('costs', 'Cost function', 'Thetas calculation iterations', 'Cost error', function (result) {
+            return [
+                { name: "Cost", data: result[0].map(function (d) { return { x: d.x, y: d.y }; }) }
+            ];
+        });
     </script>
 </body>
 </html>
