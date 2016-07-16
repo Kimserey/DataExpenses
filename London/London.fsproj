@@ -64,6 +64,7 @@
     <None Include="Number_Transactions_Against_Amount_PerMonth.fsx" />
     <None Include="Daily_ExpandingSum_PerMonth_PerCategory.fsx" />
     <None Include="Gradient_Descent.fsx" />
+    <None Include="index.html" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:;base64,=">
+    <title>London</title>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://rawgit.com/Kimserey/SimpleUI/master/dist/css/SimpleUI.css">
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+</head>
+<body>
+    <script>
+        function makeChart(endpoint, title) {
+            $.getJSON('http://localhost:8083/' + endpoint, function (result) {
+                $('<div class="chart-card" style="width:90%;">').highcharts({
+                    chart: {
+                        type: 'spline',
+                        zoomType: 'xy'
+                    },
+                    title: {
+                        text: title
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Amount'
+                        }
+                    },
+                    series: [
+                        {
+                            name: "Data",
+                            data: result[0].map(function (d) { return d; })
+                        }
+                    ]
+                }).appendTo('body');
+            });
+        }
+
+        makeChart('data', 'Data');
+    </script>
+</body>
+</html>
