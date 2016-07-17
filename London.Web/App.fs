@@ -64,7 +64,7 @@ module App =
     
         let nav = 
             let link title endpoint =
-                aAttr [ attr.href ""; on.click(fun _ _ -> Var.Set route endpoint; toggleSideMenu()) ] [ text title ]
+                aAttr [ attr.href ""; on.click(fun _ e -> e.PreventDefault(); Var.Set route endpoint; toggleSideMenu()) ] [ text title ]
             
             Nav.Doc(
                 View.Map string route.View, 

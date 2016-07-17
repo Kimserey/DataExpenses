@@ -116,10 +116,11 @@ and DataItem = {
 } with
     static member FromTuple (x, y) = { X = x; Y = y }
     
-let getDataset() =
+let getDataset filterRowPredicate =
     df
     |> Frame.groupRowsBy "Date"
     |> Frame.sortRowsByKey
+    |> Frame.filterRowValues filterRowPredicate
     |> Frame.getNumericCols
     |> Series.get "Amount"
     |> Stats.levelSum fst
@@ -129,19 +130,29 @@ let getDataset() =
             s 
             |> Series.sortByKey
             |> Series.mapKeys (fun (date: DateTime) -> date.Day)
-            |> Stats.expandingSum
-            |> Series.observations
-            |> Seq.map (fun (day, value) -> float day, value)
-            |> Seq.toList)
+            |> Series.realign [1..(if s.FirstKey().Month = DateTime.Now.Month then DateTime.Now.Day else 31)] 
+            |> Series.fillMissingWith 0.
+            |> Stats.expandingSum)
     |> Series.skip 1
     |> Series.mapValues (fun values ->
+        let toList =
+            Series.observations 
+            >> Seq.map (fun (day, value) -> float day, value) 
+            >> Seq.toList
+
         let modelResult = 
-            GradientDescent.createModel ({ LearningRate = 0.005; Dataset = values; Iterations = 8000 })
-            
+            GradientDescent.createModel 
+                { LearningRate = 0.005
+                  Dataset = toList values
+                  Iterations = 8000 }
+        
+        let totalDays = [1..31]
+
         modelResult.Cost,
-        values,
-        [ 1.,  modelResult.Estimate 1.
-          31., modelResult.Estimate 31. ])
+        toList values,
+        totalDays
+        |> List.map float
+        |> List.map (fun x -> x, modelResult.Estimate x))
     |> Series.observations
     |> Seq.map (fun ((month, year), (_, originals, estimateResults)) ->
         { Name = sprintf "%s %i" (CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName month) year
@@ -151,6 +162,6 @@ let getDataset() =
 
 let app = 
     GET >=> choose
-        [ path "/data" >=> JSON (getDataset()) ]
+        [ path "/data" >=> JSON (getDataset (fun (c:ObjectSeries<_>) -> c.GetAs<string>("Category") <> (string Category.RentAndBills))) ]
 
 startWebServer defaultConfig app
