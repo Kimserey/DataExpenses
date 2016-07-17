@@ -28,68 +28,106 @@ let training    = getData 4
 let validation  = getData 5
 let validation' = getData 6
 
-// Apply linear regression to July 2016 to predict expenses of the monht
-// Least square cost cost function = 1/2N * Sum (estimate - real value) square
-// Estimate = Theta1 * x + Theta0
+module GradientDescent =
 
-// learning rate alpha
-let alpha = 0.006
-
-let costFunc thethas (data: List<_>): float =
-    match thethas with
-    | thetha0::thetha1::_ ->
-        let sum = 
-            [0..data.Length - 1] 
-            |> List.map (fun i -> data.[i])
-            |> List.map (fun (x, y) -> thetha0 + thetha1 * x - y)
-            |> List.sum
-
-        (1./float data.Length) * (Math.Pow(sum, 2.))
-    | _ -> failwith "Could not compute cost function, thethas are not in correct format."
-
-let next thethas (data: List<_>) =
-    match thethas with
-    | thetha0::thetha1::_ ->
-        let thetha0' = 
+    type Options =
+        {
+            LearningRate: float
+            Dataset: List<float * float>
+            Iterations: int
+        } with
+            static member Default dataset = 
+                { LearningRate = 0.006
+                  Dataset = dataset
+                  Iterations = 5000 }
+                  
+    let costFunc thethas (data: List<float * float>): float =
+        match thethas with
+        | thetha0::thetha1::_ ->
             let sum = 
                 [0..data.Length - 1] 
                 |> List.map (fun i -> data.[i])
                 |> List.map (fun (x, y) -> thetha0 + thetha1 * x - y)
                 |> List.sum
 
-            thetha0 - (alpha * (1./float data.Length) * sum)
+            (1./float data.Length) * (Math.Pow(sum, 2.))
+        | _ -> failwith "Could not compute cost function, thethas are not in correct format."
 
-        let thetha1' =
-            let sum =
-                [0..data.Length - 1]
-                |> List.map (fun i -> data.[i])
-                |> List.map (fun (x, y) -> (thetha0 + thetha1 * x - y) * x)
-                |> List.sum
+    let next thethas (options: Options) =
+        match thethas with
+        | thetha0::thetha1::_ ->
+            let thetha0' = 
+                let sum = 
+                    [0..options.Dataset.Length - 1] 
+                    |> List.map (fun i -> options.Dataset.[i])
+                    |> List.map (fun (x, y) -> thetha0 + thetha1 * x - y)
+                    |> List.sum
+
+                thetha0 - (options.LearningRate * (1./float options.Dataset.Length) * sum)
+
+            let thetha1' =
+                let sum =
+                    [0..options.Dataset.Length - 1]
+                    |> List.map (fun i -> options.Dataset.[i])
+                    |> List.map (fun (x, y) -> (thetha0 + thetha1 * x - y) * x)
+                    |> List.sum
         
-            thetha1 - (alpha * (1./float data.Length) * sum)
+                thetha1 - (options.LearningRate * (1./float options.Dataset.Length) * sum)
 
-        [thetha0'; thetha1']
-    | _ -> failwith "Could not compute next thethas, thethas are not in correct format."
+            [thetha0'; thetha1']
+        | _ -> failwith "Could not compute next thethas, thethas are not in correct format."
 
-let train iterations data =
-    [0..iterations]
-    |> List.scan (fun thethas _ -> next thethas data) [0.; 0.]
-    
-let allThetasIterations = 
-    train 5000 validation
+    let train options =
+        [0..options.Iterations]
+        |> List.scan (fun thethas _ -> next thethas options) [0.; 0.]
+
+    let createModel options =
+        match train options |> List.last with
+        | thetha0::thetha1::_ -> fun x -> thetha0 + thetha1 * x
+        | _ -> failwith "Failed to create model. Could not compute thethas."
     
 let costs = 
-    allThetasIterations
+    GradientDescent.train (GradientDescent.Options.Default validation)
     |> List.chunkBySize 100
     |> List.map List.last
-    |> List.mapi (fun i thethas -> float (i * 100), costFunc thethas training)
+    |> List.mapi (fun i thethas -> float (i * 100), GradientDescent.costFunc thethas training)
 
 let thethas = 
-    allThetasIterations |> List.last
+    GradientDescent.train (GradientDescent.Options.Default validation)
+    |> List.last
 
-printfn "Cost with training data:    %10.4f" (costFunc thethas training)
-printfn "Cost with validation data:  %10.4f" (costFunc thethas validation)
-printfn "Cost with validation' data: %10.4f" (costFunc thethas validation')    
+printfn "Cost with training data:    %10.4f" (GradientDescent.costFunc thethas training)
+printfn "Cost with validation data:  %10.4f" (GradientDescent.costFunc thethas validation)
+printfn "Cost with validation' data: %10.4f" (GradientDescent.costFunc thethas validation')    
+
+
+//
+//let v =
+//
+//    df
+//    |> Frame.groupRowsBy "Date"
+//    |> Frame.sortRowsByKey
+//    |> Frame.getNumericCols
+//    |> Series.get "Amount"
+//    |> Stats.levelSum fst
+//    |> Series.groupInto 
+//        (fun (date: DateTime) _ -> date.Month, date.Year)
+//        (fun _ s -> 
+//            s 
+//            |> Series.sortByKey
+//            |> Series.mapKeys (fun (date: DateTime) -> date.Day)
+//            |> Stats.expandingSum
+//            |> Series.observations
+//            |> Seq.map (fun (day, value) -> float day, value)
+//            |> Seq.toList)
+//    |> Series.mapValues (fun values ->
+//        let thethas = 
+//        )
+
+
+
+
+
 
 (*
     Call from Shared library
