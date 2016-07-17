@@ -1,13 +1,18 @@
 ﻿namespace London.Core
 
 open System
+open System.Globalization
 open Deedle
+open GradientDescent
 
 type Day = Day of int
 type Month = Month of (string * int)
 type Year = Year of int
 type Title = Title of string
 type Sum = Sum of float
+
+type Original = Original of (float * float) list
+type Approximation = Approximation of (float * float) list
 
 type Expense = {
     Date: DateTime
@@ -216,7 +221,7 @@ type ExpenseDataFrame = {
               Category = s.GetAs<string>("Category") })
         |> Seq.toList
 
-    // Gt all expens
+    // Gt all expenses
     static member GetAllExpensesChart exp =
         let pivotTable =
             exp
@@ -453,6 +458,51 @@ type ExpenseDataFrame = {
                 Day day,
                 Sum value)
             |> Seq.toList)
+        |> Seq.toList
+
+    static member GetCumulatedExpenses (filterOut: Category list) exp =
+        exp
+        |> ExpenseDataFrame.GetFrame
+        |> Frame.groupRowsBy "Date"
+        |> Frame.sortRowsByKey
+        |> Frame.filterRowValues (fun c -> filterOut |> List.map string |> List.contains (c.GetAs<string>("Category")) |> not)
+        |> Frame.getNumericCols
+        |> Series.get "Amount"
+        |> Stats.levelSum fst
+        |> Series.groupInto 
+            (fun (date: DateTime) _ -> date.Month, date.Year)
+            (fun _ s -> 
+                s 
+                |> Series.sortByKey
+                |> Series.mapKeys (fun (date: DateTime) -> date.Day)
+                |> Series.realign [1..(if s.FirstKey().Month = DateTime.Now.Month then DateTime.Now.Day else 31)] 
+                |> Series.fillMissingWith 0.
+                |> Stats.expandingSum)
+        |> Series.skip 1
+        |> Series.mapValues (fun values ->
+            let toList =
+                Series.observations 
+                >> Seq.map (fun (day, value) -> float day, value) 
+                >> Seq.toList
+
+            let modelResult = 
+                GradientDescent.createModel 
+                    { LearningRate = 0.005
+                      Dataset = toList values
+                      Iterations = 8000 }
+            
+            let totalDays = [1..31]
+
+            modelResult.Cost,
+            toList values,
+            totalDays
+            |> List.map float
+            |> List.map (fun x -> x, modelResult.Estimate x))
+        |> Series.observations
+        |> Seq.map (fun ((month, year), (_, originals, estimateResults)) ->
+            sprintf "%s %i" (CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName month) year,
+            Original originals,
+            Approximation estimateResults)
         |> Seq.toList
 
 module Dataframe =

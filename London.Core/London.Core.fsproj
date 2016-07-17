@@ -53,8 +53,8 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Domain.fs" />
-    <Compile Include="ExpenseDataFrame.fs" />
     <Compile Include="GradientDescent.fs" />
+    <Compile Include="ExpenseDataFrame.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
