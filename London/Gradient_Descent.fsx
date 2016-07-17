@@ -4,42 +4,26 @@ open System
 open Deedle
 open London.Core
 
-(*
-    Experimentation
-*)
-
-let getData month =
-    df
-    |> Frame.filterRowValues (fun c -> 
-        let date = c.GetAs<DateTime>("Date")
-        date.Month = month && date.Year = 2016)
-    |> Frame.groupRowsBy "Date"
-    |> Frame.sortRowsByKey
-    |> Frame.getNumericCols
-    |> Series.get "Amount"
-    |> Stats.levelSum fst
-    |> Stats.expandingSum
-    |> Series.observations
-    |> Seq.map (fun ((date: DateTime), value) ->
-        float date.Day, value)
-    |> Seq.toList
-
-let training    = getData 4
-let validation  = getData 5
-let validation' = getData 6
-
 module GradientDescent =
 
-    type Options =
-        {
-            LearningRate: float
-            Dataset: List<float * float>
-            Iterations: int
-        } with
-            static member Default dataset = 
-                { LearningRate = 0.006
-                  Dataset = dataset
-                  Iterations = 5000 }
+    type Options = {
+        LearningRate: float
+        Dataset: List<float * float>
+        Iterations: int
+    } with
+        static member Default dataset = { 
+            LearningRate = 0.006
+            Dataset = dataset
+            Iterations = 5000 
+        }
+
+    type ModelResult = {
+        Estimate: float -> float
+        Cost: Cost
+        Thethas: float list
+    } 
+    and Cost = Cost of float
+        with override x.ToString () = match x with Cost v -> sprintf "Cost: %.4f%%" v
                   
     let costFunc thethas (data: List<float * float>): float =
         match thethas with
@@ -83,59 +67,47 @@ module GradientDescent =
 
     let createModel options =
         match train options |> List.last with
-        | thetha0::thetha1::_ -> fun x -> thetha0 + thetha1 * x
+        | thetha0::thetha1::_ as thethas->
+            { Estimate = fun  x -> thetha0 + thetha1 * x
+              Cost = costFunc thethas options.Dataset |> Cost
+              Thethas = thethas }
         | _ -> failwith "Failed to create model. Could not compute thethas."
     
-let costs = 
-    GradientDescent.train (GradientDescent.Options.Default validation)
-    |> List.chunkBySize 100
-    |> List.map List.last
-    |> List.mapi (fun i thethas -> float (i * 100), GradientDescent.costFunc thethas training)
+module Estimation =
+    open GradientDescent
 
-let thethas = 
-    GradientDescent.train (GradientDescent.Options.Default validation)
-    |> List.last
-
-printfn "Cost with training data:    %10.4f" (GradientDescent.costFunc thethas training)
-printfn "Cost with validation data:  %10.4f" (GradientDescent.costFunc thethas validation)
-printfn "Cost with validation' data: %10.4f" (GradientDescent.costFunc thethas validation')    
-
-
-//
-//let v =
-//
-//    df
-//    |> Frame.groupRowsBy "Date"
-//    |> Frame.sortRowsByKey
-//    |> Frame.getNumericCols
-//    |> Series.get "Amount"
-//    |> Stats.levelSum fst
-//    |> Series.groupInto 
-//        (fun (date: DateTime) _ -> date.Month, date.Year)
-//        (fun _ s -> 
-//            s 
-//            |> Series.sortByKey
-//            |> Series.mapKeys (fun (date: DateTime) -> date.Day)
-//            |> Stats.expandingSum
-//            |> Series.observations
-//            |> Seq.map (fun (day, value) -> float day, value)
-//            |> Seq.toList)
-//    |> Series.mapValues (fun values ->
-//        let thethas = 
-//        )
-
-
-
-
+    let dataset =
+        df
+        |> Frame.groupRowsBy "Date"
+        |> Frame.sortRowsByKey
+        |> Frame.getNumericCols
+        |> Series.get "Amount"
+        |> Stats.levelSum fst
+        |> Series.groupInto 
+            (fun (date: DateTime) _ -> date.Month, date.Year)
+            (fun _ s -> 
+                s 
+                |> Series.sortByKey
+                |> Series.mapKeys (fun (date: DateTime) -> date.Day)
+                |> Stats.expandingSum
+                |> Series.observations
+                |> Seq.map (fun (day, value) -> float day, value)
+                |> Seq.toList)
+    
+    let estimates =
+        dataset
+        |> Series.mapValues (fun values ->
+            let modelResult = 
+                GradientDescent.createModel ({ LearningRate = 0.005; Dataset = values; Iterations = 5000 })
+            
+            modelResult.Cost,
+            values
+            |> List.map (fst >> modelResult.Estimate))
 
 
 (*
-    Call from Shared library
+    Webserver test  
 *)
-//df
-//|> ExpenseDataFrame.FromFrame
-//|> ExpenseDataFrame.GetDailyExpandingSumPerMonth
-//|> Seq.iter(fun x -> printfn "%A" x)
 
 #I __SOURCE_DIRECTORY__
 #r "../packages/Suave/lib/net40/Suave.dll"
@@ -149,6 +121,41 @@ open Suave.Successful
 open Suave.Writers
 open Newtonsoft.Json
 open Newtonsoft.Json.Serialization
+
+
+let getData month =
+    df
+    |> Frame.filterRowValues (fun c -> 
+        let date = c.GetAs<DateTime>("Date")
+        date.Month = month && date.Year = 2016)
+    |> Frame.groupRowsBy "Date"
+    |> Frame.sortRowsByKey
+    |> Frame.getNumericCols
+    |> Series.get "Amount"
+    |> Stats.levelSum fst
+    |> Stats.expandingSum
+    |> Series.observations
+    |> Seq.map (fun ((date: DateTime), value) ->
+        float date.Day, value)
+    |> Seq.toList
+
+let training    = getData 4
+let validation  = getData 5
+let validation' = getData 6
+
+let costs = 
+    GradientDescent.train (GradientDescent.Options.Default validation)
+    |> List.chunkBySize 100
+    |> List.map List.last
+    |> List.mapi (fun i thethas -> float (i * 100), GradientDescent.costFunc thethas training)
+
+let thethas = 
+    GradientDescent.train (GradientDescent.Options.Default validation)
+    |> List.last
+
+printfn "Cost with training data:    %10.4f" (GradientDescent.costFunc thethas training)
+printfn "Cost with validation data:  %10.4f" (GradientDescent.costFunc thethas validation)
+printfn "Cost with validation' data: %10.4f" (GradientDescent.costFunc thethas validation')    
 
 let JSON v =
   OK (JsonConvert.SerializeObject(v, new JsonSerializerSettings(ContractResolver = new CamelCasePropertyNamesContractResolver())))
