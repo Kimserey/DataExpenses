@@ -33,7 +33,7 @@ module Expenses =
         open WebSharper.JavaScript
         open London.Web.Templates     
         
-        let makeChart dailyCumulatedExpenses selector =
+        let makeChart title dailyCumulatedExpenses selector =
             divAttr 
                 [ attr.``class`` "chart-card"
                   on.afterRender (fun el -> 
@@ -42,7 +42,7 @@ module Expenses =
                         .LineChart(
                         {
                             Chart = { Type = "spline"; ZoomType = "xy" }
-                            Title = { Text = "Expenses" }
+                            Title = { Text = title }
                             XAxis = 
                              { Categories = 
                                  [1..31]
@@ -85,10 +85,10 @@ module Expenses =
                                     Body = [ CardTable.Doc (List.mapi Expense.ToTableRow (expenses |> List.sortByDescending (fun e -> e.Date)))  ])
                                 Tabs.InactiveContent.Doc(
                                     Id = "chart",
-                                    Body = [ makeChart dailyCumulatedExpenses (fun (name, Original data, _) -> { Name = name; Data = data |> List.map snd |> Array.ofList } : LineSeries) ])
+                                    Body = [ makeChart "Cumulated expenses" dailyCumulatedExpenses (fun (name, Original data, _) -> { Name = name; Data = data |> List.map snd |> Array.ofList } : LineSeries) ])
                                 Tabs.InactiveContent.Doc(
                                     Id = "approximation",
-                                    Body = [ makeChart dailyCumulatedExpenses (fun (name, _, Approximation data) -> { Name = name; Data = data |> List.map snd |> Array.ofList } : LineSeries) ])
+                                    Body = [ makeChart "Cumulated expenses straight line approximation" dailyCumulatedExpenses (fun (name, _, Approximation data) -> { Name = name; Data = data |> List.map snd |> Array.ofList } : LineSeries) ])
                             ]) ]
             }
             |> Doc.Async
