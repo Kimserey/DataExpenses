@@ -26,7 +26,7 @@ Is there a correlation between:
  - the velocity of the spending at the end of the month and the total spent?
  
 Ideas to implement:
- - .
+ - Have the data computed on refresh and save into SQLite. Subsequent query will get the data directly from SQLite.
 
 Ideas implemented
  - Check every month spending progression. By comparing it all on one graph, it can detect irregularity in the daily amount spent - Use expanding sum per category and plot all months. __10-07-2016__
