@@ -82,6 +82,7 @@ module Domain =
         >> label ".*TESCO.*"                                                            "TESCO"                              Supermarket
         >> label ".*(M&S|MARKS & SPENCER|MARKS & SPEN|MARKS&SPENCER).*"                 "M&S"                                Supermarket
         >> label ".*WILKO.*"                                                            "WILKO"                              Supermarket
+        >> label ".*POUNDLAND.*"                                                        "POUNDLAND"                              Supermarket
 
         >> label ".*CURRYS*"                                                            "CURRYS"                             Electronics
         >> label ".*CARPHONE*"                                                          "CARPHONE"                           Electronics
