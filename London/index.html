@@ -48,7 +48,7 @@
             return result.map(function(dataset) {
                 return [
                     { name: dataset.name, data: dataset.originals.map(function (d) { return d.y; }) },
-                    { name: 'Estimate ' + dataset.name, data: dataset.estimates.map(function (d) { return d.y; }) }
+                    { name: 'approx ' + dataset.name, data: dataset.estimates.map(function (d) { return d.y; }) }
                 ];
             }).reduce(function(a, b) {
                 return a.concat(b);
