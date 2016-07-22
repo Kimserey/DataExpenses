@@ -58,7 +58,6 @@ let getDataset filterRowPredicate =
             |> Series.realign [1..(if s.FirstKey().Month = DateTime.Now.Month then DateTime.Now.Day else 31)] 
             |> Series.fillMissingWith 0.
             |> Stats.expandingSum)
-    |> Series.skip 1
     |> Series.mapValues (fun values ->
         let toList =
             Series.observations 
@@ -85,8 +84,11 @@ let getDataset filterRowPredicate =
           Estimates = estimateResults |> List.map DataItem.FromTuple  })
     |> Seq.toList
 
+let data = 
+    getDataset (fun (c:ObjectSeries<_>) -> c.GetAs<string>("Category") = (string Category.Supermarket))
+
 let app = 
     GET >=> choose
-        [ path "/data" >=> JSON (getDataset (fun (c:ObjectSeries<_>) -> c.GetAs<string>("Category") <> (string Category.RentAndBills))) ]
+        [ path "/data" >=> JSON data ]
 
 startWebServer defaultConfig app

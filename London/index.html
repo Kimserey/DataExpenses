@@ -13,7 +13,7 @@
     <script>
         function makeChart(endpoint, title, xAxis, yAxis, makeSeries) {
             $.getJSON('http://localhost:8083/' + endpoint, function (result) {
-                $('<div class="chart-card" style="width:100%;height:100%;">').highcharts({
+                $('<div class="chart-card" style="width:100%;height:400px;">').highcharts({
                     chart: {
                         type: 'spline',
                         zoomType: 'xy'
@@ -44,7 +44,7 @@
         }
 
 
-        makeChart('data', 'Data', 'Days', 'Total expense', function (result) {
+        makeChart('data', 'Supermarket - Approximation', 'Days', 'Total expense', function (result) {
             return result.map(function(dataset) {
                 return [
                     { name: dataset.name, data: dataset.originals.map(function (d) { return d.y; }) },
