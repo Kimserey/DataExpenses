@@ -37,13 +37,11 @@ module GradientDescent =
                     let sum = 
                         [0..data.Length - 1] 
                         |> List.map (fun i -> data.[i])
-                        |> List.map (fun (x, y) -> thetha0 + thetha1 * x - y)
+                        |> List.map (fun (x, y) -> Math.Pow(thetha0 + thetha1 * x - y, 2.))
                         |> List.sum
 
-                    Cost <| (1./float data.Length) * (Math.Pow(sum, 2.))
+                    Cost <| (1./float data.Length) * sum
                 | _ -> failwith "Could not compute cost function, thethas are not in correct format."
-
-                  
 
     let nextThetha innerDerivative (settings: Settings) thetha =
         let sum =
@@ -52,9 +50,7 @@ module GradientDescent =
             |> List.map (fun (x, y) -> innerDerivative x y)
             |> List.sum
 
-        thetha - settings.LearningRate * ((1./float settings.Dataset.Length) * sum)
-
-    
+        thetha - settings.LearningRate * ((2./float settings.Dataset.Length) * sum)
 
     let estimate settings =
         [0..settings.Iterations - 1]

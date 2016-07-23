@@ -8,53 +8,52 @@
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://rawgit.com/Kimserey/SimpleUI/master/dist/css/SimpleUI.css">
     <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
+    <div id="chart" class="chart-card" style="width: 100%; height: 700px;"></div>
+    <div id="cost" class="chart-card" style="width: 100%; height: 1000px;"></div>
     <script>
-        function makeChart(endpoint, title, xAxis, yAxis, makeSeries) {
-            $.getJSON('http://localhost:8083/' + endpoint, function (result) {
-                $('<div class="chart-card" style="width:100%;height:400px;">').highcharts({
-                    chart: {
-                        type: 'spline',
-                        zoomType: 'xy'
-                    },
-                    title: {
-                        text: title
-                    },
-                    xAxis: {
-                        title: {
-                            text: xAxis
-                        }
-                    },
-                    yAxis: {
-                        title: {
-                            text: yAxis
-                        }
-                    },
-                    plotOptions: {
-                        spline: {
-                            marker: {
-                                enabled: false
-                            }
-                        }
-                    },
-                    series: makeSeries(result)
-                }).appendTo('body');
+        var data = $.get('http://localhost:8083/data');
+        var steps = $.get('http://localhost:8083/steps');
+        var thethas = $.get('http://localhost:8083/thethas');
+
+        $.when(data, steps)
+            .done(function (data, steps) {
+                var dataRes = data[0];
+                var stepsRes = steps[0];
+
+                var data = dataRes.map(function (d) {
+                    return {
+                        name: d.name,
+                        type: 'scatter',
+                        x: d.originals.map(function (v) { return v.x; }),
+                        y: d.originals.map(function (v) { return v.y; })
+                    };
+                }).concat(stepsRes.map(function (d) {
+                    return {
+                        name: 'Iteration #' + d.iterationNum + ' (cost ' + d.cost + ')',
+                        type: 'scatter',
+                        x: d.estimations.map(function (v) { return v.x; }),
+                        y: d.estimations.map(function (v) { return v.y; })
+                    };
+                }));
+
+                Plotly.newPlot('chart', data);
             });
-        }
 
+        thethas.done(function (data) {
+            var data = [{
+                z: data.map(function (row) {
+                    return row.map(function (value) {
+                        return value.cost;
+                    });
+                }), 
+                type: 'surface'
+            }];
 
-        makeChart('data', 'Supermarket - Approximation', 'Days', 'Total expense', function (result) {
-            return result.map(function(dataset) {
-                return [
-                    { name: dataset.name, data: dataset.originals.map(function (d) { return d.y; }) },
-                    { name: 'approx ' + dataset.name, data: dataset.estimates.map(function (d) { return d.y; }) }
-                ];
-            }).reduce(function(a, b) {
-                return a.concat(b);
-            }, []);
+            Plotly.newPlot('cost', data);
         });
-
     </script>
 </body>
 </html>
