@@ -12,7 +12,8 @@
 </head>
 <body>
     <div id="chart" class="chart-card" style="width: 100%; height: 700px;"></div>
-    <div id="cost" class="chart-card" style="width: 100%; height: 1000px;"></div>
+    <div id="cost" class="chart-card" style="width: 100%; height: 700px;"></div>
+    <div id="costvsthetas" class="chart-card" style="width: 100%; height: 1000px;"></div>
     <script>
         var data = $.get('http://localhost:8083/data');
         var steps = $.get('http://localhost:8083/steps');
@@ -41,20 +42,39 @@
 
                 Plotly.newPlot('chart', data);
             });
-
-        thethas.done(function (data) {
+        
+        steps.done(function (res) {
             var data = [{
-                x: data.map(function (row) {
+                y: res.map(function (v) {
+                    return v.cost;
+                })
+            }]
+
+            var layout = {
+                xaxis: {
+                    title: 'Iterations'
+                },
+                yaxis: {
+                    title: 'Average cost'
+                }
+            }
+
+            Plotly.newPlot('cost', data, layout);
+        })
+
+        thethas.done(function (res) {
+            var data = [{
+                x: res.map(function (row) {
                     return row.map(function (value) {
                         return value.thetha0;
                     });
                 }),
-                y: data.map(function (row) {
+                y: res.map(function (row) {
                     return row.map(function (value) {
                         return value.thetha1;
                     });
                 }),
-                z: data.map(function (row) {
+                z: res.map(function (row) {
                     return row.map(function (value) {
                         return value.cost;
                     });
@@ -76,7 +96,7 @@
                 }
             }
 
-            Plotly.newPlot('cost', data, layout);
+            Plotly.newPlot('costvsthetas', data, layout);
         });
     </script>
 </body>
