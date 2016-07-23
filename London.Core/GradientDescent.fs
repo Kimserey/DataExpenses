@@ -31,6 +31,7 @@ module GradientDescent =
             
             static member Value (Cost x) = x
 
+            /// Computes the average cost
             static member Compute(data: List<float * float>, thethas: float list) =
                 match thethas with
                 | thetha0::thetha1::_ ->
@@ -40,7 +41,7 @@ module GradientDescent =
                         |> List.map (fun (x, y) -> Math.Pow(thetha0 + thetha1 * x - y, 2.))
                         |> List.sum
 
-                    Cost <| (1./float data.Length) * sum
+                    Cost <| (1./float data.Length) * Math.Sqrt(sum)
                 | _ -> failwith "Could not compute cost function, thethas are not in correct format."
 
     let nextThetha innerDerivative (settings: Settings) thetha =

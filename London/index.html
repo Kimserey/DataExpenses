@@ -44,6 +44,16 @@
 
         thethas.done(function (data) {
             var data = [{
+                x: data.map(function (row) {
+                    return row.map(function (value) {
+                        return value.thetha0;
+                    });
+                }),
+                y: data.map(function (row) {
+                    return row.map(function (value) {
+                        return value.thetha1;
+                    });
+                }),
                 z: data.map(function (row) {
                     return row.map(function (value) {
                         return value.cost;
@@ -52,7 +62,21 @@
                 type: 'surface'
             }];
 
-            Plotly.newPlot('cost', data);
+            var layout = {
+                scene: {
+                    xaxis: {
+                        title: 'Thetha 0'
+                    },
+                    yaxis: {
+                        title: 'Thetha 1'
+                    },
+                    zaxis: {
+                        title: 'Average cost'
+                    }
+                }
+            }
+
+            Plotly.newPlot('cost', data, layout);
         });
     </script>
 </body>

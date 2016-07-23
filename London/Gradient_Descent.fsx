@@ -130,10 +130,12 @@ let getThethaSteps predicate =
 let getThethas predicate =
     getData predicate
     |> Series.mapValues (fun values ->
-        [ for t0 in [0..100] do
-            yield [ for t1 in [0.0..0.5..10.0] do yield { Cost = Cost.Value <| Cost.Compute (Series.ToList values, [float t0; float t1])
-                                                          Thetha0 = float t0
-                                                          Thetha1 = float t1  }] ])
+        [ for t0 in [0.0..0.1..45.0] do
+            yield [ for t1 in [5.5..0.1..8.5] do
+                        let cost = Cost.Value <| Cost.Compute (Series.ToList values, [float t0; float t1])
+                        yield { Cost = cost
+                                Thetha0 = float t0
+                                Thetha1 = float t1  }] ])
     |> Series.observations
     |> Seq.head
     |> snd
