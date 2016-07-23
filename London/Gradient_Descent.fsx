@@ -3,6 +3,7 @@ open _references
 open System
 open Deedle
 open London.Core
+open London.Core.GradientDescent
 
 (*
     Webserver test  
@@ -41,6 +42,18 @@ and DataItem = {
 } with
     static member FromTuple (x, y) = { X = x; Y = y }
     
+type Series 
+    with 
+        static member ToList =
+            Series.observations 
+            >> Seq.map (fun (day, value) -> float day, value) 
+            >> Seq.toList
+
+let defaultSettings data =
+    { LearningRate = 0.005
+      Dataset = Series.ToList data
+      Iterations = 8000 }
+
 let getDataset filterRowPredicate =
     df
     |> Frame.groupRowsBy "Date"
@@ -59,21 +72,13 @@ let getDataset filterRowPredicate =
             |> Series.fillMissingWith 0.
             |> Stats.expandingSum)
     |> Series.mapValues (fun values ->
-        let toList =
-            Series.observations 
-            >> Seq.map (fun (day, value) -> float day, value) 
-            >> Seq.toList
-
         let modelResult = 
-            GradientDescent.createModel 
-                { LearningRate = 0.005
-                  Dataset = toList values
-                  Iterations = 8000 }
+            GradientDescent.createModel  (defaultSettings values)
         
         let totalDays = [1..31]
 
         modelResult.Cost,
-        toList values,
+        Series.ToList values,
         totalDays
         |> List.map float
         |> List.map (fun x -> x, modelResult.Estimate x))
@@ -84,11 +89,53 @@ let getDataset filterRowPredicate =
           Estimates = estimateResults |> List.map DataItem.FromTuple  })
     |> Seq.toList
 
-let data = 
-    getDataset (fun (c:ObjectSeries<_>) -> c.GetAs<string>("Category") = (string Category.Supermarket))
+type ThethaSteps = {
+    IterationNum: int
+    Cost: float
+    Estimations: float list
+}
+
+let getThethaSteps filterRowPredicate =
+    df
+    |> Frame.groupRowsBy "Date"
+    |> Frame.sortRowsByKey
+    |> Frame.filterRowValues filterRowPredicate
+    |> Frame.getNumericCols
+    |> Series.get "Amount"
+    |> Stats.levelSum fst
+    |> Series.groupInto 
+        (fun (date: DateTime) _ -> date.Month, date.Year)
+        (fun _ s -> 
+            s 
+            |> Series.sortByKey
+            |> Series.mapKeys (fun (date: DateTime) -> date.Day)
+            |> Series.realign [1..(if s.FirstKey().Month = DateTime.Now.Month then DateTime.Now.Day else 31)] 
+            |> Series.fillMissingWith 0.
+            |> Stats.expandingSum)
+    |> Series.mapValues (fun values ->
+        GradientDescent.estimate (defaultSettings values)
+        |> List.mapi (fun i thethas -> (i, thethas))
+        |> List.chunkBySize 1000
+        |> List.map List.last
+        |> List.choose (fun (i, thethas: float list) -> 
+            match thethas with
+            | thetha0::thetha1::_ -> Some { IterationNum = i; Cost = Cost.Value <| Cost.Compute (Series.ToList values, thethas); Estimations = [1..31] |> List.map (fun i ->  thetha0 + thetha1 * (float i)) }
+            | _                   -> None))
+    |> Series.observations
+    |> Seq.map snd
+    |> Seq.toList
+
+let predicate (c:ObjectSeries<_>) =
+    c.GetAs<string>("Category") = (string Category.Supermarket)
+    && c.GetAs<DateTime>("Date").Month = 5 
+    && c.GetAs<DateTime>("Date").Year = 2016
+
+let data  = getDataset predicate
+let steps = getThethaSteps predicate
 
 let app = 
     GET >=> choose
-        [ path "/data" >=> JSON data ]
+        [ path "/data" >=> JSON data 
+          path "/steps" >=> JSON steps ]
 
 startWebServer defaultConfig app

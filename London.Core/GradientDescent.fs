@@ -29,6 +29,8 @@ module GradientDescent =
         with 
             override x.ToString() = match x with Cost v -> sprintf "Cost: %.4f%%" v
             
+            static member Value (Cost x) = x
+
             static member Compute(data: List<float * float>, thethas: float list) =
                 match thethas with
                 | thetha0::thetha1::_ ->
@@ -44,28 +46,28 @@ module GradientDescent =
                   
 
     let nextThetha innerDerivative (settings: Settings) thetha =
-        let sigma =
+        let sum =
             [0..settings.Dataset.Length - 1]
             |> List.map (fun i -> settings.Dataset.[i])
             |> List.map (fun (x, y) -> innerDerivative x y)
             |> List.sum
 
-        thetha - settings.LearningRate * ((1./float settings.Dataset.Length) * sigma)
+        thetha - settings.LearningRate * ((1./float settings.Dataset.Length) * sum)
 
-    let next thethas (settings: Settings) =
-        match thethas with
-        | thetha0::thetha1::_ ->
-            let thetha0 = nextThetha (fun x y -> thetha0 + thetha1 * x - y) settings thetha0
-            let thetha1 = nextThetha (fun x y -> (thetha0 + thetha1 * x - y) * x) settings thetha1
-            [ thetha0; thetha1 ]
-        | _ -> failwith "Could not compute next thethas, thethas are not in correct format."
+    
 
-    let train settings =
-        [0..settings.Iterations]
-        |> List.scan (fun thethas _ -> next thethas settings) [0.; 0.]
+    let estimate settings =
+        [0..settings.Iterations - 1]
+        |> List.scan (fun thethas _ -> 
+            match thethas with
+            | thetha0::thetha1::_ ->
+                let thetha0 = nextThetha (fun x y -> thetha0 + thetha1 * x - y) settings thetha0
+                let thetha1 = nextThetha (fun x y -> (thetha0 + thetha1 * x - y) * x) settings thetha1
+                [ thetha0; thetha1 ]
+            | _ -> failwith "Could not compute next thethas, thethas are not in correct format.") [0.; 0.]
 
     let createModel settings =
-        let interationSteps = train settings
+        let interationSteps = estimate settings
 
         match List.last interationSteps with
         | thetha0::thetha1::_ as thethas->
