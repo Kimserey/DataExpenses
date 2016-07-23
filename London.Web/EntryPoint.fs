@@ -2,6 +2,7 @@ namespace London.Web
 
 open System
 open System.IO
+open System.Text.RegularExpressions
 open global.Owin
 open Microsoft.Owin.Hosting
 open Microsoft.Owin.StaticFiles
@@ -13,58 +14,84 @@ open Topshelf.HostConfigurators
 open London.Core
 
 module EntryPoint =
-    
-    let rootDirectory = "httproot"
-    let binDirectory = "."
 
-    type OwinHost(dataDirectory: string, baseUrl: string) =
+    type Config = {
+        ServiceName: string
+        DataDir: string
+        Url: string
+        RootDir: string
+        BinDir: string
+    } with
+        static member Default = {
+            ServiceName = "london-expenses"
+            DataDir     = "C:\\Documents\\Expenses"
+            Url         = "http://+:9600/"
+            RootDir     = "httproot"
+            BinDir      = "."
+        }
+
+    let (|Arg|_|) pattern (input: string) =
+        let m = Regex.Match(input, sprintf "^%s=(.*)$" pattern) 
+        if (m.Success) then Some m.Groups.[1].Value else None  
+    
+    let mutable config = Config.Default
+
+    type OwinHost(config: Config) =
         let mutable server: IDisposable = 
             Unchecked.defaultof<IDisposable>
         
         let options = 
             new WebSharperOptions<Sitelet.EndPoint>(
                 Debug = true, 
-                ServerRootDirectory = rootDirectory,
-                BinDirectory = binDirectory,
+                ServerRootDirectory = config.RootDir,
+                BinDirectory = config.BinDir,
                 Sitelet = Some Sitelet.sitelet)
 
         member x.Start() = 
             
             // Instantiate global dataframe
-            Dataframe.agent.Refresh (Some dataDirectory)
+            Dataframe.agent.Refresh (Some config.DataDir)
             
             server <-
-                WebApp.Start(baseUrl, fun appB ->
+                WebApp.Start(config.Url, fun appB ->
                     appB.UseWebSharper(options)
-                        .UseStaticFiles(StaticFileOptions(FileSystem = PhysicalFileSystem(rootDirectory)))
+                        .UseStaticFiles(StaticFileOptions(FileSystem = PhysicalFileSystem(config.RootDir)))
                         |> ignore)
 
-            stdout.WriteLine("Root directory {0}", rootDirectory)
-            stdout.WriteLine("Data directory {0}", dataDirectory)
-            stdout.WriteLine("Serving {0}", baseUrl)
+            stdout.WriteLine("Root directory {0}", config.RootDir)
+            stdout.WriteLine("Data directory {0}", config.DataDir)
+            stdout.WriteLine("Serving {0}", config.Url)
 
         member x.Stop() =
             server.Dispose()
 
     [<EntryPoint>]
     let Main args =
-        let mutable data = "C:\\Documents\\Expenses"
-        let mutable url = "http://+:9600/"
-
         HostFactory.Run(Action<HostConfigurator>(fun hostCfg ->
-        
+
             hostCfg.AddCommandLineDefinition("args", Action<string>(fun args -> 
-                let d, u =
-                    match args.Split(',') with
-                    | [| d; u |] -> d, u
-                    | _ -> failwith "Expecting -args=dataDirectory,baseUrl"
-                data <- d
-                url <- u))
+                printfn "Received arguments: %A" args
+
+                let rec processArgs args config =
+                    match args with
+                    | (Arg "data" dataDir)::l               -> processArgs l { config with DataDir = dataDir } 
+                    | (Arg "url" url)::l                    -> processArgs l { config with Url = url } 
+                    | (Arg "servicename" servicename)::l    -> processArgs l { config with ServiceName = servicename } 
+                    | unrecognized::l                      -> 
+                        printfn "Skipped unrecognized args \"%s\"" unrecognized
+                        processArgs l config
+                    | [] -> config
+                
+                config <- processArgs (args.Split(',') |> Array.toList) Config.Default
+                
+                printfn "Processed configuration: %A" config
+            ))
+            
 
             hostCfg.ApplyCommandLine()
 
             hostCfg.Service<OwinHost>(Action<ServiceConfigurator<OwinHost>>(fun s ->
-                s.ConstructUsing(Func<OwinHost>(fun () -> new OwinHost(data, url)))
+                s.ConstructUsing(Func<OwinHost>(fun () -> new OwinHost(config)))
                     .WhenStarted(Action<OwinHost>(fun s -> s.Start()))
                     .WhenStopped(Action<OwinHost>(fun s -> s.Stop())) |> ignore)
                 ) |> ignore
@@ -72,7 +99,7 @@ module EntryPoint =
             hostCfg
                 .RunAsLocalSystem() |> ignore
 
-            hostCfg.SetServiceName("london-expenses")
+            hostCfg.SetServiceName(config.ServiceName)
             hostCfg.SetDisplayName("London expenses")
             hostCfg.SetDescription("London expenses manager. Author: Kimserey Lam.")))
         |> ignore

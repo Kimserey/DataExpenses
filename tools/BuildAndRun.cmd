@@ -15,6 +15,6 @@ REM ---------------------------------------
 
 pushd London.Web\bin\Debug
 
-London.Web.exe
+London.Web.exe -args:servicename=london-expenses-debug,url=http://localhost:9601
 
 popd London.Web\bin\Debug
