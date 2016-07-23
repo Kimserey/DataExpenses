@@ -4,7 +4,7 @@ open System
 
 module GradientDescent =
 
-    type Options = {
+    type Settings = {
         LearningRate: float
         Dataset: List<float * float>
         Iterations: int
@@ -21,58 +21,56 @@ module GradientDescent =
         Thethas: float list
         ThethaCalculationSteps: ThethaCalculationSteps
     }
+
     and ThethaCalculationSteps = ThethaCalculationSteps of float list list
         with override x.ToString() = match x with ThethaCalculationSteps v -> sprintf "Thethas: %A" v
+
     and Cost = Cost of float
-        with override x.ToString() = match x with Cost v -> sprintf "Cost: %.4f%%" v
+        with 
+            override x.ToString() = match x with Cost v -> sprintf "Cost: %.4f%%" v
+            
+            static member Compute(data: List<float * float>, thethas: float list) =
+                match thethas with
+                | thetha0::thetha1::_ ->
+                    let sum = 
+                        [0..data.Length - 1] 
+                        |> List.map (fun i -> data.[i])
+                        |> List.map (fun (x, y) -> thetha0 + thetha1 * x - y)
+                        |> List.sum
+
+                    Cost <| (1./float data.Length) * (Math.Pow(sum, 2.))
+                | _ -> failwith "Could not compute cost function, thethas are not in correct format."
+
                   
-    let costFunc thethas (data: List<float * float>): float =
+
+    let nextThetha innerDerivative (settings: Settings) thetha =
+        let sigma =
+            [0..settings.Dataset.Length - 1]
+            |> List.map (fun i -> settings.Dataset.[i])
+            |> List.map (fun (x, y) -> innerDerivative x y)
+            |> List.sum
+
+        thetha - settings.LearningRate * ((1./float settings.Dataset.Length) * sigma)
+
+    let next thethas (settings: Settings) =
         match thethas with
         | thetha0::thetha1::_ ->
-            let sum = 
-                [0..data.Length - 1] 
-                |> List.map (fun i -> data.[i])
-                |> List.map (fun (x, y) -> thetha0 + thetha1 * x - y)
-                |> List.sum
-
-            (1./float data.Length) * (Math.Pow(sum, 2.))
-        | _ -> failwith "Could not compute cost function, thethas are not in correct format."
-
-    let next thethas (options: Options) =
-        match thethas with
-        | thetha0::thetha1::_ ->
-            let thetha0' = 
-                let sum = 
-                    [0..options.Dataset.Length - 1] 
-                    |> List.map (fun i -> options.Dataset.[i])
-                    |> List.map (fun (x, y) -> thetha0 + thetha1 * x - y)
-                    |> List.sum
-
-                thetha0 - (options.LearningRate * (1./float options.Dataset.Length) * sum)
-
-            let thetha1' =
-                let sum =
-                    [0..options.Dataset.Length - 1]
-                    |> List.map (fun i -> options.Dataset.[i])
-                    |> List.map (fun (x, y) -> (thetha0 + thetha1 * x - y) * x)
-                    |> List.sum
-        
-                thetha1 - (options.LearningRate * (1./float options.Dataset.Length) * sum)
-
-            [thetha0'; thetha1']
+            let thetha0 = nextThetha (fun x y -> thetha0 + thetha1 * x - y) settings thetha0
+            let thetha1 = nextThetha (fun x y -> (thetha0 + thetha1 * x - y) * x) settings thetha1
+            [ thetha0; thetha1 ]
         | _ -> failwith "Could not compute next thethas, thethas are not in correct format."
 
-    let train options =
-        [0..options.Iterations]
-        |> List.scan (fun thethas _ -> next thethas options) [0.; 0.]
+    let train settings =
+        [0..settings.Iterations]
+        |> List.scan (fun thethas _ -> next thethas settings) [0.; 0.]
 
-    let createModel options =
-        let interationSteps = train options
+    let createModel settings =
+        let interationSteps = train settings
 
         match List.last interationSteps with
         | thetha0::thetha1::_ as thethas->
             { Estimate = fun  x -> thetha0 + thetha1 * x
-              Cost = costFunc thethas options.Dataset |> Cost
+              Cost = Cost.Compute(settings.Dataset, thethas)
               Thethas = thethas
               ThethaCalculationSteps = ThethaCalculationSteps interationSteps }
         | _ -> failwith "Failed to create model. Could not compute thethas."

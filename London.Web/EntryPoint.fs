@@ -58,9 +58,9 @@ module EntryPoint =
                         .UseStaticFiles(StaticFileOptions(FileSystem = PhysicalFileSystem(config.RootDir)))
                         |> ignore)
 
-            stdout.WriteLine("Root directory {0}", config.RootDir)
-            stdout.WriteLine("Data directory {0}", config.DataDir)
-            stdout.WriteLine("Serving {0}", config.Url)
+            printfn "Root directory %s" config.RootDir
+            printfn "Data directory %s" config.DataDir
+            printfn "Serving %s" config.Url
 
         member x.Stop() =
             server.Dispose()
@@ -70,8 +70,6 @@ module EntryPoint =
         HostFactory.Run(Action<HostConfigurator>(fun hostCfg ->
 
             hostCfg.AddCommandLineDefinition("args", Action<string>(fun args -> 
-                printfn "Received arguments: %A" args
-
                 let rec processArgs args config =
                     match args with
                     | (Arg "data" dataDir)::l               -> processArgs l { config with DataDir = dataDir } 
@@ -83,11 +81,8 @@ module EntryPoint =
                     | [] -> config
                 
                 config <- processArgs (args.Split(',') |> Array.toList) Config.Default
-                
-                printfn "Processed configuration: %A" config
             ))
             
-
             hostCfg.ApplyCommandLine()
 
             hostCfg.Service<OwinHost>(Action<ServiceConfigurator<OwinHost>>(fun s ->
