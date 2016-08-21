@@ -54,8 +54,8 @@ module App =
                     | [ "expenses" ]  -> Expenses
                     | [ "per-month" ] -> ExpensesPerMonth
                     | [ "per-labels" ] -> LabelsPerMonth
-                    | [ "per-category" ]
-                    | _ -> ExpensesPerCategory
+                    | [ "per-category" ] -> ExpensesPerCategory
+                    | _ -> ExpensesPerMonth
     
     
         let route = 
