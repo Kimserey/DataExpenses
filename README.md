@@ -3,6 +3,13 @@
 My attempt to pierce the secret of long term savings! 
 A data expenses manager which takes .CSV as input and categorize expenses.
 
+# TODO
+
+1. Make labels configurable from within the application
+2. Create a cache of data calculated using SQLite to prevent the wasteful recalculation of all data
+3. Embed the spa into Electron to provide an easy way to install the application
+4. Move charts to Plotly
+
 # Why am I doing this?
 
 There are a lot of expense managers already.
