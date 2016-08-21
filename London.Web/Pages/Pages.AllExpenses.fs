@@ -16,9 +16,11 @@ module Expenses =
     module Rpcs =
         [<Rpc>]
         let getCumulatedExpenses(): Async<_> =
-            Dataframe.agent.Get()
-            |> ExpenseDataFrame.GetCumulatedExpenses [ Supermarket ]
-            |> async.Return
+            let data =
+                Dataframe.agent.Get()
+                |> ExpenseDataFrame.GetCumulatedExpenses []
+            
+            data |> async.Return
 
         [<Rpc>]
         let get sortBy: Async<_> =
@@ -33,9 +35,10 @@ module Expenses =
         open WebSharper.JavaScript
         open London.Web.Templates     
         
-        let makeChart title dailyCumulatedExpenses selector =
+        let makeChart key title dailyCumulatedExpenses selector =
             divAttr 
-                [ attr.``class`` "chart-card"
+                [ attr.id key
+                  attr.``class`` "chart-card"
                   on.afterRender (fun el -> 
                     JQuery
                         .Of(el)
@@ -75,9 +78,6 @@ module Expenses =
                                 Tabs.InactiveTabLink.Doc(
                                     TargetId = "chart",
                                     Title = "Chart")
-                                Tabs.InactiveTabLink.Doc(
-                                    TargetId = "approximation",
-                                    Title = "Approximation")
                             ],
                             Content =[
                                 Tabs.ActiveContent.Doc(
@@ -85,10 +85,7 @@ module Expenses =
                                     Body = [ CardTable.Doc (List.mapi Expense.ToTableRow (expenses |> List.sortByDescending (fun e -> e.Date)))  ])
                                 Tabs.InactiveContent.Doc(
                                     Id = "chart",
-                                    Body = [ makeChart "Cumulated expenses" dailyCumulatedExpenses (fun (name, Original data, _) -> { Name = name; Data = data |> List.map snd |> Array.ofList } : LineSeries) ])
-                                Tabs.InactiveContent.Doc(
-                                    Id = "approximation",
-                                    Body = [ makeChart "Cumulated expenses straight line approximation" dailyCumulatedExpenses (fun (name, _, Approximation data) -> { Name = name; Data = data |> List.map snd |> Array.ofList } : LineSeries) ])
+                                    Body = [ makeChart "cumul" "Cumulated expenses" dailyCumulatedExpenses (fun (name, data) -> { Name = name; Data = data |> List.map snd |> Array.ofList } : LineSeries) ])
                             ]) ]
             }
             |> Doc.Async

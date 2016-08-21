@@ -482,27 +482,14 @@ type ExpenseDataFrame = {
         |> Series.mapValues (fun values ->
             let toList =
                 Series.observations 
-                >> Seq.map (fun (day, value) -> float day, value) 
+                >> Seq.map (fun (day, value) -> day, value) 
                 >> Seq.toList
 
-            let modelResult = 
-                GradientDescent.createModel 
-                    { LearningRate = 0.005
-                      Dataset = toList values
-                      Iterations = 8000 }
-            
-            let totalDays = [1..31]
-
-            modelResult.Cost,
-            toList values,
-            totalDays
-            |> List.map float
-            |> List.map (fun x -> x, modelResult.Estimate x))
+            toList values)
         |> Series.observations
-        |> Seq.map (fun ((month, year), (_, originals, estimateResults)) ->
+        |> Seq.map (fun ((month, year), originals) ->
             sprintf "%s %i" (CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName month) year,
-            Original originals,
-            Approximation estimateResults)
+            originals)
         |> Seq.toList
 
 module Dataframe =

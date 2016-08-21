@@ -66,7 +66,7 @@ module ExpensesPerMonth =
             |> Doc.Concat
 
 
-        let sumChart sums month year =
+        let makeSumChart sums month year =
             divAttr 
                 [ attr.``class`` "chart-card"
                   on.afterRender (fun el -> 
@@ -136,7 +136,7 @@ module ExpensesPerMonth =
                                                 Body = [ makeRatioChart ratios month year])
                                             Tabs.InactiveContent.Doc(
                                                 Id = "chart-daily-expanding-sum-" + string cardIndex,
-                                                Body = [ sumChart sums month year])
+                                                Body = [ makeSumChart sums month year])
                                         ])
                             ])
                         |> Doc.Concat
