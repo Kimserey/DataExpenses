@@ -117,11 +117,12 @@ module Domain =
         >> label ".*COFFEE REPUBLIC.*"                                                  "COFFEE REPUBLIC"                    SweetAndSavoury
         >> label ".*PASTY SHOP.*"                                                       "PASTY SHOP PUFF"                    SweetAndSavoury
         >> label ".*AVID.*"                                                             "AVID CHOCOLATE"                     SweetAndSavoury
-        >> label ".*(EAT BLUEWATER|EAT CANARY WHARF).*"                                 "EAT"                                SweetAndSavoury
+        >> label ".*(EAT BLUEWATER|EAT CANARY WHARF|EAT LTD WESTFIELD).*"               "EAT"                                SweetAndSavoury
         >> label ".*LOLAS.*"                                                            "LOLAS"                              SweetAndSavoury
         >> label ".*STICKY RICE.*"                                                      "STICKY RICE"                        SweetAndSavoury
         >> label ".*CAFFE NERO.*"                                                       "CAFFE NERO"                         SweetAndSavoury
         >> label ".*ISLINGTON SUGAR.*"                                                  "SUGAR FREE BAKERY"                  SweetAndSavoury
+        >> label ".*ENRIQUE TOMAS LONDON.*"                                             "ENRIQUE TOMAS"                      SweetAndSavoury
 
         >> label ".*ITUNES.COM/BILL.*"                                                  "APPLE APP STORE"                    Online
         >> label ".*AMAZON.*"                                                           "AMAZON"                             Online
