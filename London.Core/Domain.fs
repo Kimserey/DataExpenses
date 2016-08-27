@@ -82,7 +82,7 @@ module Domain =
         >> label ".*TESCO.*"                                                            "TESCO"                              Supermarket
         >> label ".*(M&S|MARKS & SPENCER|MARKS & SPEN|MARKS&SPENCER).*"                 "M&S"                                Supermarket
         >> label ".*WILKO.*"                                                            "WILKO"                              Supermarket
-        >> label ".*POUNDLAND.*"                                                        "POUNDLAND"                              Supermarket
+        >> label ".*POUNDLAND.*"                                                        "POUNDLAND"                          Supermarket
 
         >> label ".*CURRYS*"                                                            "CURRYS"                             Electronics
         >> label ".*CARPHONE*"                                                          "CARPHONE"                           Electronics
@@ -129,6 +129,7 @@ module Domain =
         >> label ".*(GOOGLE|Non-Sterling Transaction Fee).*"                            "GOOGLE ACCOUNT (OR RELATED)"        Online
         >> label ".*PAYPAL.*"                                                           "PAYPAL"                             Online
         >> label ".*NAME-CHEAP.COM.*"                                                   "NAME-CHEAP"                         Online
+        >> label ".*SHOPTIQUES.*"                                                       "SHOPTIQUES"                         Online
 
         >> label ".*WASABI.*"                                                           "WASABI JAP"                         Restaurant
         >> label ".*MONGOLIAN GRILL.*"                                                  "MONGOLIAN GRILL"                    Restaurant
