@@ -97,6 +97,8 @@ module Domain =
         >> label ".*PRIMARK.*"                                                          "PRIMARK"                            Clothing
         >> label ".*DEBENHAMS.*"                                                        "DEBENHAMS"                          Clothing
         >> label ".*MONSOON.*"                                                          "MONSOON"                            Clothing
+        >> label ".*RIVER ISLAND.*"                                                     "RIVER ISLAND"                       Clothing
+        >> label ".*TOP SHOP.*"                                                         "TOP SHOP"                           Clothing
         >> label ".*ZARA.*"                                                             "ZARA"                               Clothing
 
         >> label ".*SPECSAVERS.*"                                                       "SPECSAVERS"                         HealthAndBeauty
@@ -122,7 +124,7 @@ module Domain =
         >> label ".*STICKY RICE.*"                                                      "STICKY RICE"                        SweetAndSavoury
         >> label ".*CAFFE NERO.*"                                                       "CAFFE NERO"                         SweetAndSavoury
         >> label ".*ISLINGTON SUGAR.*"                                                  "SUGAR FREE BAKERY"                  SweetAndSavoury
-        >> label ".*ENRIQUE TOMAS LONDON.*"                                             "ENRIQUE TOMAS"                      SweetAndSavoury
+        >> label ".*ENRIQUE TOMAS.*"                                                    "ENRIQUE TOMAS"                      SweetAndSavoury
 
         >> label ".*ITUNES.COM/BILL.*"                                                  "APPLE APP STORE"                    Online
         >> label ".*AMAZON.*"                                                           "AMAZON"                             Online
