@@ -166,7 +166,7 @@ module Domain =
         >> label ".*DISNEY STORE.*"                                                     "DISNEY STORE"                       Other
         >> label ".*EURO LIVERPOOL.*"                                                   "EEA"                                Other
         >> label ".*THE GENTRY BARBER.*"                                                "THE GENTRY BARBER"                  Other
-        >> label ".*M & M.*"                                                            "M&M'S WORLD"                        Other
+        >> label ".*PHOTO BOOTH.*"                                                      "PHOTO BOOTH"                        Other
 
         >> label ".*GIFFGAFF.*"                                                         "GIFFGAFF"                           RentAndBills
         >> label ".*HYPEROPTIC.*"                                                       "HYPEROPTIC"                         RentAndBills
@@ -180,6 +180,7 @@ module Domain =
         >> label ".*(CINEMA|EVERYMAN|VUE).*"                                            "CINEMA"                             Leisure
         >> label ".*(NRGGYM|HARLANDS).*"                                                "NRGGYM"                             Leisure
         >> label ".*WARNER BROS.*"                                                      "WARNER BROS HARRY POTTER"           Leisure
+        >> label ".*M & M.*"                                                            "M&M'S WORLD"                        Leisure
         
 
         >> label "^[A-Z0-9]{8}\sGB[A-Z0-9]{14}\s"                                       "FUND TRANSFER (OR RELATED)"         BankTransfer
