@@ -83,6 +83,7 @@ module Domain =
         >> label ".*(M&S|MARKS & SPENCER|MARKS & SPEN|MARKS&SPENCER).*"                 "M&S"                                Supermarket
         >> label ".*WILKO.*"                                                            "WILKO"                              Supermarket
         >> label ".*POUNDLAND.*"                                                        "POUNDLAND"                          Supermarket
+        >> label ".*POUND MART.*"                                                       "POUND MART"                         Supermarket
 
         >> label ".*CURRYS*"                                                            "CURRYS"                             Electronics
         >> label ".*CARPHONE*"                                                          "CARPHONE"                           Electronics
@@ -125,6 +126,11 @@ module Domain =
         >> label ".*CAFFE NERO.*"                                                       "CAFFE NERO"                         SweetAndSavoury
         >> label ".*ISLINGTON SUGAR.*"                                                  "SUGAR FREE BAKERY"                  SweetAndSavoury
         >> label ".*ENRIQUE TOMAS.*"                                                    "ENRIQUE TOMAS"                      SweetAndSavoury
+        >> label ".*T4 LONDON.*"                                                        "T4 BUBBLE TEA"                      SweetAndSavoury
+        >> label ".*STARBUCKS.*"                                                        "STARBUCKS"                          SweetAndSavoury
+        >> label ".*COCA COLA.*"                                                        "COCA COLA VENDING MACHINE"          SweetAndSavoury
+        >> label ".*PANOPOLIS.*"                                                        "COFFEE PANOPOLIS"                   SweetAndSavoury
+        >> label ".*ITSU.*"                                                             "ITSU"                               SweetAndSavoury
 
         >> label ".*ITUNES.COM/BILL.*"                                                  "APPLE APP STORE"                    Online
         >> label ".*AMAZON.*"                                                           "AMAZON"                             Online
@@ -160,6 +166,7 @@ module Domain =
         >> label ".*DISNEY STORE.*"                                                     "DISNEY STORE"                       Other
         >> label ".*EURO LIVERPOOL.*"                                                   "EEA"                                Other
         >> label ".*THE GENTRY BARBER.*"                                                "THE GENTRY BARBER"                  Other
+        >> label ".*M & M.*"                                                            "M&M'S WORLD"                        Other
 
         >> label ".*GIFFGAFF.*"                                                         "GIFFGAFF"                           RentAndBills
         >> label ".*HYPEROPTIC.*"                                                       "HYPEROPTIC"                         RentAndBills
@@ -167,11 +174,13 @@ module Domain =
         >> label ".*SPARK.*"                                                            "SPARK"                              RentAndBills
         >> label ".*(LONDON BOR NEWHAM|LONDON BOROUGH OF LONDON).*"                     "COUNCIL TAX"                        RentAndBills
 
-        >> label ".*(LUL TICKET MACHINE|DLR).*"                                         "UNDERGROUND / DLR"                  Transport
+        >> label ".*(LUL TICKET MACHINE|DLR|MIDLAND SEL WATFORD).*"                     "UNDERGROUND / DLR"                  Transport
         >> label ".*(LONDON & SOUTH EAS|GWR BURNHAM TO BURHAM|GREATER ANGLIA).*"        "RAILWAY"                            Transport
         
         >> label ".*(CINEMA|EVERYMAN|VUE).*"                                            "CINEMA"                             Leisure
         >> label ".*(NRGGYM|HARLANDS).*"                                                "NRGGYM"                             Leisure
+        >> label ".*WARNER BROS.*"                                                      "WARNER BROS HARRY POTTER"           Leisure
+        
 
         >> label "^[A-Z0-9]{8}\sGB[A-Z0-9]{14}\s"                                       "FUND TRANSFER (OR RELATED)"         BankTransfer
         >> label ".*SEREY PAYMENT.*"                                                    "FUND TRANSFER (OR RELATED)"         BankTransfer
